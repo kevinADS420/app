@@ -1,0 +1,94 @@
+.ContainerContent{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/pausageGenova.jpg');
+    background-size: cover; 
+    background-repeat: no-repeat;
+    padding: 5rem;
+
+
+    .InicioGoogle{
+        display: flex;
+        gap: 3rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 40%;
+        min-height: 600px;
+        padding: 2rem;
+        background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/Genova.jpg');
+        background-size: cover; 
+        background-repeat: no-repeat;
+        color: #fff;
+
+
+        button{
+            cursor: pointer;
+                color: #fff;
+                background-color: #D62839;
+                font-size: 1rem;
+                border: none;
+                border-radius: 2rem;
+                min-width: 8rem;
+                min-height: 2rem;
+        }
+
+    }
+
+    .InicioFormulario{
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        padding: 2rem;
+        min-height: 600px;
+        width: 40%;
+        gap: 0.8rem;
+        color: #1E4D10;
+
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        input{
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            width: 70%;
+        }
+
+        input:focus {
+            outline: none; /* Quita el borde azul o sombra predeterminada */
+            border-bottom: 2px solid #006400; /* Personaliza solo la línea inferior */
+          }
+
+        img{
+            width: 20vw; 
+            max-width: 273px; 
+            height: auto;
+        }
+
+        .ButtonsInicio{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+
+            button{
+                cursor: pointer;
+                color: #fff;
+                background-color: #1E4D10;
+                font-size: 1rem;
+                border: none;
+                border-radius: 2rem;
+                min-width: 8rem;
+                min-height: 2rem;
+            }
+
+        }
+
+    }
+
+}

@@ -1,0 +1,105 @@
+.containerFooter{
+    display: flex;
+    background-color: #508B25;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.containerLogo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    
+
+    img{
+        width: 20vw; 
+        max-width: 273px; 
+        height: auto;
+    }
+
+    p{
+        text-align: center;
+    }
+
+}
+
+.contacto{
+    margin: 2rem;
+}
+
+.containerContack{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0.7rem;
+
+    img{
+        width: 30px;
+    }
+
+    .icons{
+        display: flex;
+    }
+}
+
+.containerButton{
+    display: flex;
+    flex-direction: column;    
+    align-items: flex-start;
+    gap: 0.5rem;
+
+
+    .buttonInicio{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+    .buttonCategorias{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+    .buttonOfertas{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+    .buttonContacto{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+    .buttonSobreNosotros{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+    .buttonInicioSection{
+        color: black;
+        border: 0;
+        font-size: 1rem; 
+        cursor: pointer;
+    }
+
+}
+
+.IconsRedes{
+    display: flex;
+    background-color: #508B25;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+

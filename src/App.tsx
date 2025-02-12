@@ -1,13 +1,29 @@
-import { useState } from 'react'
+import Header from './components/organisms/header'
+import Inicio from './features/Home/pages/HomePage'
+import Footer from './components/organisms/Footer'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Categorias from './features/Home/pages/Categorias';
+import Ofertas from './features/Home/pages/Ofertas';
+import Contacto from './features/Home/pages/Contacto';
+import SobreNosotros from './features/Home/pages/SobreNosotros';
+import InicioSection from './features/Home/pages/InicioSectionPage';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      
-   
-    </>
+    <Router>
+      <Header />
+      <Routes>|
+        <Route path="/" element={<Inicio />} />
+        <Route path="/categorias" element={<Categorias />} />
+        <Route path="/ofertas" element={<Ofertas />} />
+        <Route path="/contacto" element={<Contacto />} />
+        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+        <Route path="/inicio-section" element={<InicioSection />} />
+      </Routes>
+      <Footer />
+    </Router>
   )
 }
 

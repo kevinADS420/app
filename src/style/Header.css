@@ -1,0 +1,277 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.containerButtons {
+    display: flex;
+    gap: 2rem; 
+    padding: 1rem;
+
+    .buttonInicio{
+        background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+    .buttonCategorias{
+      background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+    .buttonOfertas{
+      background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+    .buttonContacto{
+      background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+    .buttonSobreNosotros{
+      background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+    .buttonInicioSection{
+      background-color: #fff;
+        color: black;
+        border: 0;
+        font-size: 1.25rem; 
+        cursor: pointer;
+    }
+
+
+    .buttonInicioSection {
+        color: #63A118;
+        font-weight: bold;
+    }
+}
+
+.containerHeader {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 1rem;
+
+    .logo {
+        width: 20vw; 
+        max-width: 273px; 
+        height: auto;
+    }
+
+    .containericons {
+        display: flex;
+        gap: 1.25rem;
+
+        .icon {
+            height: 2rem; 
+            cursor: pointer;
+        }
+    }
+}
+
+/* Media Queries */
+@media (max-width: 1293px) { /* Tablets y pantallas medianas */
+    .containerButtons {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        display: none;
+    }
+
+    .containerHeader {
+        text-align: center;
+    }
+
+    .logo { /* Reduce el tamaño para pantallas medianas */
+    }
+}
+
+@media (max-width: 480px) { /* Celulares y pantallas pequeñas */
+    .containerButtons {
+        gap: 0.5rem;
+    }
+
+    button {
+        font-size: 1rem; /* Reduce el tamaño de fuente en pantallas pequeñas */
+    }
+
+    .logo {
+        width: 80%; /* Ajusta para pantallas pequeñas */
+    }
+
+    .containericons .icon {
+        height: 1.5rem; /* Reduce el tamaño de los iconos */
+    }
+}
+
+
+/* ------------------------------------------------------------------------------------------------------- */
+
+
+/* Estilos generales para el contenedor del menú hamburguesa */
+
+
+
+.hamburger-container {
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+
+    nav{
+      Ul{
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem ;
+
+        .buttonInicio{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+      .buttonCategorias{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+      .buttonOfertas{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+      .buttonContacto{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+      .buttonSobreNosotros{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+      .buttonInicioSection{
+          color: black;
+          border: 0;
+          font-size: 1.25rem; 
+          cursor: pointer;
+      }
+  
+  
+      .buttonInicioSection {
+          color: #000000;
+          font-weight: bold;
+      }
+
+      }
+    }
+
+  }
+  
+  @media (min-width: 1294px) {
+    .hamburger-container {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        display: none;
+    }
+  }
+
+  /* Botón del menú hamburguesa */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .hamburger .line {
+    width: 30px;
+    height: 3px;
+    background-color: #333;
+    transition: 0.3s ease;
+  }
+  
+  /* Cuando el menú está abierto, las líneas se transforman */
+  .hamburger .line.open:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .hamburger .line.open:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger .line.open:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  /* Menú de navegación (escondido por defecto en móviles) */
+  .nav {
+    display: none;
+  }
+  
+  .nav.open {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #63a118;
+    padding: 1rem;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  
+  .nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 10px;
+    display: block;
+  }
+  
+  /* Estilos responsivos para dispositivos móviles */
+  @media (max-width: 1293px) {
+    .nav {
+      width: 100%;
+    }
+  
+    .hamburger {
+      display: flex; /* Mostrar el icono del menú en dispositivos móviles */
+    }
+  }
