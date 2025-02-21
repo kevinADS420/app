@@ -31,13 +31,8 @@ function App() {
     <>
       <div className="ContainerContent">
         <div className="InicioGoogle">
-          <p>
-            ¡Regístrate fácilmente con tu cuenta de Google! Olvídate de llenar formularios largos y
-            empieza a disfrutar de nuestros servicios en segundos. Es rápido, seguro y sin
-            complicaciones.
-          </p>
           <button>
-            Sign Up Google <img src={Google} alt="Google" width={15} />
+            inscribete con tu cuenta de Google <img src={Google} alt="Google" width={15} />
           </button>
         </div>
 
@@ -61,8 +56,7 @@ function App() {
             />
 
             <div className="ButtonsInicio">
-              <button type="submit">Sign In</button>
-              <button type="button">Recover Password</button>
+              <button type="submit">Registrarte</button>
             </div>
           </form>
         </div>

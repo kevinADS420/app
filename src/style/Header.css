@@ -71,6 +71,7 @@
     justify-content: space-between; 
     align-items: center;
     padding: 1rem;
+    border-bottom: 3px solid #63A118;
 
     .logo {
         width: 20vw; 
