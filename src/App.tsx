@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <Routes>|
+      <Routes>|                                                                     
       <Route path="/" element={<Inicio />} />
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/ofertas" element={<Ofertas />} />
@@ -25,8 +25,8 @@ function App() {
         <Route path='Registro' element={<Registro/>} />
       </Routes>
       <Footer />
-    </Router>
-  )
-}
-
+    </Router>                                        
+  )                        
+}                    
+                                          
 export default App

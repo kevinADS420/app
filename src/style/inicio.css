@@ -1,55 +1,363 @@
-.containerInicio{
+img {
+    max-width: 100%; /* Evita que las imágenes se desborden de su contenedor */
+    height: auto;
+    display: block; /* Elimina espacio extra debajo de las imágenes en línea */
+  }
+  
+  /* Enlaces */
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+
+/*
+  Hero Section
+  --------------------------------------------------
+*/
+
+.hero {
+    position: relative;
+    text-align: center;
+    color: white;
+    background-image: url('../assets/images/imgHome.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 600px;
     display: flex;
-    gap: 3rem;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    min-height: 300px;
-    background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/fotodeunicio1.jpg');
-    background-size: cover; 
-    background-repeat: no-repeat;
-}
-
-.containerSlogan{
-    .slogan{
-        color: #fff;
-    }
-}
-
-.containerProducts{
-
-    .Products{
-        width: 7rem;
-        height: 2.5rem;
-        border: 0;
-        cursor: pointer;
-        background-color: #264653;
-    }
-
-}
-
-.containerContet{
-    margin: 1rem;
-    gap: 2rem;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .hero-content {
+    position: relative;
     
-
-    h3{
-        margin: 2rem;
-        color: #264653;
+    width: 90%;
+    max-width: 800px;
+  }
+  
+  .hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  
+  .hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Botón genérico */
+  .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block; /* Permite manejar width/height y margin */
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #388E3C;
+  }
+  
+  /*
+    About Us Section
+    --------------------------------------------------
+  */
+  
+  .about-us {
+    background-color: #f8f9fa;
+    padding: 60px 20px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .about-us h2 {
+    color: #28a745;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .about-us p {
+    color: #333;
+    font-size: 1.1em;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 20px;
+  }
+  
+  /*
+    Features Section
+    --------------------------------------------------
+  */
+  
+  .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      background-image: url('../assets/images/features.jpg');
+    background-size: cover;
+      gap: 30px;  /* Agrega un espacio entre las columnas */
+      padding: 0 30px; 
+      padding-top: 30px;
     }
-
-    p{
-        margin: 2rem;
-        max-width: 70rem;
+    
+    .feature {
+      display: flex;
+      text-align: center; /* Centra el contenido dentro de cada "feature" */
+      flex-direction: column;
+      align-items: center;
     }
-
-    img{
-        margin: 2rem;
-        max-width: 90%; 
-        height: auto;    
-        display: block; 
-        border-radius: 1rem;
+    
+    .feature img {
+      width: 40%;
+      height: 40%;  /* Ajusta la altura automáticamente para mantener la proporción */
+      border-radius: 50%; /* Hace que la imagen sea un círculo */
+      margin-bottom: 20px;
+      object-fit: cover; /* Mantiene la proporción de la imagen */
     }
+    
+    .feature h3 {
+      margin-bottom: 10px;
+    }
+    
+    .feature p {
+      color: #555; /* Agrega un color de texto más suave */
+      line-height: 1.5; /* Mejora la legibilidad del texto */
+    }
+  /*
+    Products Section
+    --------------------------------------------------
+  */
+  
+  .products {
+    background-color: #f9f9f9;
+    padding: 0 30px;
+    text-align: center;
+    padding-bottom: 30px;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+  
+  .product {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .product:hover {
+    transform: translateY(-5px);
+  }
+  
+  .product img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .product h3 {
+    margin-bottom: 15px;
+  }
+  
+  .product .price {
+    font-weight: bold;
+    color: #4CAF50;
+  }
+
+  
+/*
+  Chatbot Styles
+  --------------------------------------------------
+*/
 
 
+.floating-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    text-align: center;
 }
+
+/* Estilo mejorado para el texto de ayuda */
+.help-text {
+    background-color: #28a745; /* Color de fondo verde */
+    color: #fff; /* Texto blanco */
+    padding: 8px 12px; /* Aumenta el espacio alrededor del texto */
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 1em; /* Aumenta el tamaño de fuente */
+    font-weight: bold; /* Texto en negrita */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra para mayor contraste */
+    display: block;
+    transition: opacity 0.3s ease; /* Transición para la opacidad */
+}
+
+.text-bar {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    background-image: url('../assets/images/imagenchat.jpg');
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    width: 300px;
+    height: 400px;
+    z-index: -1;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Transición para la animación */
+    transform: translateY(20px); /* Empieza un poco abajo */
+    opacity: 0; /* Empieza transparente */
+}
+
+/* Animación al abrir el chatbot */
+.floating-icon.active .text-bar {
+    display: flex;
+    transform: translateY(0); /* Llega a su posición final */
+    opacity: 1; /* Se hace completamente visible */
+}
+
+/* Oculta el texto de ayuda cuando el chatbot está activo */
+.floating-icon.active .help-text {
+    opacity: 0; /* Se desvanece el texto */
+    pointer-events: none; /* Evita que el texto capture clics */
+}
+
+.chat-header {
+    background-color: #28a745;
+    color: #fff; /* Cambia el color del texto a blanco para mejorar el contraste */
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #444;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 0.9em;
+}
+
+.close-button {
+    font-size: 1.2em; /* Aumenta el tamaño del botón */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    padding-bottom: 2px;
+    padding: 3px 8px; /* Agrega un pequeño relleno */
+    border-radius: 50px; /* Redondea las esquinas */
+    background-color: rgba(0, 0, 0, 0.3);   
+}
+
+.close-button:hover {
+    background-color: rgba(51, 4, 4, 0.3); /* Fondo más claro al pasar el ratón */
+}
+
+.message-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px; /* Agrega un pequeño padding para evitar que el texto toque los bordes */
+}
+
+.message-bubble {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    align-self: flex-end;
+    max-width: 70%;
+    font-size: 0.9em;
+    word-break: break-word; /* Permite romper palabras largas */
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: auto;
+}
+
+#message-input {
+    background-color: #fff;
+    border: none;
+    color: #000;
+    padding: 8px;
+    flex-grow: 1;
+    font-size: 1em;
+    outline: none;  
+    border-radius: 20px;
+}
+
+#send-button-img {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+}
+
+.user-message {
+  background-color: #007bff; /* Azul para el usuario */
+  align-self: flex-end; /* Alineado a la derecha */
+}
+
+.bot-message {
+  background-color: #28a745; /* Verde para el bot */
+  align-self: flex-start; /* Alineado a la izquierda */
+}
+
+  /*
+  Media Queries
+  --------------------------------------------------
+*/
+
+/* Tablets y pantallas más grandes */
+@media (min-width: 768px) {
+    .about-us {
+      padding: 80px 40px;
+    }
+  
+    .about-us h2 {
+      font-size: 3em;
+    }
+  
+    .about-us p {
+      font-size: 1.2em;
+    }
+  
+    nav a {
+      font-size: 1em;
+    }
+  }
+  
+  /* Desktops */
+  @media (min-width: 1200px) {
+    .hero h1 {
+      font-size: 3.5em;
+    }
+  
+    .hero p {
+      font-size: 1.3em;
+    }
+  }

@@ -22,9 +22,37 @@ function App() {
   };
 
   // Manejar el submit del formulario
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(JSON.stringify(formData)); // Imprime los datos en consola como JSON
+
+    if (formData.Password !== formData.WithsignatureyourPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    // Preparar los datos para enviarlos al backend
+    const payload = {
+      Nombres: formData.Name,
+      Apellidos: formData.lastName,
+      Email: formData.Email,
+      contraseña: formData.Password,
+    };
+
+    try {
+      const response = await fetch('http://localhost:10101/register/customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      alert(data.message); // Mensaje de éxito o error del backend
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error en el registro');
+    }
   };
 
   return (
