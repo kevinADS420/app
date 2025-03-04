@@ -13,7 +13,7 @@ function App() {
         <div className='containerFooter'>
           <div className='containerLogo'>
             <img src={LogoTwo} alt="logo" />
-            <p>Con nosotros, estás haciendo el cambio hacia una alimentación más saludable y un planeta más sostenible. ¡Elige lo bueno, elige lo mejor! 🌱🍎</p>
+            <p>Con nosotros, estás haciendo el cambio hacia una alimentación más saludable y un planeta más sostenible. ¡Elige lo bueno, elige lo mejor!</p>
         </div>
         <div className='contacto'>
             <Contato/>

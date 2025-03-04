@@ -1,8 +1,11 @@
 .containerFooter{
     display: flex;
-    background-color: #508B25;
+    background-color: #edf5ed;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
+    padding: 3rem 2rem;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
 .containerLogo{
@@ -11,22 +14,30 @@
     justify-content: center;
     align-items: center;
     max-width: 500px;
+    flex: 1;
+    min-width: 300px;
+    
     
 
     img{
         width: 20vw; 
         max-width: 273px; 
         height: auto;
+        margin-bottom: 1rem;
     }
 
     p{
         text-align: center;
+        line-height: 1.6;
+        font-size: 1rem;
     }
 
 }
 
 .contacto{
-    margin: 2rem;
+    margin: 0;
+    flex: 1;
+    min-width: 250px;
 }
 
 .containerContack{
@@ -41,6 +52,7 @@
 
     .icons{
         display: flex;
+        gap: 0.5rem;
     }
 }
 
@@ -48,58 +60,134 @@
     display: flex;
     flex-direction: column;    
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.8rem;
+    flex: 1;
+    min-width: 200px;
 
 
     .buttonInicio{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
     .buttonCategorias{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
     .buttonOfertas{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
     .buttonContacto{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
     .buttonSobreNosotros{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
     .buttonInicioSection{
-        color: black;
         border: 0;
         font-size: 1rem; 
         cursor: pointer;
+        background: transparent;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0;
     }
 
 }
 
+.containerButton button {
+    border: 0;
+    font-size: 1rem;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+}
+
+.containerButton button:hover {     
+    transform: translateX(5px);
+}
+
 .IconsRedes{
     display: flex;
-    background-color: #508B25;
+    background-color: #388E3C;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
+    padding: 1rem;
+    width: 100%;
+    gap: 2rem;
+}
+
+.IconsRedes .icon {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.IconsRedes .icon:hover {
+    transform: scale(1.1);
+}
+
+@media screen and (max-width: 768px) {
+    .containerFooter {
+        padding: 2rem 1rem;
+    }
+
+    .containerLogo {
+        min-width: 100%;
+    }
+
+    .containerLogo p {
+        font-size: 0.9rem;
+    }
+
+    .contacto, .containerButton {
+        min-width: 100%;
+        align-items: center;
+    }
+
+    .containerButton {
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .containerFooter {
+        padding: 1.5rem 1rem;
+    }
+
+    .containerLogo img {
+        width: 30vw;
+    }
+
+    .IconsRedes {
+        gap: 1rem;
+    }
 }
 
