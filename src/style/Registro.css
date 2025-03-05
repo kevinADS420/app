@@ -1,41 +1,163 @@
-.ContenedorRgistro{
+.ContenedorRgistro {
     display: flex;
-    padding: 5rem;
-    justify-content: center;
-    background-color: #fff;
-}
-
-.inicio{
-    background-image:linear-gradient(rgba(0, 0, 0, 0.5), #00000080), url('../assets/images/Genova.jpg');
-    background-size: cover; 
-    background-repeat: no-repeat;
-    display: flex;
+    min-height: 100vh;
     justify-content: center;
     align-items: center;
-    padding: 6rem;
-
-    .Inputs{
-        color: aliceblue;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        gap: 1rem;  
-    }
-
+    background-color: #f5f5f5;
+    padding: 2rem;
 }
 
-.Butons{
+.inicio {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.inicio form {
     display: flex;
-    justify-content: center;
-    margin: 3rem;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.Inputs {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+}
+
+.Inputs label {
+    color: #333;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.Inputs input {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.Inputs input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-container input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+
+    &:hover {
+        background-color: rgba(76, 175, 80, 0.1);
+        color: #4CAF50;
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+    }
+}
+
+/* Estilos específicos para los botones del formulario de inicio de sesión */
+.inicio .Butons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.inicio .ButtonsInicio button,
+.inicio .buttonInicioSection,
+.inicio .recuperar-password {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.inicio .registrate {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.inicio .registrate:hover {
+    background-color: #45a049;
+}
+
+.inicio .buttonInicioSection {
+    background-color: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    text-align: center;
+}
+
+.inicio .buttonInicioSection:hover {
+    background-color: #e9ecef;
+}
+
+.inicio .recuperar-password {
+    background: none;
+    color: #4CAF50;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+
+.inicio .recuperar-password:hover {
+    color: #45a049;
+}
+
+.login-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .inicio {
+        padding: 1.5rem;
+    }
     
-    .buttonInicioSection{
-        width: 5rem;
+    .ContenedorRgistro {
+        padding: 1rem;
     }
-
-    .registrate{
-        width: 5rem;
-    }
-
 }
