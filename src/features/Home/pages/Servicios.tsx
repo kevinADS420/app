@@ -1,8 +1,13 @@
-import React from 'react';
-import Error from '../../../assets/images/páginaError.jpg'
 
-const NotFound: React.FC = () => {
-  return <img src={Error} alt="" />
-};
 
-export default NotFound;
+function SobreNosotros() {
+  return (
+    <>  
+        <h1>Hola mundo </h1>
+        <p>EN el mundo hay gente</p>
+
+    </>
+  );
+}
+
+export default SobreNosotros;
