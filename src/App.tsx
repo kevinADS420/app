@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Categorias from './features/Home/pages/Categorias';
 import Ofertas from './features/Home/pages/Ofertas';
-import Contacto from './features/Home/pages/Contacto';
+import Contacto from './features/Home/pages/servicios';
 import SobreNosotros from './features/Home/pages/SobreNosotros';
 import Inicioseccion from './features/Home/pages/inicioseccion';
 import Registro from './features/Home/pages/Registro'
