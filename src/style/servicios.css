@@ -1,0 +1,41 @@
+.Containerimg{
+    display:flex ;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    background-color: #ffffff;
+    width: 100%;
+   
+  
+}
+
+.container23{
+    text-align: center;
+    background-color:#edf5ed
+}
+
+h2{
+    text-align: center;
+    padding: 100px
+}
+.text{
+    align-content: center;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif ;
+    background-color: #ffffff;
+}
+ul{
+    padding: 200px;
+    background-color: #e0ffdf;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.letra{
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1rem
+}
+.texto2{
+    background-color: #f5fff5;
+}
+div{
+    
+}

@@ -23,6 +23,7 @@ function App() {
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
         <Route path="/inicio-section" element={<Inicioseccion />} />
         <Route path='Registro' element={<Registro/>} />
+        <Route path='servicios' element={<Servicios/>} />
       </Routes>
       <Footer />
     </Router>                                        
