@@ -26,6 +26,8 @@ function App() {
         <Route path="/inicio-section" element={<Inicioseccion />} />
         <Route path='/Registro' element={<Registro/>} />
         <Route path="/configuracion" element={<EditProfile />} />
+        <Route path='Registro' element={<Registro/>} />
+        <Route path='servicios' element={<Servicios/>} />
       </Routes>
       <Footer />
       <ToastContainer position="bottom-right" />
