@@ -33,59 +33,96 @@
 
 .containerHeader {
     display: flex;
-    flex-wrap: wrap; 
-    justify-content: space-between; 
     align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     background: linear-gradient(135deg, #edf5ed 0%, #c8e6c9 50%, #a5d6a7 100%);
     border-bottom: 3px solid #4CAF50;
-    justify-content: space-around;
+}
 
-    .logo {
-        width: 20vw; 
-        max-width: 273px; 
-        height: auto;
-    }
+.logo {
+    width: 20vw;
+    max-width: 273px;
+    height: auto;
+}
 
-    .containericons {
-        display: flex;
-        gap: 1.25rem;
+.containericons {
+    display: flex;
+    align-items: center;
+}
 
-        .icon {
-            height: 2rem; 
-            cursor: pointer;
-        }
-    }
+.auth-container {
+    display: flex;
+    align-items: center;
+}
+
+.buttonInicioSection {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.buttonInicioSection:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+}
+
+.login-button {
+    text-decoration: none;
 }
 
 /* Media Queries */
-@media (max-width: 1293px) { /* Tablets y pantallas medianas */
+@media (max-width: 1293px) {
     .containerButtons {
-        opacity: 0;
-        transition: opacity 0.5s ease;
         display: none;
     }
 
     .containerHeader {
         text-align: center;
     }
+
+    .containericons {
+        margin-left: auto;
+    }
 }
 
-@media (max-width: 480px) { /* Celulares y pantallas pequeñas */
+@media (max-width: 480px) {
     .containerButtons {
         gap: 0.5rem;
     }
 
     button {
-        font-size: 1rem; /* Reduce el tamaño de fuente en pantallas pequeñas */
+        font-size: 1rem;
     }
 
     .logo {
-        width: 80%; /* Ajusta para pantallas pequeñas */
+        width: 80%;
+    }
+    
+    .containericons .buttonInicioSection {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .containerHeader {
+        padding: 0.5rem;
     }
 
-    .containericons .icon {
-        height: 1.5rem; /* Reduce el tamaño de los iconos */
+    .logo {
+        width: 150px;
+    }
+
+    .buttonInicioSection {
+        padding: 6px 12px;
+        font-size: 14px;
     }
 }
 

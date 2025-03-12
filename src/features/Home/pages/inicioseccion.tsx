@@ -1,61 +1,171 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../../style/Registro.css';
+import axios from 'axios';
 
-function Registro() {
+// Crear un evento personalizado para la actualización del usuario
+const userLoginEvent = new Event('userLogin');
+
+function Login() {
   const [formData, setFormData] = useState({
     Email: '',
-    Password: '',
+    contraseña: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
+    const fieldMapping: Record<string, string> = {
+      email: 'Email',
+      contraseña: 'contraseña'
+    };
+    
     setFormData({
       ...formData,
-      [id]: value,
+      [fieldMapping[id] || id]: value,
     });
+    // Limpiar mensaje de error cuando el usuario empieza a escribir
+    if (error) setError('');
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(JSON.stringify(formData));
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+    
+    try {
+      // Asegúrate de que el formato del email y contraseña sean correctos
+      if (!formData.Email.trim()) {
+        setError('El correo electrónico es requerido');
+        return;
+      }
+      
+      if (!formData.contraseña.trim()) {
+        setError('La contraseña es requerida');
+        return;
+      }
+      
+      // Ajusta la URL a tu endpoint de autenticación
+      const response = await axios.post('http://localhost:10101/login/customer', {
+        Email: formData.Email.trim(),
+        contraseña: formData.contraseña
+      });
+      
+      console.log('Login response:', response.data);
+      
+      // Guardar el token en localStorage
+      localStorage.setItem('token', response.data.token);
+      
+      // Configurar el token para futuras solicitudes
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      
+      // Obtener datos del usuario usando el email actual
+      try {
+        const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+          headers: {
+            'Authorization': `Bearer ${response.data.token}`
+          }
+        });
+        
+        console.log('User data:', userResponse.data);
+        
+        // Guardar los datos del usuario en localStorage
+        const userData = {
+          id_cliente: userResponse.data.id_cliente,
+          Nombres: userResponse.data.Nombres,
+          Apellidos: userResponse.data.Apellidos,
+          Email: userResponse.data.Email
+        };
+        
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Disparar el evento de actualización de usuario
+        window.dispatchEvent(userLoginEvent);
+        
+        // Mostrar mensaje de éxito
+        setSuccess(true);
+        
+        // Redireccionar a la página principal después de 2 segundos
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      } catch (userError) {
+        console.error('Error fetching user data:', userError);
+        localStorage.removeItem('token');
+        setError('Error al obtener datos del usuario');
+        return;
+      }
+    } catch (err: any) {
+      // Manejar errores de autenticación
+      if (err.response) {
+        if (err.response.status === 404) {
+          setError('Usuario no encontrado');
+        } else if (err.response.status === 401) {
+          setError('Credenciales incorrectas');
+        } else if (err.response.data && err.response.data.message) {
+          setError(err.response.data.message);
+        } else {
+          setError('Error en el servidor');
+        }
+      } else if (err.message.includes('Network Error')) {
+        setError('No se pudo conectar al servidor. Verifica tu conexión');
+      } else {
+        setError('Error al iniciar sesión');
+      }
+      console.error('Error de inicio de sesión:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="ContenedorRgistro">
       <div className="inicio">
         <h1 className="login-title">Iniciar Sesión</h1>
+        {error && <div className="error-message">{error}</div>}
+        {success && (
+          <div className="success-message">
+            ¡Inicio de sesión exitoso! Redirigiendo...
+          </div>
+        )}
         <form id="SaveUsers" onSubmit={handleSubmit}>
           <div className="Inputs">
-            <label htmlFor="Email">Correo electrónico</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
-              type="email"
+              type="Email"
               id="Email"
               value={formData.Email}
               onChange={handleChange}
               placeholder="Ingresa tu correo"
               required
+              disabled={loading}
             />
-            <label htmlFor="Password">Contraseña</label>
+            <label htmlFor="contraseña">Contraseña</label>
             <div className="password-input-container">
               <input
                 type={showPassword ? "text" : "password"}
-                id="Password"
-                value={formData.Password}
+                id="contraseña"
+                value={formData.contraseña}
                 onChange={handleChange}
                 placeholder="Ingresa tu contraseña"
                 required
+                disabled={loading}
               />
               <button 
                 type="button" 
                 className="toggle-password"
                 onClick={togglePasswordVisibility}
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                disabled={loading}
               >
                 {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -74,14 +184,14 @@ function Registro() {
 
           <div className="Butons">
             <div className="ButtonsInicio">
-              <button className="registrate" type="submit">
-                Iniciar Sesión
+              <button className="registrate" type="submit" disabled={loading}>
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </button>
             </div>
             <Link to="/Registro" className="buttonInicioSection">
               Crear cuenta
             </Link>
-            <button className="recuperar-password">
+            <button type="button" className="recuperar-password" disabled={loading}>
               ¿Olvidaste tu contraseña?
             </button>
           </div>
@@ -91,4 +201,4 @@ function Registro() {
   );
 }
 
-export default Registro;
+export default Login;
