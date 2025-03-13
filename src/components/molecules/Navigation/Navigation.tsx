@@ -10,9 +10,8 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ isAuthenticated }) => {
   const navItems = [
     { to: '/', label: 'Inicio' },
-    { to: '/categorias', label: 'Categorías' },
-    { to: '/ofertas', label: 'Ofertas' },
-    { to: '/contacto', label: 'Servicios' },
+    { to: '/productos', label: 'Productos' },
+    { to: '/servicios', label: 'Servicios' },
     { to: '/sobre-nosotros', label: 'Sobre Nosotros' },
   ];
 

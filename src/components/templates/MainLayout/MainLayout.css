@@ -6,12 +6,18 @@
 
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding-top: 90px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 @media (max-width: 768px) {
   .main-content {
-    padding: 1rem;
+    padding-top: 75px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
   }
 } 

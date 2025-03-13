@@ -12,9 +12,8 @@ interface MobileMenuProps {
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, isAuthenticated }) => {
   const navItems = [
     { to: '/', label: 'Inicio' },
-    { to: '/categorias', label: 'Categorías' },
-    { to: '/ofertas', label: 'Ofertas' },
-    { to: '/contacto', label: 'Servicios' },
+    { to: '/productos', label: 'Productos' },
+    { to: '/servicios', label: 'Servicios' },
     { to: '/sobre-nosotros', label: 'Sobre Nosotros' },
   ];
 

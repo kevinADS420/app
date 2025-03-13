@@ -51,7 +51,7 @@
 
 /* Agregamos un espaciador para compensar el header fijo */
 .header-spacer {
-  height: 80px;
+  height: 90px;
 }
 
 /* Animación para cuando el header aparece */
@@ -80,7 +80,7 @@
   }
   
   .header-spacer {
-    height: 65px;
+    height: 75px;
   }
 
   .auth-container {
