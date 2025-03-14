@@ -1,41 +1,428 @@
-.Containerimg{
-    display:flex ;
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-    background-color: #ffffff;
-    width: 100%;
-   
+/* servicios.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.servicios-page {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+/* Encabezado de la página */
+.servicios-header {
+  background: linear-gradient(135deg, #8dc26f, #76b852);
+  padding: 2rem 0;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.servicios-header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  padding: 0 20px;
+}
+
+/* Banner con imagen */
+.servicios-banner {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: 450px;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin-top: -50px;
+  z-index: 2;
+}
+
+.servicios-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.8s ease;
+  filter: brightness(0.9);
+}
+
+.servicios-banner:hover img {
+  transform: scale(1.03);
+  filter: brightness(1);
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+  z-index: 1;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  padding: 0 40px;
+  text-align: center;
+  color: white;
+  z-index: 2;
+}
+
+.banner-text h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenido principal */
+.servicios-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 20px;
+}
+
+/* Sección de introducción */
+.servicios-intro {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.servicios-intro h2 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.servicios-intro h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #8dc26f, #76b852);
+  border-radius: 2px;
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Sección de beneficios */
+.servicios-beneficios {
+  margin-bottom: 4rem;
+}
+
+.servicios-beneficios h3 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.servicios-beneficios h3:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #8dc26f, #76b852);
+  border-radius: 2px;
+}
+
+.beneficios-lista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.beneficio-item {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  padding: 1.5rem;
+}
+
+.beneficio-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.beneficio-icon {
+  font-size: 2rem;
+  color: #76b852;
+  margin-right: 1rem;
+  min-width: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.beneficio-content {
+  flex: 1;
+}
+
+.beneficio-content h4 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.beneficio-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Sección CTA */
+.servicios-cta {
+  background: linear-gradient(135deg, #8dc26f, #76b852);
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.servicios-cta h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.servicios-cta p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  background-color: white;
+  color: #76b852;
+  border: none;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:active {
+  transform: translateY(-1px);
+}
+
+/* Estilos responsive */
+@media (max-width: 1200px) {
+  .servicios-content {
+    padding: 2.5rem 20px;
+  }
   
+  .beneficios-lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.container23{
-    text-align: center;
-    background-color:#edf5ed
+@media (max-width: 992px) {
+  .servicios-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .servicios-intro h2 {
+    font-size: 2rem;
+  }
+  
+  .servicios-banner {
+    height: 350px;
+    margin-top: -40px;
+  }
+  
+  .banner-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .servicios-cta {
+    padding: 2.5rem;
+  }
 }
 
-h2{
-    text-align: center;
-    padding: 100px
+@media (max-width: 768px) {
+  .servicios-header {
+    padding: 2.5rem 0;
+  }
+  
+  .servicios-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .servicios-banner {
+    height: 300px;
+    margin-top: -30px;
+    margin-left: 15px;
+    margin-right: 15px;
+    width: calc(100% - 30px);
+  }
+  
+  .banner-text {
+    bottom: 30px;
+    padding: 0 20px;
+  }
+  
+  .banner-text h2 {
+    font-size: 1.6rem;
+  }
+  
+  .servicios-intro h2 {
+    font-size: 1.8rem;
+  }
+  
+  .intro-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  
+  .beneficios-lista {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .servicios-cta h3 {
+    font-size: 1.8rem;
+  }
+  
+  .servicios-cta p {
+    font-size: 1rem;
+  }
 }
-.text{
-    align-content: center;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif ;
-    background-color: #ffffff;
+
+@media (max-width: 576px) {
+  .servicios-header {
+    padding: 2rem 0;
+  }
+  
+  .servicios-header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .servicios-banner {
+    height: 220px;
+    margin-top: -25px;
+    border-radius: 8px;
+  }
+  
+  .banner-text {
+    bottom: 20px;
+  }
+  
+  .banner-text h2 {
+    font-size: 1.4rem;
+  }
+  
+  .servicios-content {
+    padding: 2rem 15px;
+  }
+  
+  .servicios-intro h2 {
+    font-size: 1.6rem;
+  }
+  
+  .servicios-intro {
+    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+  }
+  
+  .beneficio-item {
+    flex-direction: column;
+    padding: 1.2rem;
+  }
+  
+  .beneficio-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+  }
+  
+  .servicios-cta {
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .servicios-cta h3 {
+    font-size: 1.6rem;
+  }
+  
+  .cta-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
 }
-ul{
-    padding: 200px;
-    background-color: #e0ffdf;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.letra{
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 1rem
-}
-.texto2{
-    background-color: #f5fff5;
-}
-div{
-    
+
+@media (max-width: 480px) {
+  .servicios-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .servicios-banner {
+    height: 180px;
+  }
+  
+  .banner-text h2 {
+    font-size: 1.2rem;
+  }
+  
+  .servicios-intro h2 {
+    font-size: 1.4rem;
+  }
+  
+  .servicios-intro h2:after {
+    width: 60px;
+  }
+  
+  .beneficio-content h4 {
+    font-size: 1.2rem;
+  }
+  
+  .beneficio-content p {
+    font-size: 0.95rem;
+  }
+  
+  .servicios-cta h3 {
+    font-size: 1.4rem;
+  }
 }
