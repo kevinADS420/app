@@ -1,5 +1,4 @@
-import React from 'react';
-import servicios from '../../../assets/images/SERVICIOS.jpg';
+import servicios from '../../../assets/images/upscalemedia-transformed.jpeg';
 import '../../../style/servicios.css';
 
 function Servicios() {
