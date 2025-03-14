@@ -1,5 +1,5 @@
-/* servicios.css */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* servicios.css - Estilo Alternativo */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 /* Estilos generales */
@@ -10,56 +10,66 @@
 }
 
 .servicios-page {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: #333;
-  background-color: #f8f9fa;
+  background-color: #fff;
   overflow-x: hidden;
 }
 
 /* Encabezado de la página */
 .servicios-header {
-  background: linear-gradient(135deg, #8dc26f, #76b852);
-  padding: 2rem 0;
+  background: #307233;
+  padding: 4rem 0;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.servicios-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.6;
 }
 
 .servicios-header h1 {
   color: white;
   font-size: 2.5rem;
-  font-weight: 900;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  margin: 0;
-  padding: 0 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
 }
 
 /* Banner con imagen */
 .servicios-banner {
   position: relative;
-  width: 100%;
+  width: 95%;
   max-width: 1200px;
   height: 450px;
-  overflow: hidden;
   margin: 0 auto;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-top: -50px;
-  z-index: 2;
+  margin-top: -60px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
 .servicios-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
   display: block;
-  transition: transform 0.8s ease;
-  filter: brightness(0.9);
+  transition: transform 1s ease;
 }
 
 .servicios-banner:hover img {
-  transform: scale(1.03);
-  filter: brightness(1);
+  transform: scale(1.05);
 }
 
 .banner-overlay {
@@ -68,92 +78,103 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
-  z-index: 1;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0) 100%);
 }
 
 .banner-text {
   position: absolute;
-  bottom: 40px;
+  bottom: 50px;
   left: 0;
   width: 100%;
   padding: 0 40px;
   text-align: center;
-  color: white;
   z-index: 2;
 }
 
 .banner-text h2 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   margin: 0;
-  padding: 0;
 }
 
 /* Contenido principal */
 .servicios-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 20px;
+  padding: 4rem 20px;
 }
 
 /* Sección de introducción */
 .servicios-intro {
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
   text-align: center;
+  position: relative;
 }
 
 .servicios-intro h2 {
   font-size: 2.2rem;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
+  color: #4CAF50;
+  margin-bottom: 2rem;
+  font-weight: 700;
   position: relative;
   display: inline-block;
 }
 
-.servicios-intro h2:after {
+.servicios-intro h2::before,
+.servicios-intro h2::after {
   content: '';
   position: absolute;
+  height: 3px;
   bottom: -10px;
+  background: #f2f5f2;
+  border-radius: 2px;
+}
+
+.servicios-intro h2::before {
+  width: 60px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #8dc26f, #76b852);
-  border-radius: 2px;
+}
+
+.servicios-intro h2::after {
+  width: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -18px;
 }
 
 .intro-text {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #555;
-  max-width: 900px;
+  color: #4CAF50;
+  max-width: 850px;
   margin: 0 auto;
 }
 
 /* Sección de beneficios */
 .servicios-beneficios {
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 }
 
 .servicios-beneficios h3 {
-  font-size: 1.8rem;
-  color: #2c3e50;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #444;
+  margin-bottom: 3rem;
   text-align: center;
   position: relative;
 }
 
-.servicios-beneficios h3:after {
+.servicios-beneficios h3::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  width: 80px;
+  height: 3px;
+  background: #4CAF50;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #8dc26f, #76b852);
   border-radius: 2px;
 }
 
@@ -161,97 +182,176 @@
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  gap: 30px;
 }
 
 .beneficio-item {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s ease;
+  position: relative;
+  padding: 2rem;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.beneficio-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #4CAF50;
+  transition: all 0.3s ease;
 }
 
 .beneficio-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.beneficio-item:hover::before {
+  width: 100%;
+  opacity: 0.1;
 }
 
 .beneficio-icon {
-  font-size: 2rem;
-  color: #76b852;
-  margin-right: 1rem;
-  min-width: 40px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.beneficio-content {
-  flex: 1;
+  font-size: 2.2rem;
+  color: #4CAF50;
+  margin-bottom: 1.2rem;
 }
 
 .beneficio-content h4 {
   font-size: 1.3rem;
-  margin-bottom: 0.8rem;
-  color: #2c3e50;
+  margin-bottom: 1rem;
+  color: #4CAF50;
+  font-weight: 600;
 }
 
 .beneficio-content p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #4CAF50;
 }
 
 /* Sección CTA */
 .servicios-cta {
-  background: linear-gradient(135deg, #8dc26f, #76b852);
-  border-radius: 12px;
-  padding: 3rem;
+  background: #4a6fa5;
+  border-radius: 10px;
+  padding: 4rem 2rem;
   text-align: center;
   color: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 35px rgba(74, 111, 165, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.servicios-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 .servicios-cta h3 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  position: relative;
 }
 
 .servicios-cta p {
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
   opacity: 0.9;
 }
 
 .cta-button {
-  background-color: white;
-  color: #76b852;
+  background-color: #4CAF50;
+  color: white;
   border: none;
-  padding: 12px 28px;
+  padding: 15px 40px;
   font-size: 1.1rem;
   font-weight: 600;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px color = #4CAF50;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.5s ease;
 }
 
 .cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px color= #4CAF50;
 }
 
-.cta-button:active {
-  transform: translateY(-1px);
+.cta-button:hover::after {
+  transform: translateX(100%) skewX(-15deg);
+}
+
+/* Animaciones */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.servicios-intro {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out 0.2s forwards;
+}
+
+.servicios-beneficios {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out 0.4s forwards;
+}
+
+.beneficio-item {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.beneficio-item:nth-child(1) { animation-delay: 0.5s; }
+.beneficio-item:nth-child(2) { animation-delay: 0.6s; }
+.beneficio-item:nth-child(3) { animation-delay: 0.7s; }
+.beneficio-item:nth-child(4) { animation-delay: 0.8s; }
+.beneficio-item:nth-child(5) { animation-delay: 0.9s; }
+.beneficio-item:nth-child(6) { animation-delay: 1s; }
+
+.servicios-cta {
+  opacity: 0;
+  animation: fadeIn 1s ease-out 1.1s forwards;
 }
 
 /* Estilos responsive */
 @media (max-width: 1200px) {
   .servicios-content {
-    padding: 2.5rem 20px;
+    padding: 3rem 20px;
   }
   
   .beneficios-lista {
@@ -269,22 +369,26 @@
   }
   
   .servicios-banner {
-    height: 350px;
-    margin-top: -40px;
+    height: 380px;
+    margin-top: -50px;
   }
   
   .banner-text h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
   .servicios-cta {
-    padding: 2.5rem;
+    padding: 3rem 2rem;
+  }
+  
+  .servicios-cta h3 {
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .servicios-header {
-    padding: 2.5rem 0;
+    padding: 3rem 0;
   }
   
   .servicios-header h1 {
@@ -292,16 +396,12 @@
   }
   
   .servicios-banner {
-    height: 300px;
-    margin-top: -30px;
-    margin-left: 15px;
-    margin-right: 15px;
-    width: calc(100% - 30px);
+    height: 320px;
+    margin-top: -40px;
   }
   
   .banner-text {
-    bottom: 30px;
-    padding: 0 20px;
+    bottom: 40px;
   }
   
   .banner-text h2 {
@@ -314,26 +414,24 @@
   
   .intro-text {
     font-size: 1rem;
-    line-height: 1.7;
   }
   
   .beneficios-lista {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   
-  .servicios-cta h3 {
+  .beneficio-item {
+    padding: 1.5rem;
+  }
+  
+  .servicios-beneficios h3 {
     font-size: 1.8rem;
-  }
-  
-  .servicios-cta p {
-    font-size: 1rem;
   }
 }
 
 @media (max-width: 576px) {
   .servicios-header {
-    padding: 2rem 0;
+    padding: 2.5rem 0;
   }
   
   .servicios-header h1 {
@@ -341,13 +439,14 @@
   }
   
   .servicios-banner {
-    height: 220px;
-    margin-top: -25px;
-    border-radius: 8px;
+    height: 250px;
+    margin-top: -30px;
+    width: 92%;
   }
   
   .banner-text {
-    bottom: 20px;
+    bottom: 30px;
+    padding: 0 20px;
   }
   
   .banner-text h2 {
@@ -355,41 +454,48 @@
   }
   
   .servicios-content {
-    padding: 2rem 15px;
+    padding: 2.5rem 15px;
+  }
+  
+  .servicios-intro {
+    margin-bottom: 3.5rem;
   }
   
   .servicios-intro h2 {
     font-size: 1.6rem;
   }
   
-  .servicios-intro {
-    margin-bottom: 3rem;
-    margin-top: 1.5rem;
-  }
-  
-  .beneficio-item {
-    flex-direction: column;
-    padding: 1.2rem;
+  .servicios-beneficios h3 {
+    font-size: 1.6rem;
+    margin-bottom: 2.5rem;
   }
   
   .beneficio-icon {
-    margin-right: 0;
+    font-size: 2rem;
     margin-bottom: 1rem;
-    justify-content: flex-start;
+  }
+  
+  .beneficio-content h4 {
+    font-size: 1.2rem;
   }
   
   .servicios-cta {
-    padding: 2rem 1.5rem;
-    margin-top: 2rem;
+    padding: 2.5rem 1.5rem;
   }
   
   .servicios-cta h3 {
     font-size: 1.6rem;
   }
   
+  .servicios-cta p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
   .cta-button {
+    padding: 14px 30px;
+    font-size: 1rem;
     width: 100%;
-    padding: 12px 20px;
   }
 }
 
@@ -399,7 +505,7 @@
   }
   
   .servicios-banner {
-    height: 180px;
+    height: 200px;
   }
   
   .banner-text h2 {
@@ -410,19 +516,7 @@
     font-size: 1.4rem;
   }
   
-  .servicios-intro h2:after {
-    width: 60px;
-  }
-  
-  .beneficio-content h4 {
-    font-size: 1.2rem;
-  }
-  
   .beneficio-content p {
-    font-size: 0.95rem;
-  }
-  
-  .servicios-cta h3 {
-    font-size: 1.4rem;
+    font-size: 0.9rem;
   }
 }
