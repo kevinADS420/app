@@ -1,193 +1,171 @@
-.containerFooter{
+.containerFooter {
     display: flex;
     background-color: #edf5ed;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: flex-start;
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1.5rem;
+    font-size: 0.95rem;
 }
 
-.containerLogo{
+.containerLogo {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 500px;
-    flex: 1;
-    min-width: 300px;
-    
-    
-
-    img{
-        width: 20vw; 
-        max-width: 273px; 
-        height: auto;
-        margin-bottom: 1rem;
-    }
-
-    p{
-        text-align: center;
-        line-height: 1.6;
-        font-size: 1rem;
-    }
-
-}
-
-.contacto{
-    margin: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-width: 400px;
     flex: 1;
     min-width: 250px;
 }
 
-.containerContack{
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 0.7rem;
-
-    img{
-        width: 30px;
-    }
-
-    .icons{
-        display: flex;
-        gap: 0.5rem;
-    }
+.containerLogo img {
+    width: 180px;
+    height: auto;
+    margin-bottom: 0.75rem;
 }
 
-.containerButton{
+.containerLogo p {
+    text-align: left;
+    line-height: 1.4;
+    font-size: 0.9rem;
+    margin-top: 0;
+}
+
+.contacto {
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+.contacto h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.containerContack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+.containerContack .icons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.containerContack img {
+    width: 20px;
+    height: 20px;
+}
+
+.containerButton {
     display: flex;
     flex-direction: column;    
     align-items: flex-start;
-    gap: 0.8rem;
+    gap: 0.5rem;
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
+}
 
-
-    .buttonInicio{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
-    .buttonCategorias{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
-    .buttonOfertas{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
-    .buttonContacto{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
-    .buttonSobreNosotros{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
-    .buttonInicioSection{
-        border: 0;
-        font-size: 1rem; 
-        cursor: pointer;
-        background: transparent;
-        transition: all 0.3s ease;
-        padding: 0.5rem 0;
-    }
-
+.containerButton h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
 }
 
 .containerButton button {
     border: 0;
-    font-size: 1rem;
+    font-size: 0.9rem; 
     cursor: pointer;
     background: transparent;
     transition: all 0.3s ease;
-    padding: 0.5rem 0;
+    padding: 0.35rem 0;
+    text-align: left;
+    width: 100%;
 }
 
 .containerButton button:hover {     
     transform: translateX(5px);
+    color: #388E3C;
 }
 
-.IconsRedes{
+.IconsRedes {
     display: flex;
     background-color: #388E3C;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 0.75rem;
     width: 100%;
-    gap: 2rem;
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
 
 .IconsRedes .icon {
-    width: 30px;
-    height: 30px;
-    transition: transform 0.3s ease;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
 }
 
 .IconsRedes .icon:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    opacity: 0.9;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
     .containerFooter {
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
+        justify-content: flex-start;
     }
+    
+    .containerLogo, .contacto, .containerButton {
+        min-width: 200px;
+        max-width: 100%;
+        flex: 0 0 calc(50% - 1.5rem);
+    }
+}
 
+@media screen and (max-width: 600px) {
+    .containerFooter {
+        padding: 1.25rem 1rem;
+        gap: 1.25rem;
+    }
+    
+    .containerLogo, .contacto, .containerButton {
+        min-width: 100%;
+        flex: 0 0 100%;
+    }
+    
     .containerLogo {
-        min-width: 100%;
-    }
-
-    .containerLogo p {
-        font-size: 0.9rem;
-    }
-
-    .contacto, .containerButton {
-        min-width: 100%;
         align-items: center;
     }
-
+    
+    .containerLogo img {
+        width: 150px;
+    }
+    
+    .containerLogo p {
+        text-align: center;
+    }
+    
     .containerButton {
         align-items: center;
     }
-}
-
-@media screen and (max-width: 480px) {
-    .containerFooter {
-        padding: 1.5rem 1rem;
+    
+    .containerButton button {
+        text-align: center;
     }
-
-    .containerLogo img {
-        width: 30vw;
-    }
-
+    
     .IconsRedes {
-        gap: 1rem;
+        gap: 1.25rem;
+        padding: 0.6rem;
+    }
+    
+    .IconsRedes .icon {
+        width: 22px;
+        height: 22px;
     }
 }
-
