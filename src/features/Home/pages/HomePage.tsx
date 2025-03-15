@@ -62,7 +62,7 @@ function Inicio() {
             </div>
             <div className="product">
               <img src={Tomate} alt="Producto 3" />
-              <h3>Toamte</h3>
+              <h3>Tomate</h3>
               <p>Descripción breve del producto.</p>
               <span className="price">COP $6,300 k</span>
             </div>
