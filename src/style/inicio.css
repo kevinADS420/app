@@ -16,17 +16,18 @@ img {
 */
 
 .hero {
-    position: relative;
-    text-align: center;
-    color: white;
-    background-image: url('../assets/images/imghome.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  position: relative;
+  text-align: center;
+  color: white;
+  background-image: url('../assets/images/imghome.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: contrast(110%) saturate(115%) brightness(105%); /* Aumenta contraste, saturación y brillo */
+}
   
   .hero::before {
     content: '';
@@ -124,8 +125,8 @@ img {
     }
     
     .feature img {
-      width: 40%;
-      height: 40%;  /* Ajusta la altura automáticamente para mantener la proporción */
+      width: 60%;
+      height: 45%;  /* Ajusta la altura automáticamente para mantener la proporción */
       border-radius: 50%; /* Hace que la imagen sea un círculo */
       margin-bottom: 20px;
       object-fit: cover; /* Mantiene la proporción de la imagen */
