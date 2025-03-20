@@ -26,7 +26,7 @@ function SobreNosotros() {
               <div className="quote-box">
                 <FaQuoteLeft />
                 <blockquote>
-                  Cada 15 días, cientos de familias en las veredas más remotas del Quindío, organizan sus cosechas para la llegada del camión que las llevará hasta los mercados campesinos de los diferentes pueblos.
+                  Cada 30 días, cientos de familias en las veredas más remotas del Quindío, organizan sus cosechas para la llegada del camión que las llevará hasta los mercados campesinos de los diferentes pueblos.
                 </blockquote>
                 <FaQuoteRight />
               </div>

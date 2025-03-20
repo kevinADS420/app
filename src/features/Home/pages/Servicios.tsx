@@ -89,11 +89,11 @@ function Servicios() {
           </ul>
         </div>
         
-        <div className="servicios-cta">
+        {/* <div className="servicios-cta">
           <h3>¿Listo para mejorar tu alimentación?</h3>
           <p>Descarga nuestra app y comienza a disfrutar de productos frescos directamente del campo</p>
           <button className="cta-button">Descargar Ahora</button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

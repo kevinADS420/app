@@ -41,7 +41,7 @@
   height: var(--header-height-scrolled);
   box-shadow: var(--shadow-medium);
   background-color: rgba(255, 255, 255, 0.98);
-  background: linear-gradient(135deg, rgba(231, 249, 232, 0.98) 0%, rgba(155, 213, 162, 0.95) 50%, rgba(115, 198, 132, 0.92));
+  background: linear-gradient(135deg, rgba(231, 249, 232, 0.98) 0%, rgba(207, 233, 210, 0.95) 50%, rgba(170, 219, 180, 0.92));
   border-bottom: 2px solid rgba(76, 175, 80, 0.3);
   backdrop-filter: blur(10px);
   box-shadow: 0 3px 15px rgba(60, 145, 80, 0.15);
@@ -55,7 +55,7 @@
   padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: left;
 }
 
 /* Logo Styles */
@@ -92,7 +92,6 @@
 .navigation {
   display: flex;
   align-items: center;
-  height: 100%;
 }
 
 .nav-links {
@@ -108,18 +107,20 @@
   position: relative;
 }
 
-.nav-link {
+
+.auth-container  {
+  width: 40px; 
+  height: 40px;
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 0 20px;
-  font-family: 'Poppins', sans-serif;
+  justify-content: center;
   font-weight: 500;
-  font-size: 1rem;
+  border-radius: 100%;
+  transition: all var(--transition-speed) ease;
+  text-align: center;
   color: var(--text-dark);
   text-decoration: none;
-  transition: color var(--transition-speed) ease;
-  position: relative;
+  cursor: pointer;
 }
 
 /* Estilos mejorados para el logo */
@@ -324,18 +325,6 @@
   margin: 10px 0;
 }
 
-.mobile-nav-link {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  color: var(--text-dark);
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all var(--transition-speed) ease;
-}
-
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
   background-color: rgba(76, 175, 80, 0.1);
@@ -414,6 +403,15 @@
   .logo {
     width: 140px; /* Ajuste responsivo para móviles */
   }
+
+  .nav-link,
+  .auth-container button,
+  .mobile-nav-link,
+  .iniciar-sesion-btn {
+    width: 110px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -471,4 +469,25 @@
     display: none;
   }
 
+  .nav-link,
+  .auth-container button,
+  .mobile-nav-link,
+  .iniciar-sesion-btn {
+    width: 100px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ajuste específico para el botón de inicio de sesión */
+.iniciar-sesion-btn {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.iniciar-sesion-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(60, 145, 80, 0.2);
 }
