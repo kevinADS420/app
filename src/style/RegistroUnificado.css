@@ -1,0 +1,408 @@
+.registro-unificado-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .registro-left-panel {
+    flex: 1;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/Genova.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+  }
+  
+  .google-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .google-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .google-content p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .google-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    background-color: white;
+    border: none;
+    border-radius: 50px;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .google-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .google-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .divider span {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .registro-form-container {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    background-color: white;
+  }
+  
+  .registro-logo {
+    width: 180px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .role-selector {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .role-selector h3 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .role-options {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .role-option {
+    position: relative;
+    cursor: pointer;
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .role-option.active {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+  }
+  
+  .role-option input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .role-option label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .radio-custom {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+  }
+  
+  .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .role-option.active .radio-custom {
+    border-color: #4CAF50;
+  }
+  
+  .role-option.active .radio-custom::after {
+    opacity: 1;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-group {
+    flex: 1;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  }
+  
+  .password-input-container {
+    position: relative;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s ease;
+  }
+  
+  .toggle-password:hover {
+    color: #333;
+  }
+  
+  .proveedor-fields {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .error-message {
+    background-color: #ffebee;
+    color: #d32f2f;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    border-left: 4px solid #d32f2f;
+    width: 100%;
+  }
+  
+  .success-message {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 500;
+    border-left: 4px solid #2e7d32;
+    width: 100%;
+  }
+  
+  .error-icon {
+    font-size: 1.2rem;
+  }
+  
+  .field-error {
+    color: #d32f2f;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+  }
+  
+  .error-input {
+    border-color: #d32f2f !important;
+    background-color: rgba(211, 47, 47, 0.05);
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-button:hover:not(.disabled) {
+    background-color: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .submit-button.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .login-redirect {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .login-redirect a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .login-redirect a:hover {
+    text-decoration: underline;
+    color: #388E3C;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 992px) {
+    .registro-unificado-container {
+      flex-direction: column;
+    }
+    
+    .registro-left-panel {
+      min-height: 300px;
+    }
+    
+    .registro-form-container {
+      padding: 2rem 1.5rem;
+    }
+    
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .google-content {
+      padding: 1.5rem;
+    }
+    
+    .google-content h2 {
+      font-size: 1.8rem;
+    }
+    
+    .registro-logo {
+      width: 150px;
+    }
+    
+    .role-options {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .role-option {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .registro-left-panel {
+      min-height: 250px;
+    }
+    
+    .google-content h2 {
+      font-size: 1.5rem;
+    }
+    
+    .google-content p {
+      font-size: 1rem;
+    }
+    
+    .registro-form-container {
+      padding: 1.5rem 1rem;
+    }
+    
+    .form-group input {
+      padding: 0.7rem 0.8rem;
+    }
+    
+    .submit-button {
+      padding: 0.8rem;
+    }
+  }

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../../style/Registro.css';
 import axios from 'axios';
 
-// Crear un evento personalizado para la actualización del usuario
+// Custom event for user login
 const userLoginEvent = new Event('userLogin');
 
 function Login() {
@@ -28,7 +28,7 @@ function Login() {
       ...formData,
       [fieldMapping[id] || id]: value,
     });
-    // Limpiar mensaje de error cuando el usuario empieza a escribir
+    // Clear error message when user starts typing
     if (error) setError('');
   };
 
@@ -42,86 +42,122 @@ function Login() {
     setError('');
     setSuccess(false);
     
+    // Validate email and password
+    if (!formData.Email.trim()) {
+      setError('El correo electrónico es requerido');
+      setLoading(false);
+      return;
+    }
+    
+    if (!formData.contraseña.trim()) {
+      setError('La contraseña es requerida');
+      setLoading(false);
+      return;
+    }
+    
+    // Intentamos iniciar sesión como cliente primero
     try {
-      // Asegúrate de que el formato del email y contraseña sean correctos
-      if (!formData.Email.trim()) {
-        setError('El correo electrónico es requerido');
-        return;
-      }
-      
-      if (!formData.contraseña.trim()) {
-        setError('La contraseña es requerida');
-        return;
-      }
-      
-      // Ajusta la URL a tu endpoint de autenticación
-      const response = await axios.post('http://localhost:10101/login/customer', {
-        Email: formData.Email.trim(),
+      console.log('Intentando login como cliente...');
+      const customerResponse = await axios.post('http://localhost:10101/login/customer', {
+        Email: formData.Email.trim(),  // Cliente usa Email con mayúscula
         contraseña: formData.contraseña
       });
       
-      console.log('Login response:', response.data);
+      console.log('Login exitoso como cliente:', customerResponse.data);
       
-      // Guardar el token en localStorage
-      localStorage.setItem('token', response.data.token);
+      // Guardar token en localStorage
+      localStorage.setItem('token', customerResponse.data.token);
+      localStorage.setItem('userType', 'customer');
       
-      // Configurar el token para futuras solicitudes
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      // Configurar token para futuras solicitudes
+      axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
       
-      // Obtener datos del usuario usando el email actual
+      // Verificar si la respuesta ya contiene datos del usuario
+      if (customerResponse.data.userData) {
+        // Si la respuesta de login ya incluye datos del usuario, los usamos directamente
+        localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
+      } else {
+        // Si no, hacemos una solicitud adicional para obtener los datos
+        try {
+          const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+            headers: {
+              'Authorization': `Bearer ${customerResponse.data.token}`
+            }
+          });
+          
+          console.log('Datos de usuario cliente:', userResponse.data);
+          
+          const userData = {
+            id_cliente: userResponse.data.id_cliente,
+            Nombres: userResponse.data.Nombres,
+            Apellidos: userResponse.data.Apellidos,
+            Email: userResponse.data.Email
+          };
+          
+          localStorage.setItem('user', JSON.stringify(userData));
+        } catch (error) {
+          console.error('Error al obtener datos del cliente:', error);
+          // Continuar aunque no podamos obtener datos completos
+        }
+      }
+      
+      // Evento de login exitoso
+      window.dispatchEvent(userLoginEvent);
+      
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+      
+      return; // Salir de la función si el login como cliente fue exitoso
+    } catch (customerError) {
+      console.log('Login como cliente falló, intentando como proveedor...', customerError);
+      
+      // Si falló como cliente, intentamos como proveedor
       try {
-        const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
-          headers: {
-            'Authorization': `Bearer ${response.data.token}`
-          }
+        const proveedorResponse = await axios.post('http://localhost:10101/login/proveedor', {
+          email: formData.Email.trim(),  // Proveedor usa email con minúscula
+          contraseña: formData.contraseña
         });
         
-        console.log('User data:', userResponse.data);
+        console.log('Login exitoso como proveedor:', proveedorResponse.data);
         
-        // Guardar los datos del usuario en localStorage
-        const userData = {
-          id_cliente: userResponse.data.id_cliente,
-          Nombres: userResponse.data.Nombres,
-          Apellidos: userResponse.data.Apellidos,
-          Email: userResponse.data.Email
-        };
+        // Guardar token en localStorage
+        localStorage.setItem('token', proveedorResponse.data.token);
+        localStorage.setItem('userType', 'proveedor');
         
-        localStorage.setItem('user', JSON.stringify(userData));
+        // Configurar token para futuras solicitudes
+        axios.defaults.headers.common['Authorization'] = `Bearer ${proveedorResponse.data.token}`;
         
-        // Disparar el evento de actualización de usuario
+        // Verificar si la respuesta ya contiene datos del usuario
+        if (proveedorResponse.data.userData) {
+          // Si la respuesta de login ya incluye datos del usuario, los usamos directamente
+          localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
+        } else {
+          // No intentamos obtener más datos del proveedor si no están incluidos en la respuesta de login
+          // porque puede haber diferencias en las rutas de la API
+          // Guardamos al menos el correo que tenemos
+          localStorage.setItem('user', JSON.stringify({
+            Email: formData.Email,
+            // Otros datos que queramos guardar de la respuesta si existen
+          }));
+        }
+        
+        // Evento de login exitoso
         window.dispatchEvent(userLoginEvent);
         
-        // Mostrar mensaje de éxito
         setSuccess(true);
-        
-        // Redireccionar a la página principal después de 2 segundos
         setTimeout(() => {
           navigate('/');
         }, 2000);
-      } catch (userError) {
-        console.error('Error fetching user data:', userError);
-        localStorage.removeItem('token');
-        setError('Error al obtener datos del usuario');
-        return;
+        
+        return; // Salir de la función si el login como proveedor fue exitoso
+      } catch (proveedorError) {
+        // Si ambos intentos fallaron, mostrar un error genérico
+        console.error('Login como proveedor también falló:', proveedorError);
+        setError('Credenciales incorrectas o usuario no encontrado');
+        setLoading(false);
       }
-    } catch (err: any) {
-      // Manejar errores de autenticación
-      if (err.response) {
-        if (err.response.status === 404) {
-          setError('Usuario no encontrado');
-        } else if (err.response.status === 401) {
-          setError('Credenciales incorrectas');
-        } else if (err.response.data && err.response.data.message) {
-          setError(err.response.data.message);
-        } else {
-          setError('Error en el servidor');
-        }
-      } else if (err.message.includes('Network Error')) {
-        setError('No se pudo conectar al servidor. Verifica tu conexión');
-      } else {
-        setError('Error al iniciar sesión');
-      }
-      console.error('Error de inicio de sesión:', err);
     } finally {
       setLoading(false);
     }
@@ -137,6 +173,7 @@ function Login() {
             ¡Inicio de sesión exitoso! Redirigiendo...
           </div>
         )}
+        
         <form id="SaveUsers" onSubmit={handleSubmit}>
           <div className="Inputs">
             <label htmlFor="email">Correo electrónico</label>

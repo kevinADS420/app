@@ -9,6 +9,11 @@
   cursor: pointer;
   padding: 0;
   z-index: 1001;
+  transition: transform 0.2s ease;
+}
+
+.hamburger-button:active {
+  transform: scale(0.95);
 }
 
 .hamburger-button .line {
@@ -17,10 +22,12 @@
   background-color: #2E7D32;
   transition: all 0.3s ease;
   transform-origin: 1px;
+  border-radius: 2px;
 }
 
 .hamburger-button.open .line:first-child {
   transform: rotate(45deg);
+  width: 105%;
 }
 
 .hamburger-button.open .line:nth-child(2) {
@@ -30,10 +37,22 @@
 
 .hamburger-button.open .line:last-child {
   transform: rotate(-45deg);
+  width: 105%;
 }
 
 @media (max-width: 1293px) {
   .hamburger-button {
     display: flex;
   }
-} 
+}
+
+@media (max-width: 480px) {
+  .hamburger-button {
+    width: 25px;
+    height: 18px;
+  }
+  
+  .hamburger-button .line {
+    height: 2px;
+  }
+}

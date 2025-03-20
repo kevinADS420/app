@@ -14,7 +14,6 @@ function Header() {
   useEffect(() => {
     const checkAuth = () => {
       const hasToken = !!localStorage.getItem('token');
-      console.log('Checking auth status:', hasToken);
       setIsAuthenticated(hasToken);
     };
 
@@ -42,6 +41,19 @@ function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Bloquear el desplazamiento del body cuando el menú móvil está abierto
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMobileMenuOpen]);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -55,7 +67,7 @@ function Header() {
             isOpen={isMobileMenuOpen} 
             onClick={toggleMobileMenu} 
           />
-          <Logo />
+          <Logo width={isScrolled ? "160px" : "180px"} />
           <Navigation isAuthenticated={isAuthenticated} />
           <div className="auth-container">
             {isAuthenticated && <UserProfile />}

@@ -9,7 +9,7 @@ interface LogoProps {
   className?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({ width = '20vw', height = 'auto', className = '' }) => {
+const Logo: React.FC<LogoProps> = ({ width = '180px', height = 'auto', className = '' }) => {
   return (
     <Link to="/" className="logo-link">
       <img 
@@ -22,4 +22,4 @@ const Logo: React.FC<LogoProps> = ({ width = '20vw', height = 'auto', className 
   );
 };
 
-export default Logo; 
+export default Logo;

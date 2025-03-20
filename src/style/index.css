@@ -3,5 +3,58 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    text-decoration: none;
+    color: #4CAF50;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #388E3C;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+}
+
+input, textarea, select {
+    font-family: inherit;
+}
+
+/* Media queries para tipografía adaptativa */
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
 }

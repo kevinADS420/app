@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../atoms/Button/Button';
 import './MobileMenu.css';
@@ -16,6 +16,30 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, isAuthenticate
     { to: '/servicios', label: 'Servicios' },
     { to: '/sobre-nosotros', label: 'Sobre Nosotros' },
   ];
+
+  // Asegurar que cuando se abre el menú, el scroll se inicie desde arriba
+  useEffect(() => {
+    if (isOpen) {
+      const menu = document.querySelector('.mobile-menu');
+      if (menu) {
+        menu.scrollTop = 0;
+      }
+    }
+  }, [isOpen]);
+
+  // Cerrar el menú con la tecla Escape
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen, onClose]);
 
   return (
     <>
@@ -51,11 +75,26 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, isAuthenticate
               </Button>
             </Link>
           )}
+          
+          {isAuthenticated && (
+            <Link 
+              to="/configuracion" 
+              className="mobile-nav-link"
+              onClick={onClose}
+            >
+              <Button 
+                variant="primary" 
+                className="mobile-nav-button"
+              >
+                Mi Perfil
+              </Button>
+            </Link>
+          )}
         </nav>
       </div>
       {isOpen && (
         <div 
-          className="mobile-menu-overlay"
+          className={`mobile-menu-overlay ${isOpen ? 'visible' : ''}`}
           onClick={onClose}
         />
       )}
@@ -63,4 +102,4 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, isAuthenticate
   );
 };
 
-export default MobileMenu; 
+export default MobileMenu;

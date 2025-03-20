@@ -10,6 +10,7 @@ import Servicios from './features/Home/pages/Servicios';
 import SobreNosotros from './features/Home/pages/SobreNosotros';
 import Inicioseccion from './features/Home/pages/inicioseccion';
 import Registro from './features/Home/pages/Registro';
+import RegistroUnificado from './features/Home/pages/RegistroUnificado';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
         <Route path="/inicio-section" element={<Inicioseccion />} />
-        <Route path="/registro" element={<Registro />} />
+        <Route path="/registro" element={<RegistroUnificado />} />
+        <Route path="/registro-antiguo" element={<Registro />} />
         <Route path="/configuracion" element={<EditProfile />} />
       </Routes>
       <Footer />
