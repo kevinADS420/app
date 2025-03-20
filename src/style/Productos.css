@@ -53,41 +53,8 @@
     --transition-fast: all 0.15s ease;
   }
   
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    font-family: var(--font-family);
-    color: var(--color-gray-800);
-    line-height: 1.5;
-    background-color: var(--color-gray-100);
-    overflow-x: hidden;
-  }
-  
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  button {
-    cursor: pointer;
-    font-family: inherit;
-  }
-  
-  img {
-    max-width: 100%;
-    height: auto;
-  }
   
   .container {
-    width: 100%;
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 1rem;
@@ -97,9 +64,6 @@
   .navbar {
     background-color: var(--color-white);
     box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
     border-bottom: 2px solid var(--color-primary-light);
   }
   
@@ -120,9 +84,7 @@
     transition: var(--transition);
   }
   
-  .navbar-logo:hover {
-    transform: scale(1.02);
-  }
+
   
   .navbar-logo img {
     height: 40px;
@@ -1039,4 +1001,51 @@
     font-size: 1.1rem;
   }
   
+
+  /* Estilos para las barras de navegación */
+.navbar-principal {
+  background-color: var(--color-white);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1001; /* Mayor z-index que la barra secundaria */
+  border-bottom: 2px solid var(--color-primary);
+  height: 70px;
+}
+
+/* Modificamos la barra secundaria para que quede debajo de la principal */
+.navbar-secundaria {
+  position: sticky;
+  top: 70px; /* La altura exacta de la barra principal */
+  z-index: 1000;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow);
+  border-bottom: 2px solid var(--color-primary-light);
+}
+
+/* Ajustamos estilos existentes */
+.navbar {
+  background-color: var(--color-white);
+}
+
+/* Estilos para el footer */
+.footer {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+  padding: 1rem 0;
+  margin-top: 2rem;
+  width: 100%;
+  clear: both;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-gray-300);
+}
   

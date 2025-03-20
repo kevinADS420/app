@@ -41,12 +41,12 @@ const IMAGENES_BANNER = [
   },
   {
     id: 'banner2',
-    url: 'https://i.ibb.co/K6CCsgf/banner-frutas-verduras-2.jpg',
+    url: 'https://i.pinimg.com/736x/03/31/a3/0331a3ddb8c5e744b2ec005c23ea9cbc.jpg',
     alt: 'Ofertas especiales en frutas'
   },
   {
     id: 'banner3',
-    url: 'https://i.ibb.co/Qk6X8dz/banner-frutas-verduras-3.jpg',
+    url: 'https://i.pinimg.com/736x/ec/ab/a3/ecaba3b64e853d7eda45658da3ebff50.jpg',
     alt: 'Productos orgánicos'
   }
 ];
@@ -395,7 +395,7 @@ const CarritoCompras: React.FC<{
   );
 };
 
-// Componente Barra de Navegación
+// Componente Barra de Navegación Secundaria
 const Navbar: React.FC<{
   cantidadCarrito: number,
   mostrarCarrito: () => void
@@ -403,12 +403,8 @@ const Navbar: React.FC<{
   const [menuMobilAbierto, setMenuMobilAbierto] = useState(false);
   
   return (
-    <nav className="navbar">
+    <nav className="navbar navbar-secundaria">
       <div className="container navbar-container">
-        <Link to="/" className="navbar-logo">
-          <img src="/logo.png" alt="Logo HUETOMKT" />
-          <span>HUETOMKT</span>
-        </Link>
         
         <div className="navbar-busqueda">
           <input 
@@ -427,9 +423,6 @@ const Navbar: React.FC<{
         
         <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/" className="nav-link">Inicio</Link>
-            </li>
             {TIPOS_PRODUCTO.map(tipo => (
               <li key={tipo.value} className="nav-item">
                 <Link 
@@ -440,9 +433,6 @@ const Navbar: React.FC<{
                 </Link>
               </li>
             ))}
-            <li className="nav-item">
-              <Link to="/contacto" className="nav-link">Contacto</Link>
-            </li>
           </ul>
         </div>
         
@@ -629,7 +619,8 @@ const Productos: React.FC = () => {
 
   return (
     <div className="tienda">
-      {/* Barra de navegación */}
+      {/* La barra de navegación principal ya está en el layout principal */}
+      {/* Esta es la barra de categorías y carrito que queremos que esté debajo */}
       <Navbar 
         cantidadCarrito={cantidadTotalCarrito} 
         mostrarCarrito={toggleCarrito} 
@@ -764,16 +755,16 @@ const Productos: React.FC = () => {
         vaciarCarrito={vaciarCarrito}
       />
       
-      
-           
-            
-            
-          
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
           <div className="footer-bottom">
             <p>© {new Date().getFullYear()} HUETOMKT - Todos los derechos reservados</p>
           </div>
         </div>
-  )
+      </footer>
+    </div>
+  );
 };
 
 export default Productos;
