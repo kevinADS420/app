@@ -18,11 +18,7 @@
   --header-height-scrolled: 70px;
 }
 
-/* Header Spacer */
-.header-spacer {
-  height: var(--header-height);
-  width: 100%;
-}
+
 
 /* Header Base Styles */
 .header {
