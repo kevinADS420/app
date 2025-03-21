@@ -2,6 +2,7 @@
 
 /* Variables y reset */
 :root {
+  --font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     --color-primary: #4CAF50;
     --color-primary-dark: #388E3C;
     --color-primary-light: #C8E6C9;
@@ -34,8 +35,7 @@
     --color-hortalizas-light: #DCEDC8;
     --color-ofertas: #F44336;
     --color-ofertas-light: #FFCDD2;
-  
-    --font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+
     
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -260,17 +260,69 @@
   }
   
   /* Banner principal */
+ /* Solución para mantener la nitidez en ventanas maximizadas */
+.carrusel-imagen {
+  /* Propiedades básicas */
+  display: block;
+  width: 100%;
+  
+  /* Mejora de renderizado para nitidez */
+  image-rendering: -webkit-optimize-contrast;
+  
+  /* Limitar expansión excesiva */
+  max-width: 100%;
+}
+
+/* Contenedor con ancho máximo para el banner */
+.banner {
+  max-width: 1920px; /* O el ancho máximo que consideres apropiado */
+  margin: 0 auto; /* Centra el banner */
+  overflow: hidden;
+}
+
+.banner .carrusel-imagen {
+  height: 400px;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* En pantallas muy grandes, limitar el estiramiento */
+@media (min-width: 1921px) { 
   .banner {
-    margin: 1.5rem 0;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Opcional: añade sombra para marcar los límites */
   }
   
   .banner .carrusel-imagen {
-    height: 400px;
+    height: auto; /* Permitir altura natural */
+    max-height: 500px; /* O el máximo que consideres */
+  }
+  
+  .container {
+    max-width: 1600px; /* Limitar ancho máximo del contenido */
+    margin: 0 auto;
+  }
+}
+/* Para navegadores modernos */
+@supports (font-smooth: auto) {
+  .carrusel-imagen {
+    font-smooth: auto;
+  }
+}
+
+  .item-imagen img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
+    filter: contrast(1.00) saturate(2.1);
+  }
+  .producto-imagen {
+    background-color: var(--color-gray-200);
+    position: relative;
+  }
+  
+  .imagen-cargando {
+    filter: blur(10px);
+    transition: filter 0.3s ease-out;
   }
   
   /* Categorías de acceso rápido */
@@ -508,9 +560,47 @@
     position: relative;
   }
   
-  .producto-imagen .carrusel-imagen {
+  .carrusel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+  }
+  
+  .carrusel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+  
+  /* Mejora de la calidad de imagen */
+  .carrusel-imagen {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Asegúrate de que las imágenes del banner tengan la altura correcta */
+  .banner .carrusel-imagen {
+    height: 400px;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  /* Asegúrate de que las imágenes de productos tengan la altura correcta */
+  .tarjeta-producto .carrusel-imagen {
     height: 200px;
     object-fit: cover;
+  }
+  
+  /* Ajustar para dispositivos móviles */
+  @media (max-width: 768px) {
+    .banner .carrusel-imagen {
+      height: 300px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .banner .carrusel-imagen {
+      height: 200px;
+    }
   }
   
   .sin-imagen {
@@ -1048,4 +1138,5 @@
   font-size: 0.9rem;
   color: var(--color-gray-300);
 }
+
   
