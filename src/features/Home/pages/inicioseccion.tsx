@@ -21,6 +21,7 @@ function Login() {
     const { id, value } = event.target;
     const fieldMapping: Record<string, string> = {
       email: 'Email',
+      Email: 'Email',
       contraseña: 'contraseña'
     };
     
@@ -55,53 +56,78 @@ function Login() {
       return;
     }
     
-    // Intentamos iniciar sesión como cliente primero
+    // Try unified login approach first
     try {
-      console.log('Intentando login como cliente...');
-      const customerResponse = await axios.post('http://localhost:10101/login/customer', {
-        Email: formData.Email.trim(),  // Cliente usa Email con mayúscula
+      console.log('Intentando login general...');
+      const loginResponse = await axios.post('http://localhost:10101/login', {
+        Email: formData.Email.trim(),
         contraseña: formData.contraseña
       });
       
-      console.log('Login exitoso como cliente:', customerResponse.data);
+      console.log('Login exitoso:', loginResponse.data);
       
-      // Guardar token en localStorage
-      localStorage.setItem('token', customerResponse.data.token);
-      localStorage.setItem('userType', 'customer');
+      // Save token in localStorage
+      localStorage.setItem('token', loginResponse.data.token);
       
-      // Configurar token para futuras solicitudes
-      axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
+      // Determine user type from the response
+      const userType = loginResponse.data.userType || 
+                       (loginResponse.data.userData?.id_cliente ? 'customer' : 
+                        loginResponse.data.userData?.id_proveedor ? 'proveedor' : 'unknown');
+                        
+      localStorage.setItem('userType', userType);
       
-      // Verificar si la respuesta ya contiene datos del usuario
-      if (customerResponse.data.userData) {
-        // Si la respuesta de login ya incluye datos del usuario, los usamos directamente
-        localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
+      // Configure token for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.data.token}`;
+      
+      // Check if the response already contains user data
+      if (loginResponse.data.userData) {
+        localStorage.setItem('user', JSON.stringify(loginResponse.data.userData));
       } else {
-        // Si no, hacemos una solicitud adicional para obtener los datos
+        // If not, make an additional request to get the data based on user type
         try {
-          const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
-            headers: {
-              'Authorization': `Bearer ${customerResponse.data.token}`
-            }
-          });
-          
-          console.log('Datos de usuario cliente:', userResponse.data);
-          
-          const userData = {
-            id_cliente: userResponse.data.id_cliente,
-            Nombres: userResponse.data.Nombres,
-            Apellidos: userResponse.data.Apellidos,
-            Email: userResponse.data.Email
-          };
-          
-          localStorage.setItem('user', JSON.stringify(userData));
+          let userResponse;
+          if (userType === 'proveedor') {
+            userResponse = await axios.get(`http://localhost:10101/profile/Proveedor`, {
+              headers: {
+                'Authorization': `Bearer ${loginResponse.data.token}`
+              }
+            });
+            
+            console.log('Datos de usuario proveedor:', userResponse.data);
+            
+            const userData = {
+              id_proveedor: userResponse.data.id_proveedor,
+              nombres: userResponse.data.nombres,
+              apellidos: userResponse.data.apellidos,
+              Email: userResponse.data.Email
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userData));
+          } else if (userType === 'customer') {
+            userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+              headers: {
+                'Authorization': `Bearer ${loginResponse.data.token}`
+              }
+            });
+            
+            console.log('Datos de usuario cliente:', userResponse.data);
+            
+            const userData = {
+              id_cliente: userResponse.data.id_cliente,
+              Nombres: userResponse.data.Nombres,
+              Apellidos: userResponse.data.Apellidos,
+              Email: userResponse.data.Email
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userData));
+          }
         } catch (error) {
-          console.error('Error al obtener datos del cliente:', error);
-          // Continuar aunque no podamos obtener datos completos
+          console.error('Error al obtener datos del usuario:', error);
+          // Continue even if we can't get complete data
         }
       }
       
-      // Evento de login exitoso
+      // Fire successful login event
       window.dispatchEvent(userLoginEvent);
       
       setSuccess(true);
@@ -109,41 +135,49 @@ function Login() {
         navigate('/');
       }, 2000);
       
-      return; // Salir de la función si el login como cliente fue exitoso
-    } catch (customerError) {
-      console.log('Login como cliente falló, intentando como proveedor...', customerError);
+      return;
+    } catch (generalLoginError) {
+      console.log('Login general falló, intentando métodos específicos...', generalLoginError);
       
-      // Si falló como cliente, intentamos como proveedor
+      // Fallback: Try as customer first
       try {
-        const proveedorResponse = await axios.post('http://localhost:10101/login/proveedor', {
-          email: formData.Email.trim(),  // Proveedor usa email con minúscula
+        const customerResponse = await axios.post('http://localhost:10101/login/customer', {
+          Email: formData.Email.trim(),
           contraseña: formData.contraseña
         });
         
-        console.log('Login exitoso como proveedor:', proveedorResponse.data);
+        console.log('Login exitoso como cliente:', customerResponse.data);
         
-        // Guardar token en localStorage
-        localStorage.setItem('token', proveedorResponse.data.token);
-        localStorage.setItem('userType', 'proveedor');
+        localStorage.setItem('token', customerResponse.data.token);
+        localStorage.setItem('userType', 'customer');
         
-        // Configurar token para futuras solicitudes
-        axios.defaults.headers.common['Authorization'] = `Bearer ${proveedorResponse.data.token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
         
-        // Verificar si la respuesta ya contiene datos del usuario
-        if (proveedorResponse.data.userData) {
-          // Si la respuesta de login ya incluye datos del usuario, los usamos directamente
-          localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
+        if (customerResponse.data.userData) {
+          localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
         } else {
-          // No intentamos obtener más datos del proveedor si no están incluidos en la respuesta de login
-          // porque puede haber diferencias en las rutas de la API
-          // Guardamos al menos el correo que tenemos
-          localStorage.setItem('user', JSON.stringify({
-            Email: formData.Email,
-            // Otros datos que queramos guardar de la respuesta si existen
-          }));
+          try {
+            const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+              headers: {
+                'Authorization': `Bearer ${customerResponse.data.token}`
+              }
+            });
+            
+            console.log('Datos de usuario cliente:', userResponse.data);
+            
+            const userData = {
+              id_cliente: userResponse.data.id_cliente,
+              Nombres: userResponse.data.Nombres,
+              Apellidos: userResponse.data.Apellidos,
+              Email: userResponse.data.Email
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userData));
+          } catch (error) {
+            console.error('Error al obtener datos del cliente:', error);
+          }
         }
         
-        // Evento de login exitoso
         window.dispatchEvent(userLoginEvent);
         
         setSuccess(true);
@@ -151,12 +185,63 @@ function Login() {
           navigate('/');
         }, 2000);
         
-        return; // Salir de la función si el login como proveedor fue exitoso
-      } catch (proveedorError) {
-        // Si ambos intentos fallaron, mostrar un error genérico
-        console.error('Login como proveedor también falló:', proveedorError);
-        setError('Credenciales incorrectas o usuario no encontrado');
-        setLoading(false);
+        return;
+      } catch (customerError) {
+        console.log('Login como cliente falló, intentando como proveedor...', customerError);
+        
+        // If failed as customer, try as provider
+        try {
+          const proveedorResponse = await axios.post('http://localhost:10101/login/proveedor', {
+            Email: formData.Email.trim(),
+            contraseña: formData.contraseña
+          });
+          
+          console.log('Login exitoso como proveedor:', proveedorResponse.data);
+          
+          localStorage.setItem('token', proveedorResponse.data.token);
+          localStorage.setItem('userType', 'proveedor');
+          
+          axios.defaults.headers.common['Authorization'] = `Bearer ${proveedorResponse.data.token}`;
+          
+          if (proveedorResponse.data.userData) {
+            localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
+          } else {
+            try {
+              // Fixed URL - removed template literal error
+              const userResponse = await axios.get('http://localhost:10101/profile/Proveedor', {
+                headers: {
+                  'Authorization': `Bearer ${proveedorResponse.data.token}`
+                }
+              });
+              
+              console.log('Datos de usuario proveedor:', userResponse.data);
+              
+              const userData = {
+                id_proveedor: userResponse.data.id_proveedor,
+                nombres: userResponse.data.nombres,
+                apellidos: userResponse.data.apellidos,
+                Email: userResponse.data.Email
+              };
+              
+              localStorage.setItem('user', JSON.stringify(userData));
+            } catch (error) {
+              console.error('Error al obtener datos del proveedor:', error);
+            }
+          }
+          
+          window.dispatchEvent(userLoginEvent);
+          
+          setSuccess(true);
+          setTimeout(() => {
+            navigate('/');
+          }, 2000);
+          
+          return;
+        } catch (proveedorError) {
+          console.error('Login como proveedor también falló:', proveedorError);
+          setError('Credenciales incorrectas o usuario no encontrado');
+          setLoading(false);
+        }
       }
     } finally {
       setLoading(false);
@@ -176,9 +261,9 @@ function Login() {
         
         <form id="SaveUsers" onSubmit={handleSubmit}>
           <div className="Inputs">
-            <label htmlFor="email">Correo electrónico</label>
+            <label htmlFor="Email">Correo electrónico</label>
             <input
-              type="Email"
+              type="email"
               id="Email"
               value={formData.Email}
               onChange={handleChange}

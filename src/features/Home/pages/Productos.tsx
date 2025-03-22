@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../../style/Productos.css';
+import banner1 from './assets/banner1.jpg';
+import banner2 from './assets/banner2.jpg';
+import banner3 from './assets/banner3.jpg';
+
 
 
 // Definición de tipos
@@ -34,21 +38,21 @@ const TIPOS_PRODUCTO = [
 
 // Imágenes para el carrusel del banner
 const IMAGENES_BANNER = [
-  {
-    id: 'banner1',
-    url: 'https://ingenieriademenu.com/wp-content/uploads/2022/05/Cuales-son-las-frutas-y-cuales-son-las-verduras.jpg',
-    alt: 'Productos frescos de temporada'
-  },
-  {
-    id: 'banner2',
-    url: 'https://i.pinimg.com/736x/03/31/a3/0331a3ddb8c5e744b2ec005c23ea9cbc.jpg',
-    alt: 'Ofertas especiales en frutas'
-  },
-  {
-    id: 'banner3',
-    url: 'https://i.pinimg.com/736x/ec/ab/a3/ecaba3b64e853d7eda45658da3ebff50.jpg',
-    alt: 'Productos orgánicos'
-  }
+    {
+      id: 'banner1',
+      url: banner1,
+      alt: 'Productos frescos de temporada'
+    },
+    {
+      id: 'banner2',
+      url: banner2,
+      alt: 'Ofertas especiales en frutas'
+    },
+    {
+      id: 'banner3',
+      url: banner3,
+      alt: 'Productos orgánicos'
+    }
 ];
 
 // Componente para mostrar categorías debajo del carrusel
@@ -77,7 +81,7 @@ const CategoriasAccesoRapido: React.FC<{
   );
 };
 
-// Componente Carrusel para mostrar las imágenes
+// COMPONENTE CARRUSEL MEJORADO - REEMPLAZA TU COMPONENTE ACTUAL CON ESTE
 const Carrusel: React.FC<{imagenes: Imagen[]}> = ({ imagenes }) => {
   const [indiceActual, setIndiceActual] = useState(0);
   
@@ -107,40 +111,115 @@ const Carrusel: React.FC<{imagenes: Imagen[]}> = ({ imagenes }) => {
   };
 
   return (
-    <div className="carrusel">
-      <div className="carrusel-contenedor">
-        <img 
-          src={imagenes[indiceActual].url} 
-          alt={imagenes[indiceActual].nombre || `Imagen ${indiceActual + 1}`} 
-          className="carrusel-imagen" 
-        />
+    <div className="carrusel" style={{ overflow: 'hidden', borderRadius: '8px' }}>
+      <div className="carrusel-contenedor" style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* Este div es el track horizontal con estilos inline para asegurar que funcione */}
+        <div 
+          style={{ 
+            display: 'flex', 
+            transition: 'transform 0.5s ease-in-out',
+            transform: `translateX(-${indiceActual * 100}%)`,
+            width: '100%'
+          }}
+        >
+          {imagenes.map((imagen, index) => (
+            <div 
+              key={imagen.id} 
+              style={{
+                flex: '0 0 100%',
+                width: '100%'
+              }}
+            >
+              <img 
+                src={imagen.url} 
+                alt={imagen.nombre || `Imagen ${index + 1}`} 
+                style={{
+                  minWidth: '100%',
+                  height: '350px',
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  imageRendering: '-webkit-optimize-contrast',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        
         {imagenes.length > 1 && (
           <>
             <button 
               type="button"
-              className="carrusel-control carrusel-anterior" 
               onClick={irAAnterior}
               aria-label="Imagen anterior"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '10px',
+                transform: 'translateY(-50%)',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+                cursor: 'pointer',
+                zIndex: 2
+              }}
             >
               &#10094;
             </button>
             <button 
               type="button"
-              className="carrusel-control carrusel-siguiente" 
               onClick={irASiguiente}
               aria-label="Imagen siguiente"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '10px',
+                transform: 'translateY(-50%)',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+                cursor: 'pointer',
+                zIndex: 2
+              }}
             >
               &#10095;
             </button>
-            <div className="carrusel-indicadores">
+            <div style={{
+              position: 'absolute',
+              bottom: '15px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              gap: '8px',
+              zIndex: 2
+            }}>
               {imagenes.map((_, index) => (
                 <span 
                   key={index} 
-                  className={`indicador ${index === indiceActual ? 'activo' : ''}`}
                   onClick={() => setIndiceActual(index)}
                   role="button"
                   tabIndex={0}
                   aria-label={`Ir a imagen ${index + 1}`}
+                  style={{
+                    width: index === indiceActual ? '20px' : '10px',
+                    height: '10px',
+                    backgroundColor: index === indiceActual ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                    borderRadius: index === indiceActual ? '10px' : '50%',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
                 />
               ))}
             </div>
