@@ -11,10 +11,10 @@ function Servicios() {
       <div className="servicios-banner">
         <img src={servicios} alt="Servicios de frutas y verduras" />
         <div className="banner-overlay"></div>
-        <div className="banner-text">
-          <h2>Productos frescos del campo a tu mesa</h2>
-        </div>
       </div>
+      <div className="banner-text">
+          <h2>!PRODUCTOS FRESCOS DEL CAMPO A TU MESA!</h2>
+        </div>
       
       <div className="servicios-content">
         <div className="servicios-intro">
