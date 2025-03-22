@@ -134,13 +134,11 @@ const Carrusel: React.FC<{imagenes: Imagen[]}> = ({ imagenes }) => {
                 src={imagen.url} 
                 alt={imagen.nombre || `Imagen ${index + 1}`} 
                 style={{
-                  width: '100%',
-                  height: '400px',
+                  minWidth: '100%',
+                  height: '350px',
                   objectFit: 'cover',
-                  display: 'block',
-                  // Propiedades para mejorar calidad
+                  flexShrink: 0,
                   imageRendering: '-webkit-optimize-contrast',
-                  maxWidth: '100%',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
               />
