@@ -1,677 +1,153 @@
-/* Variables para una paleta de colores armónica y coherente */
-:root {
-  --primary-color: #3d8b40;
-  --primary-light: #60bd63;
-  --primary-dark: #25591f;
-  --secondary-color: #ff9800;
-  --secondary-light: #ffb547;
-  --secondary-dark: #c77700;
-  --accent-color: #1e88e5;
-  --text-dark: #212121;
-  --text-medium: #757575;
-  --text-light: #f5f5f5;
-  --background-light: #fafafa;
-  --background-medium: #f0f0f0;
-  --border-radius: 10px;
-  --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-fast: all 0.3s ease;
-  --font-primary: 'Poppins', sans-serif;
-  --font-secondary: 'Montserrat', sans-serif;
-}
-
-/* Estilos generales de la página */
-.servicios-page {
-  font-family: var(--font-primary);
-  color: var(--text-dark);
-  line-height: 1.7;
-  max-width: 1300px;
-  margin: 0 auto;
-  background-color: white;
-  overflow: hidden;
-}
-
-/* Encabezado de la página */
-.servicios-header {
-  padding: 60px 20px 30px;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.servicios-header h1 {
-  font-family: var(--font-secondary);
-  font-size: 2.8rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--primary-dark);
-  position: relative;
-  display: inline-block;
-  margin: 0;
-  padding-bottom: 15px;
-}
-
-.servicios-header h1::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: var(--secondary-color);
-  border-radius: 2px;
-}
-
-/* Carrusel de imágenes */
-.carousel-container {
+/* Estilos para el nuevo slider de imágenes */
+.slider-container {
   position: relative;
   width: 100%;
   height: 500px;
-  margin: 0 auto 60px;
   overflow: hidden;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
-.carousel-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.slider-wrapper {
+  display: flex;
+  width: 300%; /* Para tres imágenes */
   height: 100%;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: var(--transition-slow);
+  transition: transform 0.5s ease-in-out;
 }
 
-.carousel-slide.active {
-  opacity: 1;
-  transform: scale(1);
-  z-index: 1;
+.slider-slide {
+  position: relative;
+  width: 33.333%; /* Una tercera parte para cada imagen */
+  height: 100%;
+  flex-shrink: 0;
 }
 
-.carousel-slide img {
+.slider-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 7s ease;
 }
 
-.carousel-slide.active img {
-  transform: scale(1.1);
-}
-
-.carousel-overlay {
+.slider-caption {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  text-align: center;
+}
+
+.slider-caption h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.slider-caption p {
+  font-size: 1.2rem;
+  max-width: 80%;
+  margin: 0 auto;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
   display: flex;
-  align-items: flex-end;
-  padding: 60px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
   z-index: 2;
 }
 
-.carousel-text {
-  color: var(--text-light);
-  max-width: 70%;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.7s ease 0.3s;
+.slider-arrow:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
-.carousel-slide.active .carousel-text {
-  opacity: 1;
-  transform: translateY(0);
+.slider-arrow-left {
+  left: 20px;
 }
 
-.carousel-text h2 {
-  font-family: var(--font-secondary);
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+.slider-arrow-right {
+  right: 20px;
 }
 
-.carousel-text p {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-/* Controles del carrusel */
-.carousel-arrows {
+.slider-dots {
   position: absolute;
-  top: 50%;
-  width: 100%;
-  transform: translateY(-50%);
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 3;
-}
-
-.carousel-arrow {
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  opacity: 0.7;
-}
-
-.carousel-arrow:hover {
-  background: white;
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-.carousel-arrow i {
-  color: var(--primary-dark);
-  font-size: 1.2rem;
-}
-
-.carousel-controls {
-  position: absolute;
-  bottom: 25px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  z-index: 3;
+  z-index: 2;
 }
 
-.carousel-dot {
+.slider-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
-  transition: var(--transition-fast);
+  border: none;
   cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
 }
 
-.carousel-dot.active {
+.slider-dot.active {
   background: white;
-  transform: scale(1.3);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-}
-
-/* Ocultar banner antiguo */
-.servicios-banner,
-.banner-text {
-  display: none;
-}
-
-/* Contenido principal */
-.servicios-content {
-  padding: 0 40px 60px;
-}
-
-/* Sección de introducción */
-.servicios-intro {
-  text-align: center;
-  max-width: 900px;
-  margin: 0 auto 80px;
-  padding: 0 20px;
-}
-
-.servicios-intro h2 {
-  font-family: var(--font-secondary);
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 30px;
-  position: relative;
-  padding-bottom: 15px;
-}
-
-.servicios-intro h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: var(--secondary-color);
-  border-radius: 2px;
-}
-
-.intro-text {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: var(--text-medium);
-}
-
-/* Sección de beneficios */
-.servicios-beneficios {
-  margin-bottom: 80px;
-}
-
-.servicios-beneficios h3 {
-  text-align: center;
-  font-family: var(--font-secondary);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 50px;
-  position: relative;
-  padding-bottom: 15px;
-}
-
-.servicios-beneficios h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: var(--secondary-color);
-  border-radius: 2px;
-}
-
-.beneficios-lista {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.beneficio-item {
-  background: white;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  box-shadow: var(--box-shadow);
-  transition: var(--transition-fast);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(0);
-}
-
-.beneficio-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-}
-
-.beneficio-icon {
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.beneficio-icon::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
-  opacity: 0;
-  transform: translate(-100%, -100%);
-  transition: transform 1s ease;
-}
-
-.beneficio-item:hover .beneficio-icon::before {
-  transform: translate(0, 0);
-  opacity: 1;
-}
-
-.beneficio-icon i {
-  font-size: 3rem;
-  z-index: 1;
-  transition: var(--transition-fast);
-}
-
-.beneficio-item:hover .beneficio-icon i {
   transform: scale(1.2);
 }
 
-.beneficio-content {
-  padding: 25px 30px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.beneficio-content h4 {
-  font-family: var(--font-secondary);
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-top: 0;
-  margin-bottom: 15px;
-  transition: var(--transition-fast);
-}
-
-.beneficio-item:hover .beneficio-content h4 {
-  color: var(--secondary-color);
-}
-
-.beneficio-content p {
-  color: var(--text-medium);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* Sección de CTA */
-.servicios-cta {
-  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-  color: white;
-  border-radius: var(--border-radius);
-  padding: 60px 40px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--box-shadow);
-}
-
-.servicios-cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-  opacity: 0.2;
-}
-
-.servicios-cta h3 {
-  font-family: var(--font-secondary);
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 15px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.servicios-cta p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.9;
-}
-
-.cta-button {
-  background: var(--secondary-color);
-  color: white;
-  font-family: var(--font-primary);
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 15px 40px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.cta-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, var(--secondary-dark), var(--secondary-light));
-  opacity: 0;
-  transition: var(--transition-fast);
-  z-index: -1;
-}
-
-.cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.cta-button:hover::before {
-  opacity: 1;
-}
-
-/* Media queries para responsividad */
-@media (max-width: 1200px) {
-  .carousel-container {
-    height: 450px;
-  }
-  
-  .beneficios-lista {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 992px) {
-  .servicios-header h1 {
-    font-size: 2.4rem;
-  }
-  
-  .carousel-container {
-    height: 400px;
-  }
-  
-  .carousel-text h2 {
-    font-size: 2.2rem;
-  }
-  
-  .carousel-overlay {
-    padding: 40px;
-  }
-  
-  .carousel-text {
-    max-width: 80%;
-  }
-  
-  .servicios-intro h2, 
-  .servicios-beneficios h3 {
-    font-size: 1.8rem;
-  }
-  
-  .servicios-cta h3 {
-    font-size: 1.8rem;
-  }
-}
-
+/* Ajuste de responsividad para pantallas pequeñas */
 @media (max-width: 768px) {
-  .servicios-header h1 {
-    font-size: 2rem;
-  }
-  
-  .carousel-container {
+  .slider-container {
     height: 350px;
   }
   
-  .carousel-text h2 {
-    font-size: 1.8rem;
+  .slider-caption h2 {
+    font-size: 1.5rem;
   }
   
-  .carousel-text p {
+  .slider-caption p {
     font-size: 1rem;
   }
   
-  .carousel-overlay {
-    padding: 30px;
+  .slider-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-container {
+    height: 250px;
   }
   
-  .carousel-text {
-    max-width: 90%;
-  }
-  
-  .beneficio-icon {
-    height: 100px;
-  }
-  
-  .beneficio-icon i {
-    font-size: 2.5rem;
-  }
-  
-  .beneficio-content {
-    padding: 20px;
-  }
-  
-  .beneficio-content h4 {
+  .slider-caption h2 {
     font-size: 1.2rem;
   }
   
-  .servicios-cta {
-    padding: 40px 30px;
+  .slider-caption p {
+    font-size: 0.9rem;
+    max-width: 90%;
   }
   
-  .servicios-cta p {
-    font-size: 1.1rem;
-  }
-  
-  .cta-button {
-    padding: 12px 30px;
-  }
-}
-
-@media (max-width: 576px) {
-  .servicios-header {
-    padding: 40px 20px 20px;
-  }
-  
-  .servicios-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .carousel-container {
-    height: 300px;
-    margin-bottom: 40px;
-  }
-  
-  .carousel-text h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .carousel-text p {
-    display: none; /* Ocultar descripción en pantallas muy pequeñas */
-  }
-  
-  .carousel-overlay {
-    padding: 20px;
-  }
-  
-  .carousel-text {
-    max-width: 100%;
-  }
-  
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .servicios-content {
-    padding: 0 20px 40px;
-  }
-  
-  .servicios-intro {
-    margin-bottom: 50px;
-  }
-  
-  .servicios-intro h2, 
-  .servicios-beneficios h3 {
-    font-size: 1.6rem;
-  }
-  
-  .intro-text {
+  .slider-arrow {
+    width: 30px;
+    height: 30px;
     font-size: 1rem;
   }
-  
-  .beneficios-lista {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .servicios-cta h3 {
-    font-size: 1.6rem;
-  }
-  
-  .servicios-cta p {
-    font-size: 1rem;
-  }
-}
-
-/* Efecto de entrada para los elementos cuando se hace scroll */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.servicios-intro,
-.servicios-beneficios,
-.servicios-cta {
-  opacity: 0;
-  animation: fadeInUp 1s ease forwards;
-}
-
-.servicios-intro {
-  animation-delay: 0.2s;
-}
-
-.servicios-beneficios {
-  animation-delay: 0.4s;
-}
-
-.servicios-cta {
-  animation-delay: 0.6s;
-}
-
-/* Ajustar la animación para los elementos de beneficios */
-.beneficio-item {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease forwards;
-}
-
-.beneficio-item:nth-child(1) {
-  animation-delay: 0.5s;
-}
-
-.beneficio-item:nth-child(2) {
-  animation-delay: 0.6s;
-}
-
-.beneficio-item:nth-child(3) {
-  animation-delay: 0.7s;
-}
-
-.beneficio-item:nth-child(4) {
-  animation-delay: 0.8s;
-}
-
-.beneficio-item:nth-child(5) {
-  animation-delay: 0.9s;
-}
-
-.beneficio-item:nth-child(6) {
-  animation-delay: 1s;
 }
