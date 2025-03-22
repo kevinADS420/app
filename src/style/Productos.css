@@ -363,85 +363,279 @@
     color: var(--color-ofertas);
   }
   
-  /* Carrusel */
-  .carrusel {
-    position: relative;
-    width: 100%;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-  }
-  
-  .carrusel-contenedor {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--radius-md);
-  }
-  
-  .carrusel-imagen {
-    width: 100%;
-    display: block;
-    transition: transform 0.3s ease;
-  }
-  
+/* Carrusel.css - Estilos avanzados para el componente Carrusel */
+
+:root {
+  --carrusel-transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  --carrusel-color-primary: #4caf50;
+  --carrusel-color-secondary: #ff9800;
+  --carrusel-color-text: #333;
+  --carrusel-color-light: #fff;
+  --carrusel-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  --carrusel-border-radius: 8px;
+}
+
+/* Contenedor principal del carrusel */
+.carrusel-mejorado {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--carrusel-border-radius);
+  box-shadow: var(--carrusel-shadow);
+  background-color: #f8f8f8;
+  margin-bottom: 20px;
+}
+
+/* Contenedor de las diapositivas */
+.carrusel-contenedor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Track para diapositivas con transición suave */
+.carrusel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: var(--carrusel-transition);
+}
+
+/* Diapositivas individuales */
+.carrusel-slide {
+  flex: 0 0 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imágenes dentro del carrusel */
+.carrusel-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s ease;
+}
+
+/* Efecto de zoom al hacer hover */
+.carrusel-slide:hover .carrusel-imagen {
+  transform: scale(1.05);
+}
+
+/* Indicadores de posición */
+.carrusel-indicadores {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+
+.indicador {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicador.activo {
+  background-color: var(--carrusel-color-light);
+  transform: scale(1.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.indicador:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.indicador:focus {
+  outline: 2px solid var(--carrusel-color-primary);
+}
+
+/* Botones de navegación */
+.carrusel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  color: var(--carrusel-color-text);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.carrusel-anterior {
+  left: 15px;
+}
+
+.carrusel-siguiente {
+  right: 15px;
+}
+
+/* Mostrar controles al hacer hover en el carrusel */
+.carrusel-mejorado:hover .carrusel-control {
+  opacity: 0.9;
+}
+
+.carrusel-control:hover {
+  background-color: var(--carrusel-color-light);
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.carrusel-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.carrusel-control:focus {
+  outline: 2px solid var(--carrusel-color-primary);
+  opacity: 1;
+}
+
+/* Leyendas/captions de imágenes */
+.imagen-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  padding: 30px 15px 15px;
+  text-align: center;
+  font-weight: 500;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.carrusel-slide:hover .imagen-caption {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Estado cuando está en transición */
+.carrusel-mejorado.transitioning .carrusel-control,
+.carrusel-mejorado.transitioning .indicador {
+  pointer-events: none;
+}
+
+/* Mensaje cuando no hay imágenes */
+.carrusel-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background-color: #f5f5f5;
+  border-radius: var(--carrusel-border-radius);
+  border: 2px dashed #ddd;
+}
+
+.mensaje-sin-imagen {
+  color: #888;
+  font-size: 0.9rem;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.carrusel-slide {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Accesibilidad */
+.carrusel-mejorado:focus {
+  outline: 2px solid var(--carrusel-color-primary);
+}
+
+.carrusel-mejorado:focus-visible {
+  box-shadow: 0 0 0 2px var(--carrusel-color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .carrusel-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.5);
-    color: var(--color-gray-800);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition);
-    z-index: 2;
-  }
-  
-  .carrusel-contenedor:hover .carrusel-control {
-    opacity: 0.8;
-  }
-  
-  .carrusel-control:hover {
-    background-color: rgba(255, 255, 255, 0.8);
-    opacity: 1 !important;
-  }
-  
-  .carrusel-anterior {
-    left: 10px;
-  }
-  
-  .carrusel-siguiente {
-    right: 10px;
-  }
-  
-  .carrusel-indicadores {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
-    z-index: 2;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
   
   .indicador {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    transition: var(--transition-fast);
+    width: 8px;
+    height: 8px;
+  }
+  
+  .imagen-caption {
+    padding: 20px 10px 10px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .carrusel-control {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .carrusel-indicadores {
+    bottom: 10px;
+  }
+}
+
+/* Soporte para preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .carrusel-track,
+  .carrusel-imagen,
+  .imagen-caption,
+  .carrusel-control,
+  .indicador {
+    transition: none;
+  }
+  
+  .carrusel-slide:hover .carrusel-imagen {
+    transform: none;
   }
   
   .indicador.activo {
-    background-color: var(--color-white);
-    transform: scale(1.2);
+    transform: none;
   }
+  
+  .carrusel-slide {
+    animation: none;
+  }
+}
   
   /* Secciones de categorías */
   .seccion-categoria {
