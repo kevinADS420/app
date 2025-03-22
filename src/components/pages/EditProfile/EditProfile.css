@@ -1,213 +1,213 @@
 .edit-profile-container {
-  padding: 2rem;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.edit-profile-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-}
-
-.edit-profile-card h2 {
-  color: #2E7D32;
-  margin-bottom: 2rem;
-  font-size: 1.75rem;
-  position: relative;
-}
-
-.edit-profile-card h2::after {
-  content: '';
-  position: absolute;
-  bottom: -0.5rem;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #4CAF50, #2E7D32);
-  border-radius: 2px;
-}
-
-.edit-profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  color: #333;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.form-group input {
-  padding: 0.75rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-}
-
-.form-group input::placeholder {
-  color: #999;
-}
-
-.save-button {
-  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.save-button::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transform: rotate(45deg);
-  transition: all 0.5s ease;
-}
-
-.save-button:hover::before {
-  animation: shine 1.5s infinite;
-}
-
-.save-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
-}
-
-.save-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Estilos para sección de contraseña */
-.password-section {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 1.5rem;
-  margin-top: 0.5rem;
-}
-
-.toggle-password-section {
-  background: none;
-  border: none;
-  color: #4CAF50;
-  font-weight: 500;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.toggle-password-section:hover {
-  color: #2E7D32;
-  text-decoration: underline;
-}
-
-.password-form {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.password-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-input-container input {
-  padding-right: 4.5rem;
-  width: 100%;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  color: #666;
-  font-size: 0.9rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.toggle-password:hover {
-  color: #4CAF50;
-}
-
-.error-message {
-  color: #f44336;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-200%) rotate(45deg);
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
   }
-  100% {
-    transform: translateX(200%) rotate(45deg);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .edit-profile-container {
-    padding: 1rem;
-  }
-
+  
   .edit-profile-card {
-    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
   }
-
+  
   .edit-profile-card h2 {
-    font-size: 1.5rem;
+    color: #2E7D32;
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    position: relative;
   }
-}
+  
+  .edit-profile-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #4CAF50, #2E7D32);
+    border-radius: 2px;
+  }
+  
+  .edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    color: #333;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  }
+  
+  .form-group input::placeholder {
+    color: #999;
+  }
+  
+  .save-button {
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .save-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+  }
+  
+  .save-button:hover::before {
+    animation: shine 1.5s infinite;
+  }
+  
+  .save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+  }
+  
+  .save-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* Estilos para sección de contraseña */
+  .password-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .toggle-password-section {
+    background: none;
+    border: none;
+    color: #4CAF50;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  
+  .toggle-password-section:hover {
+    color: #2E7D32;
+    text-decoration: underline;
+  }
+  
+  .password-form {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-input-container input {
+    padding-right: 4.5rem;
+    width: 100%;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .toggle-password:hover {
+    color: #4CAF50;
+  }
+  
+  .error-message {
+    color: #f44336;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  @keyframes shine {
+    0% {
+      transform: translateX(-200%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(200%) rotate(45deg);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .edit-profile-container {
+      padding: 1rem;
+    }
+  
+    .edit-profile-card {
+      padding: 1.5rem;
+    }
+  
+    .edit-profile-card h2 {
+      font-size: 1.5rem;
+    }
+  }
