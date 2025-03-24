@@ -1,4 +1,4 @@
-import Header from './components/organisms/header'
+import Header from './components/organisms/Header'
 import Inicio from './features/Home/pages/HomePage'
 import Footer from './components/organisms/Footer'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';

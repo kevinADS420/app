@@ -107,7 +107,7 @@ function RegistroUnificado() {
     let payload;
 
     if (userType === 'customer') {
-      endpoint = '/register/customer';
+      endpoint = '/customer/register';
       payload = {
         Nombres: formData.Nombres,
         Apellidos: formData.Apellidos,
@@ -115,11 +115,11 @@ function RegistroUnificado() {
         contraseña: formData.contraseña
       };
     } else if (userType === 'proveedor') {
-      endpoint = '/register/Proveedor'; // Nota la 'P' mayúscula para coincidir con tu backend
+      endpoint = '/proveedor/register'; // Nota la 'P' mayúscula para coincidir con tu backend
       payload = {
         nombres: formData.Nombres, // Cambio de nombre de campo para proveedores
         apellidos: formData.Apellidos, // Cambio de nombre de campo para proveedores
-        email: formData.Email, // Cambio de nombre de campo para proveedores
+        Email: formData.Email, // Cambio de nombre de campo para proveedores
         contraseña: formData.contraseña,
         tipoServicio: formData.tipoServicio,
         telefono: formData.telefono
@@ -127,7 +127,7 @@ function RegistroUnificado() {
     }
 
     try {
-      const response = await fetch(`http://localhost:10101${endpoint}`, {
+      const response = await fetch(`https://backendhuertomkt.onrender.com${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

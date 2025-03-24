@@ -181,7 +181,7 @@ const EditProfile: React.FC = () => {
       setIsLoading(true);
       // Guardar una copia del token original
       const originalToken = localStorage.getItem('token');
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:10101';
+      const baseUrl = import.meta.env.VITE_API_URL || 'https://backendhuertomkt.onrender.com';
       
       // Datos para actualizar perfil (incluyendo contraseña)
       const profileData = {

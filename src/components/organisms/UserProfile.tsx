@@ -66,7 +66,7 @@ function UserProfile() {
         
         let response;
         if (userType === 'customer') {
-          response = await axios.get('http://localhost:10101/customer/profile');
+          response = await axios.get('https://backendhuertomkt.onrender.com/customer/profile');
           
           // Si la respuesta no contiene datos completos, intentamos con el email
           if (!response.data.Nombres && localStorage.getItem('user')) {
@@ -74,7 +74,7 @@ function UserProfile() {
               const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
               if (storedUser.Email) {
                 const userDetailResponse = await axios.get(
-                  `http://localhost:10101/customer/email/${encodeURIComponent(storedUser.Email)}`
+                  `https://backendhuertomkt.onrender.com/customer/email/${encodeURIComponent(storedUser.Email)}`
                 );
                 response = userDetailResponse;
               }
@@ -83,7 +83,7 @@ function UserProfile() {
             }
           }
         } else if (userType === 'proveedor') {
-          response = await axios.get('http://localhost:10101/proveedor/profile');
+          response = await axios.get('https://backendhuertomkt.onrender.com/proveedor/profile');
           
           // Si la respuesta no contiene datos completos, intentamos con el email
           if (!response.data.nombres && localStorage.getItem('user')) {
@@ -91,7 +91,7 @@ function UserProfile() {
               const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
               if (storedUser.Email) {
                 const userDetailResponse = await axios.get(
-                  `http://localhost:10101/proveedor/email/${encodeURIComponent(storedUser.Email)}`
+                  `https://backendhuertomkt.onrender.com/proveedor/email/${encodeURIComponent(storedUser.Email)}`
                 );
                 response = userDetailResponse;
               }

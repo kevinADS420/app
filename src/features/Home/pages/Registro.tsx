@@ -86,7 +86,7 @@ function App() {
     };
 
     try {
-      const response = await fetch('http://localhost:10101/register/customer', {
+      const response = await fetch('https://backendhuertomkt.onrender.com/register/customer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

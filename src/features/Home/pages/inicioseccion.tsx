@@ -6,6 +6,9 @@ import axios from 'axios';
 // Custom event for user login
 const userLoginEvent = new Event('userLogin');
 
+// Base URL para todas las peticiones API
+const API_BASE_URL = 'https://backendhuertomkt.onrender.com';
+
 function Login() {
   const [formData, setFormData] = useState({
     Email: '',
@@ -56,13 +59,23 @@ function Login() {
       return;
     }
     
+    // Crear un objeto con los datos de login
+    const loginData = {
+      Email: formData.Email.trim(),
+      contraseña: formData.contraseña
+    };
+    
+    // Configuración común para las solicitudes axios
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    
     // Try unified login approach first
     try {
       console.log('Intentando login general...');
-      const loginResponse = await axios.post('http://localhost:10101/login', {
-        Email: formData.Email.trim(),
-        contraseña: formData.contraseña
-      });
+      const loginResponse = await axios.post(`${API_BASE_URL}/login`, loginData, axiosConfig);
       
       console.log('Login exitoso:', loginResponse.data);
       
@@ -87,7 +100,7 @@ function Login() {
         try {
           let userResponse;
           if (userType === 'proveedor') {
-            userResponse = await axios.get(`http://localhost:10101/proveedor/email/${encodeURIComponent(formData.Email)}`, {
+            userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${loginResponse.data.token}`
               }
@@ -104,7 +117,7 @@ function Login() {
             
             localStorage.setItem('user', JSON.stringify(userData));
           } else if (userType === 'customer') {
-            userResponse = await axios.get(`http://localhost:10101/customer/email/${encodeURIComponent(formData.Email)}`, {
+            userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${loginResponse.data.token}`
               }
@@ -141,10 +154,7 @@ function Login() {
       
       // Fallback: Try as customer first
       try {
-        const customerResponse = await axios.post('http://localhost:10101/login/customer', {
-          Email: formData.Email.trim(),
-          contraseña: formData.contraseña
-        });
+        const customerResponse = await axios.post(`${API_BASE_URL}/login/customer`, loginData, axiosConfig);
         
         console.log('Login exitoso como cliente:', customerResponse.data);
         
@@ -157,7 +167,7 @@ function Login() {
           localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
         } else {
           try {
-            const userResponse = await axios.get(`http://localhost:10101/customer/email/${encodeURIComponent(formData.Email)}`, {
+            const userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${customerResponse.data.token}`
               }
@@ -191,10 +201,7 @@ function Login() {
         
         // If failed as customer, try as provider
         try {
-          const proveedorResponse = await axios.post('http://localhost:10101/login/proveedor', {
-            Email: formData.Email.trim(),
-            contraseña: formData.contraseña
-          });
+          const proveedorResponse = await axios.post(`${API_BASE_URL}/login/proveedor`, loginData, axiosConfig);
           
           console.log('Login exitoso como proveedor:', proveedorResponse.data);
           
@@ -207,7 +214,7 @@ function Login() {
             localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
           } else {
             try {
-              const userResponse = await axios.get(`http://localhost:10101/proveedor/email/${encodeURIComponent(formData.Email)}`, {
+              const userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
                 headers: {
                   'Authorization': `Bearer ${proveedorResponse.data.token}`
                 }
