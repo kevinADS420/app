@@ -1,4 +1,4 @@
-import LogoTwo from '../../assets/images/logoTwo.png'
+import LogoTwo from '../../assets/images/logo.png'
 import Contato from '../atoms/textFooter/text'
 import Butoons from '../atoms/Button/ButtonFooter'
 import { FiInstagram } from "react-icons/fi";
