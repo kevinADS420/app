@@ -4,7 +4,7 @@ import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
 import { MdShoppingCart } from "react-icons/md";
-import { IoIosSearch } from "react-icons/io";
+
 
 
 
@@ -480,30 +480,13 @@ const Navbar: React.FC<{
     <nav className="navbar navbar-secundaria">
       <div className="container navbar-container">
         
-  
-          <div style={{ position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="Busca tus productos"
-              style={{
-                padding: '10px 10px 10px 50px', // Espacio a la izquierda para el icono
-                width: '200%',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                fontSize: '16px'
-              }}
-            />
-            <IoIosSearch
-              style={{
-                position: 'absolute',
-                left: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#888',
-                fontSize: '30px'
-              }}
-            />
-          </div>
+        <div className="navbar-busqueda">
+          <input 
+            type="text" 
+            placeholder="Buscar productos..." 
+          />
+          <button className="btn-buscar"><i className="icono-buscar"></i></button>
+        </div>
         
         <button 
           className="navbar-toggler" 
@@ -511,6 +494,21 @@ const Navbar: React.FC<{
         >
           ☰
         </button>
+        
+        <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
+          <ul className="navbar-nav">
+            {TIPOS_PRODUCTO.map(tipo => (
+              <li key={tipo.value} className="nav-item">
+                <Link 
+                  to={`/categoria/${tipo.value.toLowerCase()}`} 
+                  className="nav-link"
+                >
+                  {tipo.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
         
         <button className="btn-carrito" onClick={mostrarCarrito}>
             <MdShoppingCart  
