@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import '../../../style/Productos.css';
 import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
+import { MdShoppingCart } from "react-icons/md";
+import { IoIosSearch } from "react-icons/io";
 
 
 
@@ -28,13 +29,7 @@ interface ProductoCarrito extends Producto {
 }
 
 // Opciones para el tipo de producto
-const TIPOS_PRODUCTO = [
-  { value: 'Frutas', label: 'Frutas' },
-  { value: 'Verduras', label: 'Verduras' },
-  { value: 'Tuberculos', label: 'Tubérculos' },
-  { value: 'Hortalizas', label: 'Hortalizas' },
-  { value: 'ofertas', label: 'Ofertas' }
-];
+
 
 // Imágenes para el carrusel del banner
 const IMAGENES_BANNER = [
@@ -485,13 +480,30 @@ const Navbar: React.FC<{
     <nav className="navbar navbar-secundaria">
       <div className="container navbar-container">
         
-        <div className="navbar-busqueda">
-          <input 
-            type="text" 
-            placeholder="Buscar productos..." 
-          />
-          <button className="btn-buscar"><i className="icono-buscar"></i></button>
-        </div>
+  
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="Busca tus productos"
+              style={{
+                padding: '10px 10px 10px 50px', // Espacio a la izquierda para el icono
+                width: '200%',
+                borderRadius: '4px',
+                border: '1px solid #ccc',
+                fontSize: '16px'
+              }}
+            />
+            <IoIosSearch
+              style={{
+                position: 'absolute',
+                left: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: '#888',
+                fontSize: '30px'
+              }}
+            />
+          </div>
         
         <button 
           className="navbar-toggler" 
@@ -500,24 +512,15 @@ const Navbar: React.FC<{
           ☰
         </button>
         
-        <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
-          <ul className="navbar-nav">
-            {TIPOS_PRODUCTO.map(tipo => (
-              <li key={tipo.value} className="nav-item">
-                <Link 
-                  to={`/categoria/${tipo.value.toLowerCase()}`} 
-                  className="nav-link"
-                >
-                  {tipo.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        
         <button className="btn-carrito" onClick={mostrarCarrito}>
-          <span className="icono-carrito"></span>
-          {cantidadCarrito > 0 && (
+            <MdShoppingCart  
+                style={
+                  {
+                    fontSize: '40px'
+                  }
+                }
+                />
+              {cantidadCarrito > 0 && (
             <span className="contador-carrito">{cantidadCarrito}</span>
           )}
         </button>
@@ -774,11 +777,6 @@ const Productos: React.FC = () => {
                     onChange={(e) => setFiltroTipo(e.target.value)}
                   >
                     <option value="todos">Todos los tipos</option>
-                    {TIPOS_PRODUCTO.map(tipo => (
-                      <option key={tipo.value} value={tipo.value}>
-                        {tipo.label}
-                      </option>
-                    ))}
                   </select>
                 </div>
               </div>
@@ -833,15 +831,6 @@ const Productos: React.FC = () => {
         eliminarProducto={eliminarDelCarrito}
         vaciarCarrito={vaciarCarrito}
       />
-      
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} HUETOMKT - Todos los derechos reservados</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

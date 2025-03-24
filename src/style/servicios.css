@@ -156,6 +156,10 @@
 /* Sección de beneficios */
 .servicios-beneficios {
   margin-bottom: 5rem;
+  font-size: 8rem !important; /* Aumentado de 5rem a 7rem para hacerlos significativamente más grandes */
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  display: block;
 }
 
 .servicios-beneficios h3 {

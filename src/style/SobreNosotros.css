@@ -89,11 +89,15 @@ body {
 
 .stat-card {
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   background: var(--card-bg);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform var(--transition-speed);
+  font-size: 5rem !important; /* Aumentado de 5rem a 7rem para hacerlos significativamente más grandes */
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: block;
 }
 
 .stat-card:hover {
@@ -110,6 +114,11 @@ body {
   font-size: 2.5rem;
   color: var(--accent-color);
   margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  font-size: 1.2rem;
+  color: var(--text-color);
 }
 
 /* Enhanced Image Gallery */
@@ -447,6 +456,42 @@ body {
   gap: 1.5rem;
   margin-top: 2rem;
 }
+.key-point {
+  background-color: #FFF9C4; /* Amarillo claro suave */
+  /* Alternativas: #FFFDE7, #FFFACD, #FEFCE8, #FFFDD0 */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.key-point:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Bordes sutiles para mejorar el contraste */
+.key-point {
+  border-left: 4px solid #FFC107; /* Borde amarillo más intenso a la izquierda */
+}
+
+/* Asegurando que el texto sea legible con el fondo amarillo */
+.key-point p {
+  color: #5D4037; /* Marrón oscuro para mejor contraste con amarillo */
+  margin: 0;
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .key-point {
+    padding: 1.5rem;
+  }
+}
 
 .key-point {
   background: white;
@@ -467,6 +512,11 @@ body {
 .key-point i {
   color: var(--primary-color);
   font-size: 1.5rem;
+  min-width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .key-point p {
@@ -477,90 +527,105 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .imagen-galeria {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .animate-title {
-      font-size: 2rem;
+    font-size: 2rem;
   }
 
   .sobre-nosotros h2 {
-      font-size: 1.5rem;
+    font-size: 1.5rem;
   }
 
   .descripcion p {
-      font-size: 1rem;
+    font-size: 1rem;
   }
 
   .diferenciadores {
-      padding: 1.5rem;
+    padding: 1.5rem;
   }
 
   .valor-item:hover {
-      transform: translateX(5px);
+    transform: translateX(5px);
   }
 
   .vision-mision-container {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .introduccion {
-      padding: 1.5rem;
+    padding: 1.5rem;
   }
 
   .vision-card,
   .mision-card {
-      padding: 1.5rem;
+    padding: 1.5rem;
   }
 
   .vision-card h2,
   .mision-card h2 {
-      font-size: 1.5rem;
+    font-size: 1.5rem;
   }
 
   .stats-section {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .header-section {
-      flex-direction: column;
-      gap: 1rem;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .decorative-line {
-      width: 60px;
+    width: 60px;
   }
 
   .stat-card {
-      padding: 1.5rem;
+    padding: 1.5rem;
   }
 
   .stat-card h3 {
-      font-size: 2rem;
+    font-size: 2rem;
   }
 
   .quote-box {
-      padding: 1.5rem 2rem;
+    padding: 1.5rem 2rem;
   }
 
   .quote-box blockquote {
-      font-size: 1.1rem;
+    font-size: 1.1rem;
   }
 
   .highlight-text {
-      padding: 1rem;
-      font-size: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
   }
 
   .key-points {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .key-point {
-      padding: 1rem;
+    padding: 1rem;
+  }
+
+  .stat-card i {
+    font-size: 4rem !important;
+  }
+
+  .valor-item i {
+    font-size: 2rem;
+    padding: 0.8rem;
+    min-width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .key-point i {
+    font-size: 2rem;
   }
 }

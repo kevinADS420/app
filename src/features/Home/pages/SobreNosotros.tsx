@@ -20,13 +20,13 @@ function SobreNosotros() {
           <div className="introduccion fade-in">
             <div className="icon-header">
               <FaSeedling />
-              <h2>Introducción</h2>
+
             </div>
             <div className="content-box">
               <div className="quote-box">
                 <FaQuoteLeft />
                 <blockquote>
-                  Cada 30 días, cientos de familias en las veredas más remotas del Quindío, organizan sus cosechas para la llegada del camión que las llevará hasta los mercados campesinos de los diferentes pueblos.
+                  Cada mes, cientos de familias en las veredas más remotas del Quindío, organizan sus cosechas para la llegada del camión que las llevará hasta los mercados campesinos de los diferentes pueblos.
                 </blockquote>
                 <FaQuoteRight />
               </div>
