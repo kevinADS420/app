@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Logo from '../atoms/Logo/Logo';
 import Navigation from '../molecules/Navigation/Navigation';
 import UserProfile from './UserProfile';
