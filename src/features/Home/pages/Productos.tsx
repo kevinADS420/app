@@ -492,13 +492,8 @@ const Navbar: React.FC<{
           />
           <button className="btn-buscar"><i className="icono-buscar"></i></button>
         </div>
-        
-        <button 
-          className="navbar-toggler" 
-          onClick={() => setMenuMobilAbierto(!menuMobilAbierto)}
-        >
-          ☰
-        </button>
+
+         
         
         <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
           <ul className="navbar-nav">
