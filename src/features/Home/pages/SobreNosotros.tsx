@@ -1,4 +1,4 @@
-import { FaSeedling, FaQuoteLeft, FaQuoteRight, FaLightbulb, FaHistory, FaGlobe, FaHandHoldingHeart, FaEye, FaBullseye, FaCheckCircle, FaUsers, FaStore, FaTruck, FaAppleAlt, FaLeaf, FaStar, FaHeart, FaHandshake, FaAward } from 'react-icons/fa';
+import {FaCheckCircle, FaUsers, FaStore, FaTruck, FaLeaf, FaHandshake, FaAward } from 'react-icons/fa';
 import finca from '../../../assets/images/finca.jpg'
 import platanos from '../../../assets/images/platanos.jpg'
 import obrero from '../../../assets/images/obrero.jpg'
