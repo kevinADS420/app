@@ -87,7 +87,7 @@ function Login() {
         try {
           let userResponse;
           if (userType === 'proveedor') {
-            userResponse = await axios.get(`http://localhost:10101/profile/Proveedor`, {
+            userResponse = await axios.get(`http://localhost:10101/proveedor/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${loginResponse.data.token}`
               }
@@ -104,7 +104,7 @@ function Login() {
             
             localStorage.setItem('user', JSON.stringify(userData));
           } else if (userType === 'customer') {
-            userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+            userResponse = await axios.get(`http://localhost:10101/customer/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${loginResponse.data.token}`
               }
@@ -157,7 +157,7 @@ function Login() {
           localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
         } else {
           try {
-            const userResponse = await axios.get(`http://localhost:10101/customer/${formData.Email}`, {
+            const userResponse = await axios.get(`http://localhost:10101/customer/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
                 'Authorization': `Bearer ${customerResponse.data.token}`
               }
@@ -207,8 +207,7 @@ function Login() {
             localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
           } else {
             try {
-              // Fixed URL - removed template literal error
-              const userResponse = await axios.get('http://localhost:10101/profile/Proveedor', {
+              const userResponse = await axios.get(`http://localhost:10101/proveedor/email/${encodeURIComponent(formData.Email)}`, {
                 headers: {
                   'Authorization': `Bearer ${proveedorResponse.data.token}`
                 }
