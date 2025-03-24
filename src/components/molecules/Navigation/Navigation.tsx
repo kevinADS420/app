@@ -23,8 +23,10 @@ const Navigation: React.FC<NavigationProps> = ({ isAuthenticated }) => {
           to={item.to} 
           className="nav-link"
         >
+          
           <Button variant="secondary" className="nav-button">
             {item.label}
+            
           </Button>
         </Link>
       ))}

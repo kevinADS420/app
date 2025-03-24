@@ -4,6 +4,8 @@ import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
 import { MdShoppingCart } from "react-icons/md";
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -468,9 +470,20 @@ const CarritoCompras: React.FC<{
     </div>
   );
 };
+// Definir esto justo ANTES del componente Navbar
+
+// Definir tipos de productos
+const tipos_producto = [
+  { value: 'frutas', label: 'Frutas' },
+  { value: 'verduras', label: 'Verduras' },
+  { value: 'tuberculos', label: 'Tubérculos' },
+  { value: 'hortalizas', label: 'Hortalizas' },
+  { value: 'ofertas', label: 'Ofertas' }
+];
 
 // Componente Barra de Navegación Secundaria
 const Navbar: React.FC<{
+
   cantidadCarrito: number,
   mostrarCarrito: () => void
 }> = ({ cantidadCarrito, mostrarCarrito }) => {
@@ -497,7 +510,7 @@ const Navbar: React.FC<{
         
         <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
           <ul className="navbar-nav">
-            {TIPOS_PRODUCTO.map(tipo => (
+            {tipos_producto.map(tipo => (
               <li key={tipo.value} className="nav-item">
                 <Link 
                   to={`/categoria/${tipo.value.toLowerCase()}`} 

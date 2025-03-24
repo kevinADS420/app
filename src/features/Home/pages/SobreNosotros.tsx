@@ -16,70 +16,12 @@ function SobreNosotros() {
             <h1 className="animate-title">Sobre Nosotros</h1>
             <div className="decorative-line"></div>
           </div>
-          
-          <div className="introduccion fade-in">
+
+          <div className="diferenciadores hover-card">
             <div className="icon-header">
-              <FaSeedling />
-
+              <h2>Que nos hace diferentes</h2>
             </div>
-            <div className="content-box">
-              <div className="quote-box">
-                <FaQuoteLeft />
-                <blockquote>
-                  Cada mes, cientos de familias en las veredas más remotas del Quindío, organizan sus cosechas para la llegada del camión que las llevará hasta los mercados campesinos de los diferentes pueblos.
-                </blockquote>
-                <FaQuoteRight />
-              </div>
-
-              <div className="summary-box">
-                <p className="highlight-text">
-                  <FaLightbulb />
-                  Los mercados campesinos son una parte vital de nuestra tradición alimentaria, y ahora, con el auge del comercio electrónico, estamos transformando esta experiencia para el siglo XXI.
-                </p>
-                
-                <div className="key-points">
-                  <div className="key-point">
-                    <FaHistory />
-                    <p>Desde los mercados tradicionales hasta las plataformas digitales, la forma de comercializar productos agrícolas está evolucionando.</p>
-                  </div>
-                  
-                  <div className="key-point">
-                    <FaGlobe />
-                    <p>El comercio electrónico ha revolucionado la manera en que conectamos productores y consumidores, eliminando intermediarios innecesarios.</p>
-                  </div>
-                  
-                  <div className="key-point">
-                    <FaHandHoldingHeart />
-                    <p>Huerto Market nace como una solución innovadora que combina la tradición de los mercados campesinos con la tecnología moderna, facilitando el acceso a alimentos frescos y apoyando a los productores locales.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="vision-mision-container">
-            <div className="vision-card fade-in">
-              <div className="icon-header">
-                <FaEye />
-                <h2>Nuestra Visión</h2>
-              </div>
-              <p>Ser la plataforma líder en la transformación del comercio agrícola local, creando un ecosistema digital inclusivo que empodere a los productores rurales y garantice el acceso a alimentos frescos y de calidad para todos los consumidores del Quindío y, eventualmente, de Colombia.</p>
-            </div>
-
-            <div className="mision-card fade-in">
-              <div className="icon-header">
-                <FaBullseye />
-                <h2>Nuestra Misión</h2>
-              </div>
-              <p>Cerrar la brecha entre productores y consumidores mediante una plataforma digital innovadora que:</p>
-              <ul>
-                <li><FaCheckCircle /> Conecta directamente a campesinos con compradores finales</li>
-                <li><FaCheckCircle /> Reduce el desperdicio de alimentos</li>
-                <li><FaCheckCircle /> Promueve la inclusión digital de comunidades rurales</li>
-                <li><FaCheckCircle /> Garantiza precios justos para productores y consumidores</li>
-                <li><FaCheckCircle /> Fomenta prácticas agrícolas sostenibles</li>
-              </ul>
-            </div>
+            <p>Nuestro compromiso con el desarrollo rural y la economía local fortalece a los productores y promueve prácticas sostenibles. Trabajamos directamente con cooperativas agrícolas locales, garantizando precios justos y eliminando intermediarios. Impulsamos la agricultura sostenible mediante capacitación y apoyo a métodos que protegen la biodiversidad. Al comprar nuestros productos, obtienes alimentos más frescos mientras apoyas un sistema alimentario más justo y respetuoso con el medio ambiente.</p>
           </div>
 
           <div className="stats-section">
@@ -114,7 +56,7 @@ function SobreNosotros() {
               <div className="image-wrapper">
                 <img src={platanos} alt="Imagen 2" className="hover-effect" />
                 <div className="imagen-overlay">
-                  <h3><FaAppleAlt /> Productos Frescos</h3>
+                  <h3> Productos Frescos</h3>
                   <p>Calidad garantizada del campo a tu mesa</p>
                 </div>
               </div>
@@ -123,24 +65,37 @@ function SobreNosotros() {
               <div className="image-wrapper">
                 <img src={obrero}alt="Imagen 3" className="hover-effect" />
                 <div className="imagen-overlay">
-                  <h3><FaLeaf /> Agricultura Sostenible</h3>
+                  <h3> Agricultura Sostenible</h3>
                   <p>Comprometidos con el medio ambiente</p>
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="diferenciadores hover-card">
-            <div className="icon-header">
-              <FaStar />
-              <h2>Lo que nos hace diferentes</h2>
+          
+          <div className="vision-mision-container">
+            <div className="vision-card fade-in">
+              <div className="icon-header">
+                <h2>Nuestra Visión</h2>
+              </div>
+              <p>Ser la plataforma líder en la transformación del comercio agrícola local, creando un ecosistema digital inclusivo que empodere a los productores rurales y garantice el acceso a alimentos frescos y de calidad para todos los consumidores del Quindío y, eventualmente, de Colombia.</p>
             </div>
-            <p>Nuestro compromiso con el desarrollo rural y la economía local se refleja en cada compra, fortaleciendo a los productores y promoviendo prácticas sostenibles.</p>
+
+            <div className="mision-card fade-in">
+              <div className="icon-header">
+                <h2>Nuestra Misión</h2>
+              </div>
+              <p>Cerrar la brecha entre productores y consumidores mediante una plataforma digital innovadora que:</p>
+              <ul>
+                <li><FaCheckCircle /> Conecta directamente a campesinos con compradores finales</li>
+                <li><FaCheckCircle /> Promueve la inclusión digital de comunidades rurales</li>
+                <li><FaCheckCircle /> Garantiza precios justos para productores y consumidores</li>
+              </ul>
+            </div>
           </div>
+
 
           <div className="valores">
             <div className="icon-header">
-              <FaHeart />
               <h2>Nuestros valores</h2>
             </div>
             <ul className="valores-lista">
