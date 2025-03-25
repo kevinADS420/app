@@ -6,7 +6,7 @@
   
   .registro-left-panel {
     flex: 1;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/Genova.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/limonesInicio.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
