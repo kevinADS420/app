@@ -19,7 +19,7 @@ img {
   position: relative;
   text-align: center;
   color: white;
-  background-image: url('../assets/images/imghome.jpg');
+  background-image: url('../../public/images/imgHome.jpg');
   background-size: cover;
   background-position: center;
   height: 600px;
