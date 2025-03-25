@@ -382,7 +382,7 @@
     background-color: var(--color-frutas-light);
     color: var(--color-frutas);
   }
-  
+
   .categoria-boton.verduras {
     border-bottom: 3px solid var(--color-verduras);
   }
@@ -390,7 +390,7 @@
     background-color: var(--color-verduras-light);
     color: var(--color-verduras);
   }
-  
+
   .categoria-boton.tuberculos {
     border-bottom: 3px solid var(--color-tuberculos);
   }
@@ -398,7 +398,7 @@
     background-color: var(--color-tuberculos-light);
     color: var(--color-tuberculos);
   }
-  
+
   .categoria-boton.hortalizas {
     border-bottom: 3px solid var(--color-hortalizas);
   }
@@ -406,7 +406,7 @@
     background-color: var(--color-hortalizas-light);
     color: var(--color-hortalizas);
   }
-  
+
   .categoria-boton.ofertas {
     border-bottom: 3px solid var(--color-ofertas);
   }

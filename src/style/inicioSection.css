@@ -18,17 +18,17 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 45%;
-    min-height: 500px;
+    width: 30%;
+    min-height: 300px;
     padding: 1.5rem;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/Genova.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/limones.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     color: #fff;
     position: relative;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 5px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 

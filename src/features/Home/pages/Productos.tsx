@@ -5,6 +5,7 @@ import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
 import { MdShoppingCart } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import { IoIosSearch } from "react-icons/io";
 
 
 
@@ -498,7 +499,9 @@ const Navbar: React.FC<{
             type="text" 
             placeholder="Buscar productos..." 
           />
-          <button className="btn-buscar"><i className="icono-buscar"></i></button>
+        <button className="btn-buscar" onClick={()=>console.log("jws")}>
+            <IoIosSearch className="icono-buscar" />
+        </button>
         </div>
         
         <button 
