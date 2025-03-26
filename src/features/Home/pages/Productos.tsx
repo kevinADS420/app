@@ -3,13 +3,9 @@ import '../../../style/Productos.css';
 import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
-import { MdShoppingCart } from "react-icons/md";
-import { Link } from 'react-router-dom';
+import { MdShoppingCart, MdAddCircle } from "react-icons/md";
+import { Link, useNavigate } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
-
-
-
-
 
 // Definición de tipos
 interface Imagen {
@@ -31,9 +27,6 @@ interface ProductoCarrito extends Producto {
   cantidad: number;
 }
 
-// Opciones para el tipo de producto
-
-
 // Imágenes para el carrusel del banner
 const IMAGENES_BANNER = [
     {
@@ -50,7 +43,7 @@ const IMAGENES_BANNER = [
       id: 'banner3',
       url: banner3,
       alt: 'Productos orgánicos'
-    }
+    }
 ];
 
 // Componente para mostrar categorías debajo del carrusel
@@ -484,7 +477,6 @@ const tipos_producto = [
 
 // Componente Barra de Navegación Secundaria
 const Navbar: React.FC<{
-
   cantidadCarrito: number,
   mostrarCarrito: () => void
 }> = ({ cantidadCarrito, mostrarCarrito }) => {
@@ -553,66 +545,61 @@ const Productos: React.FC = () => {
   // Estados para filtros
   const [filtroTipo, setFiltroTipo] = useState<string>('todos');
   const [terminoBusqueda, setTerminoBusqueda] = useState<string>('');
+  const [userType, setUserType] = useState<string | null>(null);
+  const navigate = useNavigate();
   
-  // Cargar productos del localStorage o productos exportados
-  useEffect(() => {
-    const cargarProductos = () => {
-      // Primero intentamos cargar los productos exportados recientemente
-      const productosExportados = localStorage.getItem('productosExportados');
+  // Agregar estado de carga
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Función para obtener productos del backend
+  const obtenerProductosDelBackend = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://backendhuertomkt.onrender.com/products');
+      if (!response.ok) {
+        throw new Error('Error al obtener productos del servidor');
+      }
+      const data = await response.json();
       
-      if (productosExportados) {
-        try {
-          const productosParseados = JSON.parse(productosExportados);
-          
-          // Añadir descuentos aleatorios a algunos productos para mostrarlos como ofertas
-          const productosConOfertas = productosParseados.map((p: Producto) => {
-            // Asignar descuento aleatoriamente al 30% de los productos
-            if (Math.random() < 0.3) {
-              return {
-                ...p,
-                descuento: Math.floor(Math.random() * 30) + 10, // Descuento entre 10% y 40%
-                tipo: 'ofertas' // Cambiar tipo a ofertas
-              };
-            }
-            return p;
-          });
-          
-          setProductos(productosConOfertas);
-          
-          // Limpiamos localStorage para evitar duplicados en futuras cargas
-          localStorage.removeItem('productosExportados');
-        } catch (e) {
-          console.error('Error al cargar productos exportados:', e);
-        }
-      }
-      // Si no hay productos exportados, cargar productos guardados
-      else {
-        const productosGuardados = localStorage.getItem('productosGuardados');
-        if (productosGuardados) {
-          try {
-            const parsed = JSON.parse(productosGuardados);
-            
-            // Añadir descuentos aleatorios a algunos productos
-            const productosConOfertas = parsed.map((p: Producto) => {
-              if (Math.random() < 0.3) {
-                return {
-                  ...p,
-                  descuento: Math.floor(Math.random() * 30) + 10,
-                  tipo: 'ofertas'
-                };
-              }
-              return p;
-            });
-            
-            setProductos(productosConOfertas);
-          } catch (e) {
-            console.error('Error al cargar productos guardados:', e);
-          }
-        }
-      }
-    };
+      // Transformar los datos recibidos al formato que espera nuestra aplicación
+      const productosFormateados = data.map((prod: any) => ({
+        id: prod.id_producto.toString(),
+        nombre: prod.nombreP,
+        tipo: prod.tipo,
+        precio: parseFloat(prod.Precio),
+        imagenes: Array.isArray(prod.imagen) 
+          ? prod.imagen.map((img: string, index: number) => ({
+              id: `img_${prod.id_producto}_${index}`,
+              nombre: `Imagen ${index + 1} del producto`,
+              url: img.startsWith('data:') ? img : `data:image/jpeg;base64,${img}`
+            }))
+          : [{
+              id: `img_${prod.id_producto}_0`,
+              nombre: 'Imagen del producto',
+              url: prod.imagen.startsWith('data:') 
+                ? prod.imagen 
+                : `data:image/jpeg;base64,${prod.imagen}`
+            }],
+        ...(Math.random() < 0.3 ? { descuento: Math.floor(Math.random() * 30) + 10 } : {})
+      }));
+
+      console.log('Productos obtenidos del backend:', productosFormateados);
+      setProductos(productosFormateados);
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Cargar productos cuando se monte el componente
+  useEffect(() => {
+    // Verificar el tipo de usuario desde localStorage
+    const userTypeFromStorage = localStorage.getItem('userType');
+    setUserType(userTypeFromStorage);
     
-    cargarProductos();
+    // Obtener productos del backend
+    obtenerProductosDelBackend();
     
     // Cargar carrito guardado
     const carritoGuardado = localStorage.getItem('carritoProductos');
@@ -624,7 +611,27 @@ const Productos: React.FC = () => {
       }
     }
   }, []);
-  
+
+  // Escuchar cambios en localStorage para productos exportados
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const productosExportados = localStorage.getItem('productosExportados');
+      if (productosExportados) {
+        // Si hay nuevos productos exportados, actualizar la lista desde el backend
+        obtenerProductosDelBackend();
+        // Limpiar localStorage para evitar duplicados
+        localStorage.removeItem('productosExportados');
+      }
+    };
+
+    // Agregar listener para cambios en localStorage
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   // Guardar carrito en localStorage cuando cambie
   useEffect(() => {
     localStorage.setItem('carritoProductos', JSON.stringify(productosCarrito));
@@ -687,6 +694,21 @@ const Productos: React.FC = () => {
   const toggleCarrito = () => {
     setMostrarCarritoModal(!mostrarCarritoModal);
   };
+
+  // Función mejorada para la navegación
+  const handleNavigateToRegistro = () => {
+    setIsLoading(true);
+    // Simular una carga suave antes de navegar
+    setTimeout(() => {
+      navigate('/RegistroProductos', { 
+        state: { 
+          from: 'productos',
+          timestamp: Date.now() 
+        }
+      });
+      setIsLoading(false);
+    }, 300);
+  };
   
   // Obtener productos por categoría
   const obtenerProductosPorTipo = (tipo: string) => {
@@ -715,6 +737,52 @@ const Productos: React.FC = () => {
 
   return (
     <div className="tienda">
+      {isLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 9999,
+          transition: 'all 0.3s ease'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '10px'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '4px solid #f3f3f3',
+              borderTop: '4px solid #4CAF50',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}></div>
+            <span style={{
+              color: '#4CAF50',
+              fontSize: '16px',
+              fontWeight: '500'
+            }}>Cargando...</span>
+          </div>
+        </div>
+      )}
+      
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+
       {/* La barra de navegación principal ya está en el layout principal */}
       {/* Esta es la barra de categorías y carrito que queremos que esté debajo */}
       <Navbar 
@@ -791,8 +859,55 @@ const Productos: React.FC = () => {
                     onChange={(e) => setFiltroTipo(e.target.value)}
                   >
                     <option value="todos">Todos los tipos</option>
+                    {tipos_producto.map(tipo => (
+                      <option key={tipo.value} value={tipo.value}>
+                        {tipo.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
+                
+                {/* Botón para agregar productos (solo visible para proveedores) */}
+                {userType === 'proveedor' && (
+                  <button 
+                    className="btn-agregar-productos"
+                    onClick={handleNavigateToRegistro}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '10px 20px',
+                      backgroundColor: '#4CAF50',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      transition: 'all 0.3s ease',
+                      marginLeft: '10px',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = '#45a049';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = '#4CAF50';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+                    }}
+                    disabled={isLoading}
+                  >
+                    <MdAddCircle style={{ 
+                      marginRight: '8px',
+                      fontSize: '20px'
+                    }} />
+                    {isLoading ? 'Cargando...' : 'Agregar Productos'}
+                  </button>
+                )}
               </div>
               
               <div className="info-resultados">

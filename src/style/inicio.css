@@ -111,7 +111,7 @@ img {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       background-image: url('../assets/images/features.jpg');
-    background-size: cover;
+      background-size: cover;
       gap: 30px;  /* Agrega un espacio entre las columnas */
       padding: 0 30px; 
       padding-top: 30px;

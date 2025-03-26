@@ -217,8 +217,7 @@ function UserProfile() {
           <div className="profile-dropdown">
             <div className="profile-header">
               <h3>{userDisplay.nombre} {userDisplay.apellido}</h3>
-              <p>{userDisplay.email}</p>
-              <p className="user-id">ID: {userDisplay.id}</p>
+              <p className="user-id">Tipo: {userData.id_cliente ? 'Cliente' : userData.id_proveedor ? 'Proveedor' : 'Usuario'}</p>
             </div>
 
             <div className="profile-menu">

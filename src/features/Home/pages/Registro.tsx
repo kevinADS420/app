@@ -84,7 +84,7 @@ function App() {
       Email: formData.Email,
       contraseña: formData.Password,
     };
-
+    
     try {
       const response = await fetch('https://backendhuertomkt.onrender.com/register/customer', {
         method: 'POST',

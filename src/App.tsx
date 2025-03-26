@@ -12,6 +12,7 @@ import Inicioseccion from './features/Home/pages/inicioseccion';
 import Registro from './features/Home/pages/Registro';
 import RegistroUnificado from './features/Home/pages/RegistroUnificado';
 import EditProfile from './components/pages/EditProfile/EditProfile';
+import RegistroProductos from './features/Home/pages/RegistroProduc';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/registro" element={<RegistroUnificado />} />
         <Route path="/registro-antiguo" element={<Registro />} />
         <Route path="/configuracion" element={<EditProfile />} />
+        <Route path="/RegistroProductos" element= {<RegistroProductos/>}/>
       </Routes>
       <Footer />
       <ToastContainer position="bottom-right" />
