@@ -6,6 +6,8 @@ import banner3 from './assets/banner3.jpg';
 import { MdShoppingCart, MdAddCircle } from "react-icons/md";
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Definición de tipos
 interface Imagen {
@@ -16,11 +18,12 @@ interface Imagen {
 
 interface Producto {
   id: string;
-  nombre: string;
+  nombreP: string;
   tipo: string;
   precio: number;
   imagenes: Imagen[];
   descuento?: number; // Para productos en oferta
+  id_proveedor?: string; // Agregamos el ID del proveedor
 }
 
 interface ProductoCarrito extends Producto {
@@ -270,7 +273,6 @@ const TarjetaProducto: React.FC<{
   producto: Producto,
   agregarAlCarrito: (producto: Producto) => void
 }> = ({ producto, agregarAlCarrito }) => {
-  // Formatear precio
   const formatearPrecio = (precio: number): string => {
     return `$ ${precio.toLocaleString('es-CO', {
       minimumFractionDigits: 0,
@@ -307,19 +309,21 @@ const TarjetaProducto: React.FC<{
       </div>
       
       <div className="producto-info">
-        <h3>{producto.nombre}</h3>
+        <h3>{producto.nombreP}</h3>
         <span className={`tipo-badge ${producto.tipo.toLowerCase()}`}>
           {producto.tipo}
         </span>
         {mostrarPrecio()}
       </div>
       
-      <button 
-        className="btn-agregar" 
-        onClick={() => agregarAlCarrito(producto)}
-      >
-        <i className="icono-carrito"></i> Agregar
-      </button>
+      <div className="producto-acciones">
+        <button 
+          className="btn-agregar" 
+          onClick={() => agregarAlCarrito(producto)}
+        >
+          <i className="icono-carrito"></i> Agregar
+        </button>
+      </div>
     </div>
   );
 };
@@ -384,7 +388,7 @@ const CarritoCompras: React.FC<{
                     {producto.imagenes && producto.imagenes.length > 0 ? (
                       <img 
                         src={producto.imagenes[0].url} 
-                        alt={producto.nombre} 
+                        alt={producto.nombreP} 
                       />
                     ) : (
                       <div className="sin-imagen-mini">
@@ -394,7 +398,7 @@ const CarritoCompras: React.FC<{
                   </div>
                   
                   <div className="item-detalles">
-                    <h4>{producto.nombre}</h4>
+                    <h4>{producto.nombreP}</h4>
                     <div className="item-precio">
                       {producto.descuento ? (
                         <span>
@@ -485,48 +489,23 @@ const Navbar: React.FC<{
   return (
     <nav className="navbar navbar-secundaria">
       <div className="container navbar-container">
-        
         <div className="navbar-busqueda">
           <input 
             type="text" 
             placeholder="Buscar productos..." 
           />
-        <button className="btn-buscar" onClick={()=>console.log("jws")}>
+          <button className="btn-buscar" onClick={()=>console.log("jws")}>
             <IoIosSearch className="icono-buscar" />
-        </button>
-        </div>
-        
-        <button 
-          className="navbar-toggler" 
-          onClick={() => setMenuMobilAbierto(!menuMobilAbierto)}
-        >
-          ☰
-        </button>
-        
-        <div className={`navbar-menu ${menuMobilAbierto ? 'abierto' : ''}`}>
-          <ul className="navbar-nav">
-            {tipos_producto.map(tipo => (
-              <li key={tipo.value} className="nav-item">
-                <Link 
-                  to={`/categoria/${tipo.value.toLowerCase()}`} 
-                  className="nav-link"
-                >
-                  {tipo.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          </button>
         </div>
         
         <button className="btn-carrito" onClick={mostrarCarrito}>
-            <MdShoppingCart  
-                style={
-                  {
-                    fontSize: '40px'
-                  }
-                }
-                />
-              {cantidadCarrito > 0 && (
+          <MdShoppingCart  
+            style={{
+              fontSize: '40px'
+            }}
+          />
+          {cantidadCarrito > 0 && (
             <span className="contador-carrito">{cantidadCarrito}</span>
           )}
         </button>
@@ -551,6 +530,11 @@ const Productos: React.FC = () => {
   // Agregar estado de carga
   const [isLoading, setIsLoading] = useState(false);
   
+  // Estados existentes...
+  const [lastActivity, setLastActivity] = useState<number>(Date.now());
+  const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutos en milisegundos
+  const [mostrarMisProductos, setMostrarMisProductos] = useState(false);
+  
   // Función para obtener productos del backend
   const obtenerProductosDelBackend = async () => {
     try {
@@ -561,10 +545,13 @@ const Productos: React.FC = () => {
       }
       const data = await response.json();
       
+      // Log para ver los datos crudos que llegan del backend
+      console.log('Datos crudos del backend:', data);
+      
       // Transformar los datos recibidos al formato que espera nuestra aplicación
       const productosFormateados = data.map((prod: any) => ({
         id: prod.id_producto.toString(),
-        nombre: prod.nombreP,
+        nombreP: prod.nombreP,
         tipo: prod.tipo,
         precio: parseFloat(prod.Precio),
         imagenes: Array.isArray(prod.imagen) 
@@ -580,10 +567,12 @@ const Productos: React.FC = () => {
                 ? prod.imagen 
                 : `data:image/jpeg;base64,${prod.imagen}`
             }],
-        ...(Math.random() < 0.3 ? { descuento: Math.floor(Math.random() * 30) + 10 } : {})
+        id_proveedor: prod.id_proveedor ? prod.id_proveedor.toString() : null
       }));
 
-      console.log('Productos obtenidos del backend:', productosFormateados);
+      // Log para ver los productos formateados
+      console.log('Productos formateados:', productosFormateados);
+
       setProductos(productosFormateados);
     } catch (error) {
       console.error('Error al obtener productos:', error);
@@ -614,9 +603,8 @@ const Productos: React.FC = () => {
 
   // Escuchar cambios en localStorage para productos exportados
   useEffect(() => {
-    const handleStorageChange = () => {
-      const productosExportados = localStorage.getItem('productosExportados');
-      if (productosExportados) {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'productosExportados' && e.newValue) {
         // Si hay nuevos productos exportados, actualizar la lista desde el backend
         obtenerProductosDelBackend();
         // Limpiar localStorage para evitar duplicados
@@ -640,24 +628,38 @@ const Productos: React.FC = () => {
   // Función para agregar un producto al carrito
   const agregarAlCarrito = (producto: Producto) => {
     setProductosCarrito(prevCarrito => {
-      // Verificar si el producto ya está en el carrito
       const productoExistente = prevCarrito.find(p => p.id === producto.id);
       
       if (productoExistente) {
-        // Actualizar cantidad si ya existe
+        toast.info(`Se agregó otra unidad de ${producto.nombreP} al carrito`, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return prevCarrito.map(p => 
           p.id === producto.id 
             ? { ...p, cantidad: p.cantidad + 1 } 
             : p
         );
       } else {
-        // Agregar como nuevo si no existe
+        toast.success(`¡${producto.nombreP} agregado al carrito!`, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         return [...prevCarrito, { ...producto, cantidad: 1 }];
       }
     });
-    
-    // Mostrar notificación de éxito
-    alert(`${producto.nombre} agregado al carrito`);
   };
   
   // Función para actualizar cantidad de un producto en el carrito
@@ -678,16 +680,61 @@ const Productos: React.FC = () => {
   
   // Función para eliminar un producto del carrito
   const eliminarDelCarrito = (id: string) => {
-    setProductosCarrito(prevCarrito => 
-      prevCarrito.filter(p => p.id !== id)
-    );
+    const producto = productosCarrito.find(p => p.id === id);
+    if (producto) {
+      setProductosCarrito(prevCarrito => prevCarrito.filter(p => p.id !== id));
+      toast.info(`${producto.nombreP} eliminado del carrito`, {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
   
   // Función para vaciar el carrito
   const vaciarCarrito = () => {
-    if (window.confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+    const confirmar = () => {
       setProductosCarrito([]);
-    }
+      toast.success('Carrito vaciado exitosamente', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    };
+
+    toast.warn(
+      <div>
+        <p>¿Estás seguro de que deseas vaciar el carrito?</p>
+        <button 
+          onClick={confirmar}
+          style={{
+            background: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            marginRight: '10px',
+            cursor: 'pointer'
+          }}
+        >
+          Confirmar
+        </button>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        closeButton: true,
+      }
+    );
   };
   
   // Función para alternar la visibilidad del carrito
@@ -728,15 +775,84 @@ const Productos: React.FC = () => {
   // Filtrar productos para el catálogo
   const productosFiltrados = productos
     .filter(producto => 
-      filtroTipo === 'todos' || producto.tipo.toLowerCase() === filtroTipo.toLowerCase()
+      filtroTipo === 'todos' || producto.tipo === filtroTipo
     )
     .filter(producto => 
-      producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      producto.nombreP.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
       producto.tipo.toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
 
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    localStorage.removeItem('userType');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('carritoProductos');
+    
+    toast.warn('Su sesión ha expirado por inactividad', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    
+    navigate('/login');
+  };
+
+  // Efecto para controlar la inactividad
+  useEffect(() => {
+    // Función para actualizar el tiempo de última actividad
+    const updateLastActivity = () => {
+      setLastActivity(Date.now());
+    };
+
+    // Eventos a escuchar para detectar actividad
+    const events = [
+      'mousedown',
+      'mousemove',
+      'keydown',
+      'scroll',
+      'touchstart',
+      'click'
+    ];
+
+    // Agregar listeners para todos los eventos
+    events.forEach(event => {
+      window.addEventListener(event, updateLastActivity);
+    });
+
+    // Intervalo para verificar inactividad
+    const checkInactivity = setInterval(() => {
+      const timeSinceLastActivity = Date.now() - lastActivity;
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+        handleLogout();
+      }
+    }, 60000); // Verificar cada minuto
+
+    // Limpiar listeners y intervalo
+    return () => {
+      events.forEach(event => {
+        window.removeEventListener(event, updateLastActivity);
+      });
+      clearInterval(checkInactivity);
+    };
+  }, [lastActivity, navigate]);
+
   return (
     <div className="tienda">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {isLoading && (
         <div style={{
           position: 'fixed',
@@ -783,20 +899,15 @@ const Productos: React.FC = () => {
         `}
       </style>
 
-      {/* La barra de navegación principal ya está en el layout principal */}
-      {/* Esta es la barra de categorías y carrito que queremos que esté debajo */}
       <Navbar 
         cantidadCarrito={cantidadTotalCarrito} 
         mostrarCarrito={toggleCarrito} 
       />
       
-      {/* Contenido principal */}
       <main>
-        {/* Banner con carrusel */}
         <Banner />
         
         <div className="container">
-          {/* Categorías botones debajo del carrusel */}
           <CategoriasAccesoRapido 
             categorias={[
               { value: 'Frutas', label: 'Frutas', icono: <i className="icon-frutas">F</i> },
@@ -807,7 +918,6 @@ const Productos: React.FC = () => {
             ]}
           />
           
-          {/* Secciones de categorías */}
           <SeccionCategoria 
             titulo="Ofertas" 
             productos={obtenerProductosPorTipo('ofertas')}
@@ -951,7 +1061,6 @@ const Productos: React.FC = () => {
         </div>
       </main>
       
-      {/* Modal del carrito de compras */}
       <CarritoCompras 
         productos={productosCarrito}
         visible={mostrarCarritoModal}

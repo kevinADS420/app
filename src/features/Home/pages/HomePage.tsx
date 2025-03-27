@@ -6,9 +6,66 @@ import Sostenibilas from '../../../assets/images/sostenibilidad.jpg'
 import Pimenton from '../../../assets/images/Pimenton.jpg'
 import Planato from '../../../assets/images/platano.jpg'
 import Tomate from '../../../assets/images/toamte.jpg'
-
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Inicio() { 
+  const navigate = useNavigate();
+  const [lastActivity, setLastActivity] = useState<number>(Date.now());
+  const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutos en milisegundos
+
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    // Limpiar localStorage
+    localStorage.removeItem('userType');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('carritoProductos');
+    
+    // Mostrar mensaje
+    alert('Su sesión ha expirado por inactividad');
+    
+    // Redirigir al login
+    navigate('/login');
+  };
+
+  // Efecto para controlar la inactividad
+  useEffect(() => {
+    // Función para actualizar el tiempo de última actividad
+    const updateLastActivity = () => {
+      setLastActivity(Date.now());
+    };
+
+    // Eventos a escuchar para detectar actividad
+    const events = [
+      'mousedown',
+      'mousemove',
+      'keydown',
+      'scroll',
+      'touchstart',
+      'click'
+    ];
+
+    // Agregar listeners para todos los eventos
+    events.forEach(event => {
+      window.addEventListener(event, updateLastActivity);
+    });
+
+    // Intervalo para verificar inactividad
+    const checkInactivity = setInterval(() => {
+      const timeSinceLastActivity = Date.now() - lastActivity;
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+        handleLogout();
+      }
+    }, 60000); // Verificar cada minuto
+
+    // Limpiar listeners y intervalo
+    return () => {
+      events.forEach(event => {
+        window.removeEventListener(event, updateLastActivity);
+      });
+      clearInterval(checkInactivity);
+    };
+  }, [lastActivity, navigate]);
 
   return (
     <>
