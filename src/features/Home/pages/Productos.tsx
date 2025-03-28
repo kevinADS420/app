@@ -135,6 +135,15 @@ const Carrusel: React.FC<{imagenes: Imagen[]}> = ({ imagenes }) => {
                   imageRendering: '-webkit-optimize-contrast',
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
+                onError={(e) => {
+                  console.error('Error cargando imagen:', e);
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                  e.currentTarget.style.backgroundColor = '#f0f0f0';
+                  if (e.currentTarget.parentNode) {
+                    (e.currentTarget.parentNode as HTMLElement).innerHTML = '<div class="sin-imagen"><span>Sin imagen</span></div>';
+                  }
+                }}
               />
             </div>
           ))}
@@ -295,12 +304,40 @@ const TarjetaProducto: React.FC<{
     
     return <div className="precio">{formatearPrecio(producto.precio)}</div>;
   };
+
+  // Verificar si el producto tiene imágenes válidas
+  const tieneImagenesValidas = producto.imagenes && 
+                              producto.imagenes.length > 0 && 
+                              producto.imagenes[0].url;
   
   return (
     <div className="tarjeta-producto">
       <div className="producto-imagen">
-        {producto.imagenes && producto.imagenes.length > 0 ? (
-          <Carrusel imagenes={producto.imagenes} />
+        {tieneImagenesValidas ? (
+          // Si hay solo una imagen, mostramos directamente la imagen en lugar del carrusel
+          producto.imagenes.length === 1 ? (
+            <img 
+              src={producto.imagenes[0].url} 
+              alt={producto.nombreP}
+              style={{
+                width: '100%',
+                height: '200px',
+                objectFit: 'cover',
+                borderRadius: '8px 8px 0 0'
+              }}
+              onError={(e) => {
+                console.error('Error cargando imagen:', e);
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                e.currentTarget.style.backgroundColor = '#f0f0f0';
+                if (e.currentTarget.parentNode) {
+                  (e.currentTarget.parentNode as HTMLElement).innerHTML = '<div class="sin-imagen"><span>Sin imagen</span></div>';
+                }
+              }}
+            />
+          ) : (
+            <Carrusel imagenes={producto.imagenes} />
+          )
         ) : (
           <div className="sin-imagen">
             <span>Sin imagen</span>
@@ -535,7 +572,7 @@ const Productos: React.FC = () => {
   const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutos en milisegundos
   const [mostrarMisProductos, setMostrarMisProductos] = useState(false);
   
-  // Función para obtener productos del backend
+  // Función mejorada para procesar imágenes del backend
   const obtenerProductosDelBackend = async () => {
     try {
       setIsLoading(true);
@@ -547,28 +584,73 @@ const Productos: React.FC = () => {
       
       // Log para ver los datos crudos que llegan del backend
       console.log('Datos crudos del backend:', data);
-      
+
       // Transformar los datos recibidos al formato que espera nuestra aplicación
-      const productosFormateados = data.map((prod: any) => ({
-        id: prod.id_producto.toString(),
-        nombreP: prod.nombreP,
-        tipo: prod.tipo,
-        precio: parseFloat(prod.Precio),
-        imagenes: Array.isArray(prod.imagen) 
-          ? prod.imagen.map((img: string, index: number) => ({
-              id: `img_${prod.id_producto}_${index}`,
-              nombre: `Imagen ${index + 1} del producto`,
-              url: img.startsWith('data:') ? img : `data:image/jpeg;base64,${img}`
-            }))
-          : [{
-              id: `img_${prod.id_producto}_0`,
-              nombre: 'Imagen del producto',
-              url: prod.imagen.startsWith('data:') 
-                ? prod.imagen 
-                : `data:image/jpeg;base64,${prod.imagen}`
-            }],
-        id_proveedor: prod.id_proveedor ? prod.id_proveedor.toString() : null
-      }));
+      const productosFormateados = data.map((prod: any) => {
+        // Procesar la imagen
+        let imagenesProcesadas = [];
+        
+        try {
+          if (prod.imagen) {
+            // Comprobar si imagen es un array, un string o null
+            if (Array.isArray(prod.imagen)) {
+              // Si es un array, procesar cada imagen
+              imagenesProcesadas = prod.imagen
+                .filter((img: any) => img) // Filtrar valores nulos o vacíos
+                .map((img: string, index: number) => {
+                  let url = '';
+                  
+                  // Verificar el formato de la imagen
+                  if (typeof img === 'string') {
+                    // Verificar si ya es una URL de datos
+                    if (img.startsWith('data:')) {
+                      url = img;
+                    } else {
+                      // Asumir que es base64 y necesita prefijo
+                      url = `data:image/jpeg;base64,${img}`;
+                    }
+                  }
+                  
+                  return {
+                    id: `img_${prod.id_producto}_${index}`,
+                    nombre: `Imagen ${index + 1} del producto ${prod.nombreP}`,
+                    url: url
+                  };
+                });
+            } else if (typeof prod.imagen === 'string' && prod.imagen.trim() !== '') {
+              // Si es un string único, procesarlo
+              let url = '';
+              
+              if (prod.imagen.startsWith('data:')) {
+                url = prod.imagen;
+              } else {
+                url = `data:image/jpeg;base64,${prod.imagen}`;
+              }
+              
+              imagenesProcesadas = [{
+                id: `img_${prod.id_producto}_0`,
+                nombre: `Imagen del producto ${prod.nombreP}`,
+                url: url
+              }];
+            }
+          }
+        } catch (error) {
+          console.error(`Error procesando imágenes del producto ${prod.id_producto}:`, error);
+          imagenesProcesadas = [];
+        }
+
+        // Asegurar que haya al menos un precio
+        const precio = parseFloat(prod.Precio) || 0;
+
+        return {
+          id: prod.id_producto.toString(),
+          nombreP: prod.nombreP || 'Producto sin nombre',
+          tipo: prod.tipo || 'Sin categoría',
+          precio: precio,
+          imagenes: imagenesProcesadas,
+          id_proveedor: prod.id_proveedor ? prod.id_proveedor.toString() : null
+        };
+      });
 
       // Log para ver los productos formateados
       console.log('Productos formateados:', productosFormateados);
@@ -576,8 +658,68 @@ const Productos: React.FC = () => {
       setProductos(productosFormateados);
     } catch (error) {
       console.error('Error al obtener productos:', error);
+      toast.error('Error al cargar los productos. Intente más tarde.', {
+        position: "bottom-right",
+        autoClose: 3000
+      });
     } finally {
       setIsLoading(false);
+    }
+  };
+  
+  // Función auxiliar para validar y formatear base64
+  const validarYFormatearBase64 = (imagen: string): string => {
+    try {
+      if (!imagen) {
+        console.log('Imagen vacía o nula');
+        throw new Error('Imagen vacía o nula');
+      }
+
+      // Si ya es una URL de datos, la devolvemos tal cual
+      if (imagen.startsWith('data:')) {
+        console.log('Imagen ya tiene formato data:URL');
+        return imagen;
+      }
+
+      // Limpiar la cadena base64
+      const base64Limpio = imagen.trim();
+      
+      // Log para depuración
+      console.log('Procesando imagen base64:', {
+        primeros20Caracteres: base64Limpio.substring(0, 20),
+        longitud: base64Limpio.length,
+        esJPEG: base64Limpio.startsWith('/9j/')
+      });
+
+      // Verificar si es un JPEG (comienza con /9j/)
+      if (base64Limpio.startsWith('/9j/')) {
+        const imagenCompleta = `data:image/jpeg;base64,${base64Limpio}`;
+        console.log('Imagen procesada como JPEG');
+        return imagenCompleta;
+      }
+
+      // Si no es JPEG, intentar detectar otros formatos
+      if (base64Limpio.startsWith('iVBOR')) {
+        console.log('Imagen detectada como PNG');
+        return `data:image/png;base64,${base64Limpio}`;
+      }
+
+      if (base64Limpio.startsWith('R0lGOD')) {
+        console.log('Imagen detectada como GIF');
+        return `data:image/gif;base64,${base64Limpio}`;
+      }
+
+      // Si no reconocemos el formato pero parece base64 válido, asumimos JPEG
+      if (/^[A-Za-z0-9+/=]+$/.test(base64Limpio)) {
+        console.log('Imagen base64 válida, asumiendo JPEG');
+        return `data:image/jpeg;base64,${base64Limpio}`;
+      }
+
+      throw new Error('Formato de imagen no reconocido');
+    } catch (error) {
+      console.error('Error procesando imagen base64:', error);
+      // Devolver una imagen por defecto o placeholder
+      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
     }
   };
   
