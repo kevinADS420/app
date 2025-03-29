@@ -72,15 +72,15 @@ function SobreNosotros() {
             </div>
           </div>
           
-          <div className="vision-mision-container">
-            <div className="vision-card fade-in">
+          <div className="strategic-content">
+            <div className="strategic-card fade-in">
               <div className="icon-header">
                 <h2>Nuestra Visión</h2>
               </div>
               <p>Ser la plataforma líder en la transformación del comercio agrícola local, creando un ecosistema digital inclusivo que empodere a los productores rurales y garantice el acceso a alimentos frescos y de calidad para todos los consumidores del Quindío y, eventualmente, de Colombia.</p>
             </div>
 
-            <div className="mision-card fade-in">
+            <div className="strategic-card strategic-card--mission fade-in">
               <div className="icon-header">
                 <h2>Nuestra Misión</h2>
               </div>
