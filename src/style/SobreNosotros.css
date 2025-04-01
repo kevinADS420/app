@@ -119,12 +119,13 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
-  margin: 3rem 0;
+  padding: center;
+  margin: 6rem ;
 }
 
 .vision-card,
 .mision-card {
-  background: white;
+  background: #ffffff;
   padding: 1.8rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -139,7 +140,7 @@ body {
 .vision-card h2,
 .mision-card h2 {
   color: #4CAF50;
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
 }
 

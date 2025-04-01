@@ -1,4 +1,4 @@
-/* servicios.css - Estilo Alternativo */
+/* servicios.css - Estilo responsivo mejorado */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
@@ -18,8 +18,8 @@
 
 /* Encabezado de la página */
 .servicios-header {
-  background:#4CAF65;
-  padding: 4rem 0;
+  background: #ffffff;
+  padding: 3rem 1rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -37,7 +37,7 @@
 }
 
 .servicios-header h1 {
-  color: white;
+  color: #4CAF65;
   font-size: 2.5rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -46,12 +46,13 @@
   z-index: 2;
 }
 
+/* Contenedor de imágenes horizontales */
 .horizontal-images-container {
   display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  max-width: 1200px;
-  margin: 0 auto 2rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1500px;
+  margin: 0 auto 1rem;
   padding: 0 1rem;
 }
 
@@ -59,8 +60,9 @@
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  flex: 1;
-  height: 400px;
+  flex: 1 1 300px; /* Base de 300px permite mejor comportamiento responsivo */
+  min-width: 280px; /* Evita que se compriman demasiado */
+  height: 600px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -75,7 +77,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.7s ease;
 }
 
 .horizontal-image-card:hover img {
@@ -89,7 +91,7 @@
   width: 100%;
   padding: 1.5rem;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  color: white;
+  color: rgb(255, 255, 255);
   text-align: center;
 }
 
@@ -106,33 +108,17 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* Título principal con mejor espaciado */
-.servicios-header {
-  text-align: center;
-  padding: 2rem 0;
-  background-color: #f8f9fa;
-  margin-bottom: 1.5rem;
-}
-
-.servicios-header h1 {
-  color: #2a6b35;
-  font-weight: 700;
-  font-size: 2.5rem;
-  letter-spacing: 1px;
-}
-
-/* Estilo para el texto principal debajo de las imágenes */
+/* Banner de texto debajo de las imágenes */
 .servicios-banner-text {
   text-align: center;
   padding: 1.5rem;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
   background-color: #2a6b35;
   color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  width: calc(100% - 2rem);
 }
 
 .servicios-banner-text h2 {
@@ -146,12 +132,12 @@
 .servicios-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 20px;
+  padding: 2rem 1rem 4rem;
 }
 
 /* Sección de introducción */
 .servicios-intro {
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
   text-align: center;
   position: relative;
 }
@@ -198,11 +184,7 @@
 
 /* Sección de beneficios */
 .servicios-beneficios {
-  margin-bottom: 5rem;
-  font-size: 8rem !important; /* Aumentado de 5rem a 7rem para hacerlos significativamente más grandes */
-  color: var(--primary-color);
-  margin-bottom: 2rem;
-  display: block;
+  margin-bottom: 4rem;
 }
 
 .servicios-beneficios h3 {
@@ -228,7 +210,7 @@
 .beneficios-lista {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 30px;
 }
 
@@ -283,80 +265,6 @@
   color: #4CAF50;
 }
 
-/* Sección CTA */
-.servicios-cta {
-  background: #4a6fa5;
-  border-radius: 10px;
-  padding: 4rem 2rem;
-  text-align: center;
-  color: white;
-  box-shadow: 0 15px 35px rgba(74, 111, 165, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.servicios-cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-.servicios-cta h3 {
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  position: relative;
-}
-
-.servicios-cta p {
-  font-size: 1.1rem;
-  margin-bottom: 2.5rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.9;
-}
-
-.cta-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 15px 40px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 20px color = #4CAF50;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(-100%) skewX(-15deg);
-  transition: transform 0.5s ease;
-}
-
-.cta-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px color= #4CAF50;
-}
-
-.cta-button:hover::after {
-  transform: translateX(100%) skewX(-15deg);
-}
-
 /* Animaciones */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(40px); }
@@ -395,14 +303,14 @@
   animation: fadeIn 1s ease-out 1.1s forwards;
 }
 
-/* Estilos responsive */
+/* Estilos responsive mejorados */
 @media (max-width: 1200px) {
   .servicios-content {
     padding: 3rem 20px;
   }
   
   .beneficios-lista {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
@@ -415,13 +323,8 @@
     font-size: 2rem;
   }
   
-  .servicios-banner {
-    height: 380px;
-    margin-top: -50px;
-  }
-  
-  .banner-text h2 {
-    font-size: 2rem;
+  .servicios-banner-text h2 {
+    font-size: 1.8rem;
   }
   
   .servicios-cta {
@@ -435,23 +338,23 @@
 
 @media (max-width: 768px) {
   .servicios-header {
-    padding: 3rem 0;
+    padding: 3rem 1rem;
   }
   
   .servicios-header h1 {
     font-size: 1.8rem;
   }
   
-  .servicios-banner {
-    height: 320px;
-    margin-top: -40px;
+  .horizontal-images-container {
+    flex-direction: column;
   }
   
-  .banner-text {
-    bottom: 40px;
+  .horizontal-image-card {
+    flex: 1 1 100%;
+    height: 350px;
   }
   
-  .banner-text h2 {
+  .servicios-banner-text h2 {
     font-size: 1.6rem;
   }
   
@@ -474,47 +377,64 @@
   .servicios-beneficios h3 {
     font-size: 1.8rem;
   }
+  
+  .servicios-cta h3 {
+    font-size: 1.8rem;
+  }
+  
+  .servicios-cta p {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 576px) {
   .servicios-header {
-    padding: 2.5rem 0;
+    padding: 2.5rem 1rem;
   }
   
   .servicios-header h1 {
     font-size: 1.6rem;
   }
   
-  .servicios-banner {
-    height: 250px;
-    margin-top: -30px;
-    width: 92%;
+  .horizontal-image-card {
+    height: 300px;
   }
   
-  .banner-text {
-    bottom: 30px;
-    padding: 0 20px;
+  .image-overlay h3 {
+    font-size: 1.3rem;
   }
   
-  .banner-text h2 {
+  .image-overlay p {
+    font-size: 0.9rem;
+  }
+  
+  .servicios-banner-text {
+    padding: 1.2rem 1rem;
+  }
+  
+  .servicios-banner-text h2 {
     font-size: 1.4rem;
   }
   
   .servicios-content {
-    padding: 2.5rem 15px;
+    padding: 2rem 1rem 3rem;
   }
   
   .servicios-intro {
-    margin-bottom: 3.5rem;
+    margin-bottom: 3rem;
   }
   
   .servicios-intro h2 {
     font-size: 1.6rem;
   }
   
+  .intro-text {
+    font-size: 0.95rem;
+  }
+  
   .servicios-beneficios h3 {
     font-size: 1.6rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
   
   .beneficio-icon {
@@ -526,16 +446,21 @@
     font-size: 1.2rem;
   }
   
+  .beneficio-content p {
+    font-size: 0.9rem;
+  }
+  
   .servicios-cta {
     padding: 2.5rem 1.5rem;
+    margin-top: 2rem;
   }
   
   .servicios-cta h3 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
   
   .servicios-cta p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-bottom: 2rem;
   }
   
@@ -543,6 +468,7 @@
     padding: 14px 30px;
     font-size: 1rem;
     width: 100%;
+    max-width: 250px;
   }
 }
 
@@ -551,12 +477,8 @@
     font-size: 1.4rem;
   }
   
-  .servicios-banner {
-    height: 200px;
-  }
-  
-  .banner-text h2 {
-    font-size: 1.2rem;
+  .horizontal-image-card {
+    height: 250px;
   }
   
   .servicios-intro h2 {
@@ -565,5 +487,36 @@
   
   .beneficio-content p {
     font-size: 0.9rem;
+  }
+  
+  .beneficio-item {
+    padding: 1.2rem;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 380px) {
+  .servicios-header h1 {
+    font-size: 1.2rem;
+  }
+  
+  .horizontal-image-card {
+    height: 220px;
+  }
+  
+  .image-overlay h3 {
+    font-size: 1.1rem;
+  }
+  
+  .image-overlay p {
+    font-size: 0.8rem;
+  }
+  
+  .servicios-banner-text h2 {
+    font-size: 1.2rem;
+  }
+  
+  .servicios-intro h2 {
+    font-size: 1.3rem;
   }
 }
