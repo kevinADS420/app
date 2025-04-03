@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import type { HTMLAttributes } from 'react';
 import '../../../style/inicio.css'; 
 import IconBot from '../../../assets/icons/iconbot.png'
 import IconEnvio from '../../../assets/icons/iconEnviar.png'
+import { IoCloseCircle } from "react-icons/io5";
 
 interface Message {
     sender: 'user' | 'bot';
@@ -29,7 +31,7 @@ const Chatbot: React.FC = () => {
             displayMessage('user', messageText);
 
             try {
-                const response = await fetch('/api/chatbot', {
+                const response = await fetch('https://backendhuertomkt.onrender.com/api/chatbot/message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -38,7 +40,7 @@ const Chatbot: React.FC = () => {
                 });
 
                 const data = await response.json();
-                const botResponse = data.response;
+                const botResponse = data.message;
                 displayMessage('bot', botResponse);
             } catch (error) {
                 console.error('Error al obtener la respuesta del bot:', error);
@@ -65,7 +67,7 @@ const Chatbot: React.FC = () => {
         sendMessage();
     };
 
-    const handleCloseClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+    const handleCloseClick = (event: React.MouseEvent<SVGElement>) => {
         event.stopPropagation();
         setIsActive(false);
     };
@@ -84,7 +86,7 @@ const Chatbot: React.FC = () => {
             <div className="text-bar" onClick={(event) => event.stopPropagation()}>
                 <div className="chat-header">
                     Tu Chatbot Asistente de HuertoMKT
-                    <span className="close-button" onClick={handleCloseClick}>×</span>
+                    <IoCloseCircle className="close-button" onClick={handleCloseClick} />
                 </div>
                 <div className="message-area" ref={messageAreaRef}>
                     {messages.map((message, index) => (
