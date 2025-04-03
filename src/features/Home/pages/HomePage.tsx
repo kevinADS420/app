@@ -74,7 +74,7 @@ function Inicio() {
           <div className="hero-content">
             <h1>Productos Frescos Directo a tu Mesa</h1>
             <p>Apoyamos a productores locales y te ofrecemos frutas y verduras de la más alta calidad.</p>
-            <a href="#" className="btn">Explora Nuestros Productos</a>
+            <a href="./productos" className="btn">Explora Nuestros Productos</a>
           </div>
         </section>
 

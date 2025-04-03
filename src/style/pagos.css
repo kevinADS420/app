@@ -1,0 +1,366 @@
+/* Variables y reset */
+:root {
+  --primary: #4CAF50;
+  --primary-dark: #3d8b40;
+  --primary-light: #81c784;
+  --primary-lightest: #e8f5e9;
+  --background: #f7f9f7;
+  --dark: #2e3d2f;
+  --white: #ffffff;
+  --light: #f8f9f8;
+  --gray: #68776a;
+  --gray-light: #dbe5dc;
+  --gray-dark: #556357;
+  --danger: #e53935;
+  --success: #2e7d32;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-sm: 4px;
+  --transition: all 0.2s ease-in-out;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--dark);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+
+/* Contenedor principal */
+.pago-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+.pago-container h1 {
+  text-align: center;
+  color: var(--primary-dark);
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.pago-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* Indicador de pasos */
+.indicador-pasos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+  position: relative;
+}
+
+.paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.paso-numero {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 8px;
+  transition: var(--transition);
+}
+
+.paso-texto {
+  font-size: 0.9rem;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.paso-linea {
+  flex: 1;
+  height: 2px;
+  background: var(--gray-light);
+  margin: 0 10px;
+  position: relative;
+  top: -20px;
+  z-index: 1;
+}
+
+.paso.activo .paso-numero {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 0 0 4px var(--primary-lightest);
+}
+
+.paso.activo .paso-texto {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.paso.completado .paso-numero {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--white);
+}
+
+/* Contenedor de cada paso */
+.paso-container {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Formularios */
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-lightest);
+  outline: none;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Resumen de productos */
+.producto-resumen {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-light);
+  margin-bottom: 1rem;
+}
+
+.producto-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.producto-info img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.producto-precio {
+  font-weight: 600;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+/* Botones de acción */
+.paso-acciones {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gray-light);
+}
+
+.btn-volver,
+.btn-continuar,
+.btn-pagar {
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transition);
+  min-width: 150px;
+}
+
+.btn-volver {
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  color: var(--gray-dark);
+}
+
+.btn-volver:hover {
+  background: var(--gray-light);
+}
+
+.btn-continuar,
+.btn-pagar {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+}
+
+.btn-continuar:hover:not(:disabled),
+.btn-pagar:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-continuar:disabled,
+.btn-pagar:disabled {
+  background: var(--gray-light);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Pago exitoso */
+.pago-exitoso {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.icono-exito {
+  width: 80px;
+  height: 80px;
+  background: var(--success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  color: white;
+  font-size: 2rem;
+  position: relative;
+}
+
+.icono-exito::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--success);
+  animation: pulse 2s infinite;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .paso-acciones {
+    flex-direction: column;
+  }
+
+  .btn-volver,
+  .btn-continuar,
+  .btn-pagar {
+    width: 100%;
+  }
+
+  .indicador-pasos {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .paso-linea {
+    width: 2px;
+    height: 20px;
+    margin: 5px 0;
+  }
+
+  .paso {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .paso-texto {
+    margin: 0;
+  }
+}
+
+/* Estilos para el spinner de carga */
+.procesando-pago {
+  text-align: center;
+  padding: 2rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--primary-lightest);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

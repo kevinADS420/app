@@ -4,11 +4,11 @@ import banner1 from './assets/banner1.jpg';
 import banner2 from './assets/banner2.jpg';
 import banner3 from './assets/banner3.jpg';
 import { MdShoppingCart, MdAddCircle } from "react-icons/md";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Pago, { PagoProps } from './pagos';
 // Definición de tipos
 interface Imagen {
   id: string;
@@ -289,7 +289,7 @@ const TarjetaProducto: React.FC<{
     })}`;
   };
   
-  // Mostrar precio con descuento si aplica
+  // Mostrar precio con descuento si aplica const CarritoCompras
   const mostrarPrecio = () => {
     if (producto.descuento) {
       const precioDescuento = producto.precio * (1 - producto.descuento / 100);
@@ -314,7 +314,7 @@ const TarjetaProducto: React.FC<{
     <div className="tarjeta-producto">
       <div className="producto-imagen">
         {tieneImagenesValidas ? (
-          // Si hay solo una imagen, mostramos directamente la imagen en lugar del carrusel
+          // Si hay solo una imagen, mostramos directamente la imagen en lugar del carrusel  
           producto.imagenes.length === 1 ? (
             <img 
               src={producto.imagenes[0].url} 
@@ -366,6 +366,7 @@ const TarjetaProducto: React.FC<{
 };
 
 // Componente Carrito de Compras
+// Componente Carrito de Compras actualizado con botón de pagos funcional
 const CarritoCompras: React.FC<{
   productos: ProductoCarrito[],
   visible: boolean,
@@ -374,6 +375,9 @@ const CarritoCompras: React.FC<{
   eliminarProducto: (id: string) => void,
   vaciarCarrito: () => void
 }> = ({ productos, visible, onClose, actualizarCantidad, eliminarProducto, vaciarCarrito }) => {
+  // Estado para controlar la visualización del componente de pagos
+  const [mostrarPagos, setMostrarPagos] = useState(false);
+  
   if (!visible) return null;
   
   // Calcular total de la compra
@@ -395,17 +399,21 @@ const CarritoCompras: React.FC<{
     })}`;
   };
   
-  const irAPagar = () => {
-    // Aquí iría la lógica para ir a la página de pago
-    alert('Redirigiendo a la página de pago...');
-    onClose();
+  // Función para mostrar el componente de pagos
+  const mostrarComponentePagos = () => {
+    setMostrarPagos(true);
+  };
+  
+  // Función para ocultar el componente de pagos y volver al carrito
+  const volverAlCarrito = () => {
+    setMostrarPagos(false);
   };
   
   return (
     <div className="carrito-overlay">
       <div className="carrito-contenedor">
         <div className="carrito-encabezado">
-          <h2>Carrito de Compras</h2>
+          <h2>{mostrarPagos ? 'Proceso de Pago' : 'Carrito de Compras'}</h2>
           <button className="btn-cerrar" onClick={onClose}>×</button>
         </div>
         
@@ -418,87 +426,138 @@ const CarritoCompras: React.FC<{
           </div>
         ) : (
           <>
-            <div className="carrito-productos">
-              {productos.map(producto => (
-                <div key={producto.id} className="carrito-item">
-                  <div className="item-imagen">
-                    {producto.imagenes && producto.imagenes.length > 0 ? (
-                      <img 
-                        src={producto.imagenes[0].url} 
-                        alt={producto.nombreP} 
-                      />
-                    ) : (
-                      <div className="sin-imagen-mini">
-                        <span>Sin imagen</span>
+            {mostrarPagos ? (
+              // Mostrar el componente de pagos
+              <div className="pagos-container">
+                <Pago 
+                  total={total} 
+                  onCancel={volverAlCarrito}
+                />
+                
+                {/* Botón para volver al carrito */}
+                <button 
+                  className="btn-volver-carrito"
+                  onClick={volverAlCarrito}
+                  style={{
+                    marginTop: '15px',
+                    padding: '8px 15px',
+                    background: '#f0f0f0',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Volver al carrito
+                </button>
+              </div>
+            ) : (
+              // Mostrar contenido normal del carrito
+              <>
+                <div className="carrito-productos">
+                  {productos.map(producto => (
+                    <div key={producto.id} className="carrito-item">
+                      <div className="item-imagen">
+                        {producto.imagenes && producto.imagenes.length > 0 ? (
+                          <img 
+                            src={producto.imagenes[0].url} 
+                            alt={producto.nombreP} 
+                          />
+                        ) : (
+                          <div className="sin-imagen-mini">
+                            <span>Sin imagen</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  
-                  <div className="item-detalles">
-                    <h4>{producto.nombreP}</h4>
-                    <div className="item-precio">
-                      {producto.descuento ? (
-                        <span>
-                          {formatearPrecio(producto.precio * (1 - producto.descuento / 100))}
-                        </span>
-                      ) : (
-                        <span>{formatearPrecio(producto.precio)}</span>
-                      )}
+                      
+                      <div className="item-detalles">
+                        <h4>{producto.nombreP}</h4>
+                        <div className="item-precio">
+                          {producto.descuento ? (
+                            <span>
+                              {formatearPrecio(producto.precio * (1 - producto.descuento / 100))}
+                            </span>
+                          ) : (
+                            <span>{formatearPrecio(producto.precio)}</span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="item-cantidad">
+                        <button 
+                          onClick={() => actualizarCantidad(producto.id, producto.cantidad - 1)}
+                          disabled={producto.cantidad <= 1}
+                        >
+                          -
+                        </button>
+                        <span>{producto.cantidad}</span>
+                        <button onClick={() => actualizarCantidad(producto.id, producto.cantidad + 1)}>
+                          +
+                        </button>
+                      </div>
+                      
+                      <div className="item-subtotal">
+                        {formatearPrecio(
+                          producto.descuento 
+                            ? producto.precio * (1 - producto.descuento / 100) * producto.cantidad
+                            : producto.precio * producto.cantidad
+                        )}
+                      </div>
+                      
+                      <button 
+                        className="btn-eliminar" 
+                        onClick={() => eliminarProducto(producto.id)}
+                      >
+                        <i className="icono-eliminar"></i>
+                      </button>
                     </div>
-                  </div>
-                  
-                  <div className="item-cantidad">
-                    <button 
-                      onClick={() => actualizarCantidad(producto.id, producto.cantidad - 1)}
-                      disabled={producto.cantidad <= 1}
-                    >
-                      -
-                    </button>
-                    <span>{producto.cantidad}</span>
-                    <button onClick={() => actualizarCantidad(producto.id, producto.cantidad + 1)}>
-                      +
-                    </button>
-                  </div>
-                  
-                  <div className="item-subtotal">
-                    {formatearPrecio(
-                      producto.descuento 
-                        ? producto.precio * (1 - producto.descuento / 100) * producto.cantidad
-                        : producto.precio * producto.cantidad
-                    )}
-                  </div>
-                  
-                  <button 
-                    className="btn-eliminar" 
-                    onClick={() => eliminarProducto(producto.id)}
-                  >
-                    <i className="icono-eliminar"></i>
-                  </button>
+                  ))}
                 </div>
-              ))}
-            </div>
-            
-            <div className="carrito-resumen">
-              <div className="carrito-total">
-                <span>Total:</span>
-                <span className="total-valor">{formatearPrecio(total)}</span>
-              </div>
-              
-              <div className="carrito-acciones">
-                <button 
-                  className="btn-vaciar" 
-                  onClick={vaciarCarrito}
-                >
-                  Vaciar carrito
-                </button>
-                <button 
-                  className="btn-pagar" 
-                  onClick={irAPagar}
-                >
-                  Proceder al pago
-                </button>
-              </div>
-            </div>
+                
+                <div className="carrito-resumen">
+                  <div className="carrito-total">
+                    <span>Total:</span>
+                    <span className="total-valor">{formatearPrecio(total)}</span>
+                  </div>
+                  
+                  <div className="carrito-acciones">
+                    <button 
+                      className="btn-vaciar" 
+                      onClick={vaciarCarrito}
+                    >
+                      Vaciar carrito
+                    </button>
+                    
+                    {/* Nuevo botón para el sistema de pagos */}
+                    <button 
+                      className="btn-pagar-sistema"
+                      onClick={mostrarComponentePagos}
+                      style={{
+                        backgroundColor: '#ff9800',
+                        color: 'white',
+                        padding: '10px 20px',
+                        border: 'none',
+                        borderRadius: '5px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'background-color 0.3s'
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f57c00';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.backgroundColor = '#ff9800';
+                      }}
+                    >
+                      <MdShoppingCart style={{ marginRight: '8px', fontSize: '18px' }} />
+                      Pagar ahora
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
@@ -521,8 +580,6 @@ const Navbar: React.FC<{
   cantidadCarrito: number,
   mostrarCarrito: () => void
 }> = ({ cantidadCarrito, mostrarCarrito }) => {
-  const [menuMobilAbierto, setMenuMobilAbierto] = useState(false);
-  
   return (
     <nav className="navbar navbar-secundaria">
       <div className="container navbar-container">
@@ -570,7 +627,7 @@ const Productos: React.FC = () => {
   // Estados existentes...
   const [lastActivity, setLastActivity] = useState<number>(Date.now());
   const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutos en milisegundos
-  const [mostrarMisProductos, setMostrarMisProductos] = useState(false);
+  const [mostrarMisProductos] = useState(false);
   
   // Función mejorada para procesar imágenes del backend
   const obtenerProductosDelBackend = async () => {
@@ -664,62 +721,6 @@ const Productos: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
-    }
-  };
-  
-  // Función auxiliar para validar y formatear base64
-  const validarYFormatearBase64 = (imagen: string): string => {
-    try {
-      if (!imagen) {
-        console.log('Imagen vacía o nula');
-        throw new Error('Imagen vacía o nula');
-      }
-
-      // Si ya es una URL de datos, la devolvemos tal cual
-      if (imagen.startsWith('data:')) {
-        console.log('Imagen ya tiene formato data:URL');
-        return imagen;
-      }
-
-      // Limpiar la cadena base64
-      const base64Limpio = imagen.trim();
-      
-      // Log para depuración
-      console.log('Procesando imagen base64:', {
-        primeros20Caracteres: base64Limpio.substring(0, 20),
-        longitud: base64Limpio.length,
-        esJPEG: base64Limpio.startsWith('/9j/')
-      });
-
-      // Verificar si es un JPEG (comienza con /9j/)
-      if (base64Limpio.startsWith('/9j/')) {
-        const imagenCompleta = `data:image/jpeg;base64,${base64Limpio}`;
-        console.log('Imagen procesada como JPEG');
-        return imagenCompleta;
-      }
-
-      // Si no es JPEG, intentar detectar otros formatos
-      if (base64Limpio.startsWith('iVBOR')) {
-        console.log('Imagen detectada como PNG');
-        return `data:image/png;base64,${base64Limpio}`;
-      }
-
-      if (base64Limpio.startsWith('R0lGOD')) {
-        console.log('Imagen detectada como GIF');
-        return `data:image/gif;base64,${base64Limpio}`;
-      }
-
-      // Si no reconocemos el formato pero parece base64 válido, asumimos JPEG
-      if (/^[A-Za-z0-9+/=]+$/.test(base64Limpio)) {
-        console.log('Imagen base64 válida, asumiendo JPEG');
-        return `data:image/jpeg;base64,${base64Limpio}`;
-      }
-
-      throw new Error('Formato de imagen no reconocido');
-    } catch (error) {
-      console.error('Error procesando imagen base64:', error);
-      // Devolver una imagen por defecto o placeholder
-      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
     }
   };
   
