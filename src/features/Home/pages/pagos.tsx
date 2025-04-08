@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../../../style/pagos.css';
 
 // Interfaces
@@ -222,6 +222,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
   const renderizarPaso1 = () => {
     return (
       <div className="paso-container">
+        <button className="btn-cerrar-pago" onClick={onCancel}>×</button>
         <div className="seccion-cliente">
           <div className="form-header">
             <h2>Información Personal</h2>
@@ -311,7 +312,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
         <div className="paso-acciones">
           <button 
             type="button" 
-            className="btn-volver" 
+            className="btn-volver-carrito" 
             onClick={onCancel}
           >
             Volver al Carrito
@@ -333,6 +334,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
   const renderizarPaso2 = () => {
     return (
       <div className="paso-container">
+        <button className="btn-cerrar-pago" onClick={onCancel}>×</button>
         <div className="seccion-ubicacion">
           <div className="form-header">
             <h2>Dirección de Entrega</h2>
@@ -371,7 +373,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
         <div className="paso-acciones">
           <button 
             type="button" 
-            className="btn-volver" 
+            className="btn-volver-carrito" 
             onClick={retrocederPaso}
           >
             Volver Atrás
@@ -393,6 +395,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
   const renderizarPaso3 = () => {
     return (
       <div className="paso-container">
+        <button className="btn-cerrar-pago" onClick={onCancel}>×</button>
         <div className="seccion-resumen">
           <div className="form-header">
             <h2>Resumen del Pedido</h2>
@@ -450,7 +453,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
         <div className="paso-acciones">
           <button 
             type="button" 
-            className="btn-volver" 
+            className="btn-volver-carrito" 
             onClick={retrocederPaso}
           >
             Volver Atrás
@@ -472,6 +475,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
     if (pagoExitoso) {
       return (
         <div className="paso-container">
+          <button className="btn-cerrar-pago" onClick={onCancel}>×</button>
           <div className="pago-exitoso">
             <div className="icono-exito">✓</div>
             <h2>¡Pago Procesado con Éxito!</h2>
@@ -514,6 +518,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
     
     return (
       <div className="paso-container">
+        <button className="btn-cerrar-pago" onClick={onCancel}>×</button>
         <div className="seccion-pago">
           <div className="form-header">
             <h2>Método de Pago</h2>
@@ -638,7 +643,7 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
         <div className="paso-acciones">
           <button 
             type="button" 
-            className="btn-volver" 
+            className="btn-volver-carrito" 
             onClick={retrocederPaso}
             disabled={pagoProcesando}
           >
@@ -684,13 +689,28 @@ const Pago: React.FC<PagoProps> = ({ total, onCancel, productos = [] }) => {
     );
   };
   
+  // Agregar ref para el contenedor del paso
+  const pasoContainerRef = useRef<HTMLDivElement>(null);
+
+  // Efecto para manejar el scroll cuando cambia el paso
+  useEffect(() => {
+    if (pasoContainerRef.current) {
+      pasoContainerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }, [pasoActual]);
+
   return (
     <div className="pago-container">
       <h1>Proceso de Pago</h1>
       
       {!pagoExitoso && renderizarIndicadorPasos()}
       
-      {renderizarPaso()}
+      <div ref={pasoContainerRef}>
+        {renderizarPaso()}
+      </div>
     </div>
   );
 };
