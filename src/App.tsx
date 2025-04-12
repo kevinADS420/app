@@ -16,6 +16,9 @@ import EditProfile from './components/pages/EditProfile/EditProfile';
 import RegistroProductos from './features/Home/pages/RegistroProduc';
 import GoogleCallback from './features/Home/pages/GoogleCallback';
 import Dashboard from './features/Home/pages/Dashboard';
+import AuthCheck from './components/AuthCheck';
+import AuthTest from './components/AuthTest';
+import FetchTest from './components/FetchTest';
 
 function App() {
   return (
@@ -38,6 +41,14 @@ function App() {
         {/* Asegurar que tengamos un wildcard para capturar parámetros adicionales */}
         <Route path="/auth/google/callback/*" element={<GoogleCallback />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        
+        {/* Ruta para verificar la autenticación */}
+        <Route path="/auth-check" element={<AuthCheck />} />
+        
+        {/* Ruta para probar la autenticación */}
+        <Route path="/auth-test" element={<AuthTest />} />
+        
+        <Route path="/fetch-test" element={<FetchTest />} />
       </Routes>
       <Footer />
       <ToastContainer position="bottom-right" />

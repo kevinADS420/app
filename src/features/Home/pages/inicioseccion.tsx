@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../../style/Registro.css';
-import axios from 'axios';
+import axiosInstance from '../../../utils/axios';
 
 // Custom event for user login
 const userLoginEvent = new Event('userLogin');
-
-// Base URL para todas las peticiones API
-const API_BASE_URL = 'https://backendhuertomkt.onrender.com';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -65,22 +62,16 @@ function Login() {
       contraseña: formData.contraseña
     };
     
-    // Configuración común para las solicitudes axios
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    
     // Try unified login approach first
     try {
       console.log('Intentando login general...');
-      const loginResponse = await axios.post(`${API_BASE_URL}/login`, loginData, axiosConfig);
+      const loginResponse = await axiosInstance.post('/login', loginData);
       
       console.log('Login exitoso:', loginResponse.data);
       
       // Save token in localStorage
       localStorage.setItem('token', loginResponse.data.token);
+      console.log('Token guardado en localStorage:', loginResponse.data.token);
       
       // Determine user type from the response
       const userType = loginResponse.data.userType || 
@@ -88,9 +79,6 @@ function Login() {
                         loginResponse.data.userData?.id_proveedor ? 'proveedor' : 'unknown');
                         
       localStorage.setItem('userType', userType);
-      
-      // Configure token for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.data.token}`;
       
       // Check if the response already contains user data
       if (loginResponse.data.userData) {
@@ -100,11 +88,7 @@ function Login() {
         try {
           let userResponse;
           if (userType === 'proveedor') {
-            userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
-              headers: {
-                'Authorization': `Bearer ${loginResponse.data.token}`
-              }
-            });
+            userResponse = await axiosInstance.get(`/proveedor/email/${encodeURIComponent(formData.Email)}`);
             
             console.log('Datos de usuario proveedor:', userResponse.data);
             
@@ -117,11 +101,7 @@ function Login() {
             
             localStorage.setItem('user', JSON.stringify(userData));
           } else if (userType === 'customer') {
-            userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
-              headers: {
-                'Authorization': `Bearer ${loginResponse.data.token}`
-              }
-            });
+            userResponse = await axiosInstance.get(`/customer/email/${encodeURIComponent(formData.Email)}`);
             
             console.log('Datos de usuario cliente:', userResponse.data);
             
@@ -154,24 +134,18 @@ function Login() {
       
       // Fallback: Try as customer first
       try {
-        const customerResponse = await axios.post(`${API_BASE_URL}/login/customer`, loginData, axiosConfig);
+        const customerResponse = await axiosInstance.post('/login/customer', loginData);
         
         console.log('Login exitoso como cliente:', customerResponse.data);
         
         localStorage.setItem('token', customerResponse.data.token);
         localStorage.setItem('userType', 'customer');
         
-        axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
-        
         if (customerResponse.data.userData) {
           localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
         } else {
           try {
-            const userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
-              headers: {
-                'Authorization': `Bearer ${customerResponse.data.token}`
-              }
-            });
+            const userResponse = await axiosInstance.get(`/customer/email/${encodeURIComponent(formData.Email)}`);
             
             console.log('Datos de usuario cliente:', userResponse.data);
             
@@ -201,24 +175,18 @@ function Login() {
         
         // If failed as customer, try as provider
         try {
-          const proveedorResponse = await axios.post(`${API_BASE_URL}/login/proveedor`, loginData, axiosConfig);
+          const proveedorResponse = await axiosInstance.post('/login/proveedor', loginData);
           
           console.log('Login exitoso como proveedor:', proveedorResponse.data);
           
           localStorage.setItem('token', proveedorResponse.data.token);
           localStorage.setItem('userType', 'proveedor');
           
-          axios.defaults.headers.common['Authorization'] = `Bearer ${proveedorResponse.data.token}`;
-          
           if (proveedorResponse.data.userData) {
             localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
           } else {
             try {
-              const userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
-                headers: {
-                  'Authorization': `Bearer ${proveedorResponse.data.token}`
-                }
-              });
+              const userResponse = await axiosInstance.get(`/proveedor/email/${encodeURIComponent(formData.Email)}`);
               
               console.log('Datos de usuario proveedor:', userResponse.data);
               

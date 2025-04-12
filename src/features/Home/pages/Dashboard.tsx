@@ -1,118 +1,232 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../../style/Dashboard.css'; // Agregar un archivo CSS para estilizar el dashboard
+
+interface UserData {
+  user?: {
+    Nombres?: string;
+    nombres?: string;
+    Apellidos?: string;
+    apellidos?: string;
+    Email?: string;
+  };
+  userType?: string;
+}
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    // Verificar el estado de autenticación usando la nueva ruta
+    const checkAuthStatus = async () => {
       try {
-        const response = await fetch('https://backendhuertomkt.onrender.com/dashboard', {
-          credentials: 'include'
+        console.log('Verificando estado de autenticación...');
+        const response = await fetch('https://backendhuertomkt.onrender.com/auth/check', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
         });
         
+        console.log('Respuesta de verificación de autenticación:', response.status);
+        
         if (response.ok) {
-          const data = await response.json();
-          setUserData(data);
+          const authData = await response.json();
+          console.log('Datos de autenticación:', authData);
+          
+          if (authData.authenticated) {
+            // Usuario autenticado, intentar obtener datos completos
+            try {
+              const userStr = localStorage.getItem('user');
+              const userType = authData.userType || localStorage.getItem('userType') || 'customer';
+              
+              // Actualizar userType en localStorage si viene del servidor
+              if (authData.userType) {
+                localStorage.setItem('userType', authData.userType);
+              }
+              
+              if (userStr) {
+                // Si ya tenemos datos en localStorage, usarlos
+                const user = JSON.parse(userStr);
+                setUserData({
+                  user: {
+                    Nombres: user.Nombres || user.nombres || '',
+                    Apellidos: user.Apellidos || user.apellidos || '',
+                    Email: user.Email || ''
+                  },
+                  userType: userType
+                });
+                setLoading(false);
+              } else {
+                // Si no hay datos de usuario en localStorage, obtenerlos del servidor
+                fetchUserDataFromServer(localStorage.getItem('token') || '', userType);
+              }
+            } catch (error) {
+              console.error('Error al procesar datos de usuario:', error);
+              setAuthError('Error al procesar los datos del usuario');
+              setLoading(false);
+            }
+          } else {
+            // No autenticado según el servidor
+            setAuthError('Sesión no válida. Por favor inicie sesión nuevamente.');
+            setTimeout(() => navigate('/inicio-section'), 2000);
+          }
         } else {
-          // Si no hay datos de usuario, redirigir al inicio de sesión
-          navigate('/inicio-section');
+          // Error en la respuesta del servidor
+          const errorData = await response.text();
+          console.error('Error en verificación de autenticación:', errorData);
+          setAuthError('Error de autenticación. Por favor inicie sesión nuevamente.');
+          setTimeout(() => navigate('/inicio-section'), 2000);
         }
       } catch (error) {
-        console.error('Error al obtener datos del usuario:', error);
-        navigate('/inicio-section');
+        console.error('Error al verificar autenticación:', error);
+        setAuthError('Error de conexión. Por favor inténtelo de nuevo más tarde.');
+        setLoading(false);
+      }
+    };
+
+    const fetchUserDataFromServer = async (token: string, userType: string) => {
+      try {
+        const baseUrl = 'https://backendhuertomkt.onrender.com';
+        let endpoint = '';
+
+        if (userType === 'customer') {
+          endpoint = '/customer/profile';
+        } else if (userType === 'proveedor') {
+          endpoint = '/proveedor/profile';
+        } else {
+          throw new Error('Tipo de usuario desconocido');
+        }
+
+        const response = await fetch(`${baseUrl}${endpoint}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData({
+            user: {
+              Nombres: data.Nombres || data.nombres || '',
+              Apellidos: data.Apellidos || data.apellidos || '',
+              Email: data.Email || ''
+            },
+            userType: userType
+          });
+          // Guardar en localStorage para futuras referencias
+          localStorage.setItem('user', JSON.stringify(data));
+        } else {
+          throw new Error('Error al obtener datos del usuario');
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del usuario desde el servidor:', error);
+        setAuthError('Error al cargar datos de usuario. Por favor inicie sesión nuevamente.');
+        setTimeout(() => navigate('/inicio-section'), 2000);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserData();
+    // Verificar estado de autenticación
+    checkAuthStatus();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('https://backendhuertomkt.onrender.com/logout', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      
-      if (response.ok) {
-        // Limpiar cualquier dato de sesión local
-        localStorage.removeItem('userType');
-        localStorage.removeItem('userId');
-        // Redirigir al inicio
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
+  const handleLogout = () => {
+    // Limpiar localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userType');
+    
+    // Crear evento personalizado para notificar cierre de sesión
+    const userLogoutEvent = new Event('userLogout');
+    window.dispatchEvent(userLogoutEvent);
+    
+    // Redirigir al inicio
+    navigate('/');
   };
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
-        <div className="loading-spinner" style={{
-          width: '40px',
-          height: '40px',
-          border: '4px solid #f3f3f3',
-          borderTop: '4px solid #3498db',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite'
-        }}></div>
+      <div className="dashboard-loading">
+        <div className="loading-spinner"></div>
+        <p>Cargando información...</p>
+      </div>
+    );
+  }
+  
+  if (authError) {
+    return (
+      <div className="dashboard-error">
+        <div className="error-icon">⚠️</div>
+        <h2>Error de autenticación</h2>
+        <p>{authError}</p>
+        <button onClick={() => navigate('/inicio-section')} className="error-button">
+          Ir a inicio de sesión
+        </button>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Dashboard</h1>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
+        <button className="logout-button" onClick={handleLogout}>
+          Cerrar Sesión
+        </button>
+      </div>
       
-      {userData && (
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '1.5rem', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          marginTop: '1rem'
-        }}>
-          <h2>Bienvenido, {userData.user?.Nombres || 'Usuario'}</h2>
-          <p>Tipo de usuario: {userData.userType || 'Cliente'}</p>
+      <div className="dashboard-content">
+        {userData && (
+          <div className="user-info-card">
+            <div className="user-avatar">
+              {userData.user?.Nombres?.charAt(0) || ''}
+              {userData.user?.Apellidos?.charAt(0) || ''}
+            </div>
+            <div className="user-details">
+              <h2>Bienvenido, {userData.user?.Nombres || 'Usuario'} {userData.user?.Apellidos || ''}</h2>
+              <p className="user-email">{userData.user?.Email || ''}</p>
+              <p className="user-type">Tipo de usuario: <span>{userData.userType === 'proveedor' ? 'Proveedor' : 'Cliente'}</span></p>
+            </div>
+          </div>
+        )}
+        
+        <div className="dashboard-cards">
+          <div className="dashboard-card">
+            <h3>Mis Pedidos</h3>
+            <p>Consulta el estado de tus pedidos recientes</p>
+            <button className="card-button">Ver Pedidos</button>
+          </div>
           
-          <div style={{ marginTop: '2rem' }}>
-            <button 
-              onClick={handleLogout}
-              style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: '#f44336',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Cerrar Sesión
-            </button>
+          <div className="dashboard-card">
+            <h3>Mi Perfil</h3>
+            <p>Actualiza tu información personal</p>
+            <button className="card-button" onClick={() => navigate('/configuracion')}>Editar Perfil</button>
+          </div>
+          
+          {userData?.userType === 'proveedor' && (
+            <div className="dashboard-card">
+              <h3>Mis Productos</h3>
+              <p>Administra tu catálogo de productos</p>
+              <button className="card-button" onClick={() => navigate('/RegistroProductos')}>Gestionar Productos</button>
+            </div>
+          )}
+          
+          <div className="dashboard-card">
+            <h3>Favoritos</h3>
+            <p>Accede a tus productos favoritos</p>
+            <button className="card-button">Ver Favoritos</button>
           </div>
         </div>
-      )}
-      
-      <style>
-        {`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}
-      </style>
+      </div>
     </div>
   );
 }
 
-export default Dashboard; 
+export default Dashboard;
