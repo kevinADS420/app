@@ -37,40 +37,47 @@ body {
 
 /* Contenedor principal */
 .pago-container {
+  scroll-behavior: smooth;
   max-width: 1000px;
   margin: 2rem auto;
   padding: 0 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 4rem);
 }
 
 .pago-container h1 {
   text-align: center;
   color: var(--primary-dark);
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin-bottom: 2.5rem;
   font-weight: 700;
   position: relative;
+  padding-bottom: 1rem;
 }
 
 .pago-container h1::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
+  width: 100px;
   height: 4px;
-  background: var(--primary);
+  background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
   border-radius: 2px;
 }
 
 /* Indicador de pasos */
 .indicador-pasos {
+  position: sticky;
+  top: 0;
+  background: var(--background);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
-  padding: 0 2rem;
-  position: relative;
 }
 
 .paso {
@@ -137,7 +144,85 @@ body {
   box-shadow: var(--shadow-md);
   padding: 2rem;
   margin-bottom: 2rem;
-  animation: fadeIn 0.3s ease;
+  animation: slideIn 0.3s ease-out;
+  scroll-margin-top: 2rem;
+  position: relative;
+  padding-top: 3rem;
+}
+
+/* Estilos mejorados para los encabezados de los pasos */
+.form-header {
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-lightest);
+}
+
+.form-header h2 {
+  color: var(--primary-dark);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Iconos para cada paso */
+.form-header h2::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-lightest);
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
+/* Icono específico para cada paso */
+.seccion-cliente .form-header h2::before {
+  content: '1';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.seccion-ubicacion .form-header h2::before {
+  content: '2';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.seccion-resumen .form-header h2::before {
+  content: '3';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.seccion-pago .form-header h2::before {
+  content: '4';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.form-required-hint {
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding-left: 3.5rem;
 }
 
 /* Formularios */
@@ -305,6 +390,69 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para el botón de cerrar */
+.btn-cerrar-pago {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--gray-light);
+  color: var(--gray-dark);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  z-index: 10;
+}
+
+.btn-cerrar-pago:hover {
+  background-color: var(--danger);
+  color: var(--white);
+  transform: scale(1.1);
+}
+
+/* Estilos para el botón de volver al carrito */
+.btn-volver-carrito {
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transition);
+  min-width: 150px;
+  background-color: var(--white);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-volver-carrito:hover {
+  background-color: var(--primary-lightest);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .form-grid {
@@ -341,6 +489,40 @@ body {
 
   .paso-texto {
     margin: 0;
+  }
+
+  .btn-cerrar-pago {
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 28px;
+    height: 28px;
+    font-size: 1.25rem;
+  }
+
+  .paso-container {
+    padding-top: 2.5rem;
+  }
+
+  .btn-volver-carrito {
+    width: 100%;
+  }
+
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-header h2::before {
+    width: 32px;
+    height: 32px;
+    background-size: 16px;
+  }
+
+  .form-required-hint {
+    padding-left: 2.8rem;
+  }
+
+  .pago-container h1 {
+    font-size: 2rem;
   }
 }
 
