@@ -13,6 +13,7 @@ import Registro from './features/Home/pages/Registro';
 import RegistroUnificado from './features/Home/pages/RegistroUnificado';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import RegistroProductos from './features/Home/pages/RegistroProduc';
+import GoogleCallback from './features/Home/pages/GoogleCallback';
 
 function App() {
   return (
@@ -27,7 +28,8 @@ function App() {
         <Route path="/registro" element={<RegistroUnificado />} />
         <Route path="/registro-antiguo" element={<Registro />} />
         <Route path="/configuracion" element={<EditProfile />} />
-        <Route path="/RegistroProductos" element= {<RegistroProductos/>}/>
+        <Route path="/RegistroProductos" element={<RegistroProductos/>}/>
+        <Route path="/auth/google/callback/*" element={<GoogleCallback />} />
       </Routes>
       <Footer />
       <ToastContainer position="bottom-right" />

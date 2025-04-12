@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/images/logo.png';
 import Google from '../../../assets/icons/icons8-google-48.png';
@@ -25,6 +25,25 @@ function RegistroUnificado() {
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    // Verificar si el usuario ya está autenticado
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('https://backendhuertomkt.onrender.com/dashboard', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          // Asegurar que el usuario sea cliente
+          localStorage.setItem('userType', 'customer');
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error);
+      }
+    };
+    checkAuth();
+  }, [navigate]);
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
@@ -156,12 +175,30 @@ function RegistroUnificado() {
 
   const handleGoogleSignIn = async () => {
     try {
-      // Aquí iría la lógica de autenticación con Google
-      // Por ahora solo mostraremos un mensaje
-      setErrorMessage('La autenticación con Google está en desarrollo');
+      // Usar la ruta correcta para la autenticación con Google
+      window.location.href = 'https://backendhuertomkt.onrender.com/auth/google';
     } catch (error) {
       console.error('Error en autenticación con Google:', error);
       setErrorMessage('Error al iniciar sesión con Google');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('https://backendhuertomkt.onrender.com/logout', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        // Limpiar cualquier dato de sesión local
+        localStorage.removeItem('userType');
+        localStorage.removeItem('userId');
+        // Redirigir al inicio
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
     }
   };
 
@@ -170,10 +207,10 @@ function RegistroUnificado() {
       <div className="registro-left-panel">
         <div className="google-content">
           <h2>Bienvenido a HuertoMKT</h2>
-          <p>Regístrate de forma rápida y segura con tu cuenta de Google</p>
+          <p>Regístrate como cliente de forma rápida y segura con tu cuenta de Google</p>
           <button className="google-button" onClick={handleGoogleSignIn}>
             <img src={Google} alt="Google" className="google-icon" />
-            <span>Continuar con Google</span>
+            <span>Continuar con Google como Cliente</span>
           </button>
           <div className="divider">
             <span>o</span>
