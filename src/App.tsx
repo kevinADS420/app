@@ -1,3 +1,4 @@
+// Actualización para App.tsx
 import Header from './components/organisms/header'
 import Inicio from './features/Home/pages/HomePage'
 import Footer from './components/organisms/Footer'
@@ -14,6 +15,7 @@ import RegistroUnificado from './features/Home/pages/RegistroUnificado';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import RegistroProductos from './features/Home/pages/RegistroProduc';
 import GoogleCallback from './features/Home/pages/GoogleCallback';
+import Dashboard from './features/Home/pages/Dashboard';
 
 function App() {
   return (
@@ -29,7 +31,13 @@ function App() {
         <Route path="/registro-antiguo" element={<Registro />} />
         <Route path="/configuracion" element={<EditProfile />} />
         <Route path="/RegistroProductos" element={<RegistroProductos/>}/>
+        
+        {/* Ruta para el callback de Google actualizada */}
+        <Route path="/auth/google/callback" element={<GoogleCallback />} />
+        
+        {/* Asegurar que tengamos un wildcard para capturar parámetros adicionales */}
         <Route path="/auth/google/callback/*" element={<GoogleCallback />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
       <ToastContainer position="bottom-right" />

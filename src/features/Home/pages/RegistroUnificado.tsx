@@ -175,8 +175,24 @@ function RegistroUnificado() {
 
   const handleGoogleSignIn = async () => {
     try {
+      // Obtener la URL actual para construir una URL de redirección completa
+      const currentDomain = window.location.origin;
+      
+      // Construir la URL de callback adecuada
+      const redirectUri = `${currentDomain}/auth/google/callback`;
+      
+      // Codificarla para URL
+      const encodedRedirectUri = encodeURIComponent(redirectUri);
+      
+      // Añadir el tipo de usuario seleccionado como parámetro
+      const userTypeParam = userType || 'customer'; // Por defecto, es cliente
+      
+      // Log para depuración
+      console.log('Iniciando autenticación con Google');
+      console.log('URL de redirección:', redirectUri);
+      
       // Usar la ruta correcta para la autenticación con Google
-      window.location.href = 'https://backendhuertomkt.onrender.com/auth/google';
+      window.location.href = `https://backendhuertomkt.onrender.com/auth/google?userType=${userTypeParam}&redirectUri=${encodedRedirectUri}`;
     } catch (error) {
       console.error('Error en autenticación con Google:', error);
       setErrorMessage('Error al iniciar sesión con Google');

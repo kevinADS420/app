@@ -140,8 +140,21 @@ function App() {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
+      // Obtener la URL actual para construir una URL de redirección completa
+      const currentDomain = window.location.origin;
+      
+      // Construir la URL de callback adecuada
+      const redirectUri = `${currentDomain}/auth/google/callback`;
+      
+      // Codificarla para URL
+      const encodedRedirectUri = encodeURIComponent(redirectUri);
+      
+      // Log para depuración
+      console.log('Iniciando autenticación con Google');
+      console.log('URL de redirección:', redirectUri);
+      
       // Iniciar el proceso de autenticación con Google y especificar que es cliente
-      window.location.href = 'https://backendhuertomkt.onrender.com/auth/google?userType=cliente';
+      window.location.href = `https://backendhuertomkt.onrender.com/auth/google?userType=cliente&redirectUri=${encodedRedirectUri}`;
     } catch (error) {
       console.error('Error:', error);
       setErrorMessage('Error en el registro con Google');
