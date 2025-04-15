@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Pago, { PagoProps } from './pagos';
+import Pago from './pagos';
 // Definición de tipos
 interface Imagen {
   id: string;

@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Logo from '../../../assets/images/logo.png';
 import Google from '../../../assets/icons/icons8-google-48.png';
-import logo from '../../../assets/images/logo.png';
 import '../../../style/inicioSection.css';
 
 function App() {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Name: '',
     lastName: '',
@@ -19,25 +15,6 @@ function App() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  useEffect(() => {
-    // Verificar si el usuario ya está autenticado
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('https://backendhuertomkt.onrender.com/dashboard', {
-          credentials: 'include'
-        });
-        if (response.ok) {
-          navigate('/dashboard');
-        }
-      } catch (error) {
-        console.error('Error checking auth:', error);
-      }
-    };
-    checkAuth();
-  }, [navigate]);
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
@@ -55,8 +32,8 @@ function App() {
     }
     if (!formData.Password) {
       errors.Password = 'La contraseña es requerida';
-    } else if (formData.Password.length < 8) {
-      errors.Password = 'La contraseña debe tener al menos 8 caracteres';
+    } else if (formData.Password.length < 6) {
+      errors.Password = 'La contraseña debe tener al menos 6 caracteres';
     }
     if (!formData.WithsignatureyourPassword) {
       errors.WithsignatureyourPassword = 'Debes confirmar tu contraseña';
@@ -101,9 +78,6 @@ function App() {
       return;
     }
 
-    setIsLoading(true);
-    setShowSuccess(false);
-
     const payload = {
       Nombres: formData.Name,
       Apellidos: formData.lastName,
@@ -121,95 +95,35 @@ function App() {
       });
 
       const data = await response.json();
-      
-      // Mostrar logo y animación de carga
-      setTimeout(() => {
-        setIsLoading(false);
-        setShowSuccess(true);
-        setTimeout(() => {
-          alert(data.message);
-        }, 1000);
-      }, 3000);
-
+      alert(data.message);
     } catch (error) {
       console.error('Error:', error);
       setErrorMessage('Error en el registro');
-      setIsLoading(false);
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse: any) => {
+  const handleGoogleSignIn = async () => {
     try {
-      // Obtener la URL actual para construir una URL de redirección completa
-      const currentDomain = window.location.origin;
-      
-      // Construir la URL de callback adecuada
-      const redirectUri = `${currentDomain}/auth/google/callback`;
-      
-      // Codificarla para URL
-      const encodedRedirectUri = encodeURIComponent(redirectUri);
-      
-      // Log para depuración
-      console.log('Iniciando autenticación con Google');
-      console.log('URL de redirección:', redirectUri);
-      
-      // Iniciar el proceso de autenticación con Google y especificar que es cliente
-      window.location.href = `https://backendhuertomkt.onrender.com/auth/google?userType=cliente&redirectUri=${encodedRedirectUri}`;
+      // Aquí iría la lógica de autenticación con Google
+      // Por ahora solo mostraremos un mensaje
+      setErrorMessage('La autenticación con Google está en desarrollo');
     } catch (error) {
-      console.error('Error:', error);
-      setErrorMessage('Error en el registro con Google');
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('https://backendhuertomkt.onrender.com/logout', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      
-      if (response.ok) {
-        // Limpiar cualquier dato de sesión local
-        localStorage.removeItem('userType');
-        localStorage.removeItem('userId');
-        // Redirigir al inicio
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error('Error en autenticación con Google:', error);
+      setErrorMessage('Error al iniciar sesión con Google');
     }
   };
 
   return (
-    <GoogleOAuthProvider clientId="TU_CLIENT_ID_DE_GOOGLE">
+    <>
       <div className="ContainerContent">
-        {isLoading && (
-          <div className="loading-overlay">
-            <img src={logo} alt="Logo" className="loading-logo" />
-            <div className="loading-spinner"></div>
-          </div>
-        )}
-        {showSuccess && (
-          <div className="success-message">
-            <img src={Logo} alt="Logo" className="success-logo" />
-            <p>¡Registro exitoso!</p>
-          </div>
-        )}
         <div className="InicioGoogle">
           <div className="google-content">
             <h2>Bienvenido a HuertoMKT</h2>
             <p>Regístrate de forma rápida y segura con tu cuenta de Google</p>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => setErrorMessage('Error al iniciar sesión con Google')}
-              useOneTap
-              theme="outline"
-              size="large"
-              width="280px"
-              text="continue_with"
-              shape="pill"
-              locale="es"
-            />
+            <button className="google-button" onClick={handleGoogleSignIn}>
+              <img src={Google} alt="Google" className="google-icon" />
+              <span>Continuar con Google</span>
+            </button>
             <div className="divider">
               <span>o</span>
             </div>
@@ -329,7 +243,7 @@ function App() {
           </form>
         </div>
       </div>
-    </GoogleOAuthProvider>
+    </>
   );
 }
 
