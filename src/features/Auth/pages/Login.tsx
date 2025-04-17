@@ -7,7 +7,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     // Redirigir al backend para iniciar el proceso de autenticación con Google
-    window.location.href = 'https://backendhuertomkt.onrender.com/auth/google';
+    window.location.href = 'https://backendhuertomkt.onrender.com/auth/google/login';
   };
 
   const handleLoginClick = () => {

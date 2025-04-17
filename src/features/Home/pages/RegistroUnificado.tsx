@@ -155,7 +155,7 @@ function RegistroUnificado() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `https://backendhuertomkt.onrender.com/auth/google?userType=${userType}`;
+    window.location.href = `https://backendhuertomkt.onrender.com/auth/google/login?userType=${userType}`;
   };
 
   return (
