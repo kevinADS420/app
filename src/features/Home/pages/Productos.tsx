@@ -9,7 +9,7 @@ import { IoIosSearch } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Pago from './pagos';
-// Definición de tipos
+// Definición de tipos 
 interface Imagen {
   id: string;
   nombre: string;

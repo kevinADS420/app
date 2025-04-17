@@ -9,12 +9,12 @@ const userLogoutEvent = new Event('userLogout');
 interface UserData {
   id_cliente?: number;
   id_proveedor?: number;
-  Nombres?: string;
-  nombres?: string;
-  Apellidos?: string;
-  apellidos?: string;
-  Email?: string;
-  Telefono?: string;
+  id_admin?: number;
+  Email: string;
+  Nombres: string;
+  Apellidos: string;
+  role?: 'customer' | 'proveedor' | 'admin';
+  googleId?: string;
 }
 
 function UserProfile() {
@@ -22,146 +22,120 @@ function UserProfile() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    console.log('👋 Ejecutando logout...');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userType');
+    setUserData(null);
+    window.dispatchEvent(new Event('userLogout'));
+    navigate('/');
+  };
+
   const loadUserData = async () => {
     const userStr = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     const userType = localStorage.getItem('userType');
     
-    console.log('Loading user data:', userStr);
-    
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        
-        // Comprobamos si es proveedor o cliente y normalizamos
-        if (user) {
-          const normalizedUser: UserData = {
-            id_cliente:   user.id_cliente,
-            id_proveedor: user.id_proveedor,
-            Nombres:      user.Nombres        || user.nombres    || '',
-            Apellidos:    user.Apellidos      || user.apellidos  || '',
-            Email:        user.Email          || '',
-            Telefono:     user.Telefono
-          };
-          
-          // Verificamos que tengamos la información mínima necesaria
-          if (normalizedUser.Nombres && normalizedUser.Apellidos && normalizedUser.Email) {
-            setUserData(normalizedUser);
-            return;
-          } else {
-            console.error('Datos de usuario incompletos');
-          }
-        }
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-      }
-    } else {
-      console.error('No user data found');
-    }
-    
-    // Si llegamos aquí, intentamos cargar desde la API
-    if (token) {
-      try {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
-        let response;
-        if (userType === 'customer') {
-          response = await axios.get('https://backendhuertomkt.onrender.com/customer/profile');
-          
-          // Si la respuesta no contiene datos completos, intentamos con el email
-          if (!response.data.Nombres && localStorage.getItem('user')) {
-            try {
-              const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-              if (storedUser.Email) {
-                const userDetailResponse = await axios.get(
-                  `https://backendhuertomkt.onrender.com/customer/email/${encodeURIComponent(storedUser.Email)}`
-                );
-                response = userDetailResponse;
-              }
-            } catch (detailError) {
-              console.error('Error fetching detailed user data:', detailError);
-            }
-          }
-        } else if (userType === 'proveedor') {
-          response = await axios.get('https://backendhuertomkt.onrender.com/proveedor/profile');
-          
-          // Si la respuesta no contiene datos completos, intentamos con el email
-          if (!response.data.nombres && localStorage.getItem('user')) {
-            try {
-              const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-              if (storedUser.Email) {
-                const userDetailResponse = await axios.get(
-                  `https://backendhuertomkt.onrender.com/proveedor/email/${encodeURIComponent(storedUser.Email)}`
-                );
-                response = userDetailResponse;
-              }
-            } catch (detailError) {
-              console.error('Error fetching detailed user data:', detailError);
-            }
-          }
-        }
-        
-        if (response && response.data) {
-          const apiUser = response.data;
-          
-          // Normalizamos los datos que vienen de la API
-          const normalizedUser: UserData = {
-            id_cliente:   apiUser.id_cliente,
-            id_proveedor: apiUser.id_proveedor,
-            Nombres:      apiUser.Nombres       || apiUser.nombres    || '',
-            Apellidos:    apiUser.Apellidos     || apiUser.apellidos  || '',
-            Email:        apiUser.Email         || '',
-            Telefono:     apiUser.Telefono
-          };
-          
-          // Guardamos en localStorage y estado
-          localStorage.setItem('user', JSON.stringify(normalizedUser));
-          setUserData(normalizedUser);
-          return;
-        }
-      } catch (error) {
-        console.error('Error fetching user data from API:', error);
-      }
-    }
-    
-    // Solo hacemos logout si no hay token
+    // Si no hay token, hacer logout
     if (!token) {
+      handleLogout();
+      return;
+    }
+
+    // Configurar axios con el token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    try {
+      let response;
+      const baseUrl = 'https://backendhuertomkt.onrender.com';
+
+      // Seleccionar la ruta según el tipo de usuario
+      switch(userType) {
+        case 'proveedor':
+          response = await axios.get(`${baseUrl}/proveedor/profile`);
+          if (response.data.status === 'success' && response.data.data) {
+            const proveedorData = response.data.data;
+            const normalizedUser: UserData = {
+              id_proveedor: proveedorData.id_proveedor,
+              Nombres: proveedorData.nombres,
+              Apellidos: proveedorData.apellidos,
+              Email: proveedorData.Email,
+              role: 'proveedor' as const
+            };
+            localStorage.setItem('user', JSON.stringify(normalizedUser));
+            setUserData(normalizedUser);
+          }
+          break;
+          
+        case 'admin':
+          response = await axios.get(`${baseUrl}/admin/profile`);
+          if (response.data.status === 'success' && response.data.data) {
+            const adminData = response.data.data;
+            const normalizedUser: UserData = {
+              id_admin: adminData.id_admin,
+              Nombres: adminData.nombres,
+              Apellidos: adminData.apellidos,
+              Email: adminData.Email,
+              role: 'admin' as const
+            };
+            localStorage.setItem('user', JSON.stringify(normalizedUser));
+            setUserData(normalizedUser);
+          }
+          break;
+          
+        case 'customer':
+          response = await axios.get(`${baseUrl}/customer/profile`);
+          if (response.data.status === 'success' && response.data.data) {
+            const customerData = response.data.data;
+            const normalizedUser: UserData = {
+              id_cliente: customerData.id_cliente,
+              Nombres: customerData.Nombres,
+              Apellidos: customerData.Apellidos,
+              Email: customerData.Email,
+              role: 'customer' as const
+            };
+            localStorage.setItem('user', JSON.stringify(normalizedUser));
+            setUserData(normalizedUser);
+          }
+          break;
+          
+        default:
+          console.error('Tipo de usuario no reconocido:', userType);
+          handleLogout();
+          return;
+      }
+
+      if (!response || !response.data) {
+        console.error('No se pudieron obtener los datos del usuario');
+        handleLogout();
+        return;
+      }
+
+    } catch (error) {
+      console.error('Error loading user data:', error);
       handleLogout();
     }
   };
 
   useEffect(() => {
+    console.log('🔄 Iniciando carga de datos de usuario...');
     loadUserData();
 
-    const handleUserLogin = () => {
-      console.log('User login event detected');
+    // Escuchar eventos de login/logout
+    const handleLogin = () => {
+      console.log('👋 Evento de login recibido');
       loadUserData();
     };
 
-    const handleUserUpdate = () => {
-      loadUserData();
-    };
+    window.addEventListener('userLogin', handleLogin);
+    window.addEventListener('userLogout', handleLogout);
 
-    window.addEventListener('userLogin', handleUserLogin);
-    window.addEventListener('storage', loadUserData);
-    window.addEventListener('userUpdate', handleUserUpdate);
-    
     return () => {
-      window.removeEventListener('userLogin', handleUserLogin);
-      window.removeEventListener('storage', loadUserData);
-      window.removeEventListener('userUpdate', handleUserUpdate);
+      window.removeEventListener('userLogin', handleLogin);
+      window.removeEventListener('userLogout', handleLogout);
     };
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userType');
-    setUserData(null);
-    setIsOpen(false);
-    window.dispatchEvent(userLogoutEvent);
-    navigate('/inicio-section');
-  };
 
   // Si no hay datos de usuario, no mostrar nada
   if (!userData) {
@@ -183,7 +157,7 @@ function UserProfile() {
     {
       icon: '⚙️',
       label: 'Editar Perfil',
-      path: '/configuracion'
+      path: '/editar-perfil'
     },
     {
       icon: '📋',
@@ -194,10 +168,10 @@ function UserProfile() {
 
   // Para mantener compatibilidad con la estructura anterior
   const userDisplay = {
-    id: userData.id_cliente || userData.id_proveedor || 0,
-    nombre: userData.Nombres || '',
-    apellido: userData.Apellidos || '',
-    email: userData.Email || ''
+    id: userData.id_cliente || 0,
+    nombre: userData.Nombres,
+    apellido: userData.Apellidos,
+    email: userData.Email
   };
 
   return (
@@ -217,7 +191,7 @@ function UserProfile() {
           <div className="profile-dropdown">
             <div className="profile-header">
               <h3>{userDisplay.nombre} {userDisplay.apellido}</h3>
-              <p className="user-id">Tipo: {userData.id_cliente ? 'Cliente' : userData.id_proveedor ? 'Proveedor' : 'Usuario'}</p>
+              <p className="user-id">Tipo: {userData.role || 'Usuario'}</p>
             </div>
 
             <div className="profile-menu">

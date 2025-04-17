@@ -3,12 +3,18 @@ import { toast } from 'react-toastify';
 import './EditProfile.css';
 
 interface UserData {
-  id_cliente: number;
+  id_cliente?: number;
+  id_proveedor?: number;
+  id_admin?: number;
   Nombres: string;
+  nombres?: string;
   Apellidos: string;
+  apellidos?: string;
   Email: string;
   Telefono?: string;
-  contraseña?: string; // Añadimos el campo contraseña a la interfaz
+  telefono?: string;
+  contraseña?: string;
+  role?: 'customer' | 'proveedor' | 'admin';
 }
 
 const EditProfile: React.FC = () => {
@@ -18,7 +24,7 @@ const EditProfile: React.FC = () => {
     Apellidos: '',
     Email: '',
     Telefono: '',
-    contraseña: '' // Añadimos el campo contraseña al estado del formulario
+    contraseña: ''
   });
   
   // Nuevo estado para las contraseñas
@@ -82,19 +88,27 @@ const EditProfile: React.FC = () => {
 
   const loadUserData = () => {
     const userStr = localStorage.getItem('user');
+    const userType = localStorage.getItem('userType');
+    
     if (userStr) {
       const user = JSON.parse(userStr);
       
-      // Verificar si hay un teléfono en localStorage que no se haya sincronizado aún
-      const previousFormData = JSON.parse(localStorage.getItem('editProfileForm') || '{}');
+      // Normalizar los nombres de campos según el tipo de usuario
+      const normalizedUser = {
+        ...user,
+        Nombres: user.Nombres || user.nombres || '',
+        Apellidos: user.Apellidos || user.apellidos || '',
+        Telefono: user.Telefono || user.telefono || '',
+        role: userType || 'customer'
+      };
       
-      setUserData(user);
+      setUserData(normalizedUser);
       setFormData({
-        Nombres: user.Nombres || '',
-        Apellidos: user.Apellidos || '',
-        Email: user.Email || '',
-        Telefono: user.Telefono || previousFormData.Telefono || '',
-        contraseña: user.contraseña || '' // Guardamos la contraseña si existe
+        Nombres: normalizedUser.Nombres,
+        Apellidos: normalizedUser.Apellidos,
+        Email: normalizedUser.Email,
+        Telefono: normalizedUser.Telefono,
+        contraseña: normalizedUser.contraseña || ''
       });
     }
   };
@@ -179,23 +193,46 @@ const EditProfile: React.FC = () => {
 
     try {
       setIsLoading(true);
-      // Guardar una copia del token original
       const originalToken = localStorage.getItem('token');
       const baseUrl = import.meta.env.VITE_API_URL || 'https://backendhuertomkt.onrender.com';
+      const userType = localStorage.getItem('userType');
       
-      // Datos para actualizar perfil (incluyendo contraseña)
+      // Determinar la ruta y el ID según el tipo de usuario
+      let updateEndpoint = '';
+      let userId = '';
+      
+      switch(userType) {
+        case 'proveedor':
+          updateEndpoint = '/Update/proveedor';
+          userId = userData.id_proveedor?.toString() || '';
+          break;
+        case 'admin':
+          updateEndpoint = '/Update/admin';
+          userId = userData.id_admin?.toString() || '';
+          break;
+        default: // cliente
+          updateEndpoint = '/Update/customer';
+          userId = userData.id_cliente?.toString() || '';
+      }
+      
+      // Adaptar los datos según el tipo de usuario
       const profileData = {
         ...formData,
-        id_cliente: userData.id_cliente,
-        numeroTelefono: formData.Telefono, // Nombre correcto esperado por el backend
-        tipoTelefono: 'movil' // Añadir el tipo de teléfono que espera el backend
+        // Para proveedores y admin
+        nombres: formData.Nombres,
+        apellidos: formData.Apellidos,
+        telefono: formData.Telefono,
+        // Para clientes
+        Nombres: formData.Nombres,
+        Apellidos: formData.Apellidos,
+        Telefono: formData.Telefono,
+        numeroTelefono: formData.Telefono,
+        tipoTelefono: 'movil'
       };
       
-      // Log para ver los datos del perfil que se están enviando
       console.log("Datos de perfil a enviar:", profileData);
 
-      // Actualizar datos del perfil
-      const profileResponse = await fetch(`${baseUrl}/Update/customer/${userData.id_cliente}`, {
+      const profileResponse = await fetch(`${baseUrl}${updateEndpoint}/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -212,30 +249,38 @@ const EditProfile: React.FC = () => {
       const updatedUser = await profileResponse.json();
       console.log("Respuesta del servidor (perfil):", updatedUser);
       
-      // Crear una copia del usuario actualizado para modificarla
-      const userToSave = {...updatedUser};
+      // Normalizar los datos actualizados según el tipo de usuario
+      const normalizedUser = {
+        ...updatedUser,
+        Nombres: updatedUser.Nombres || updatedUser.nombres,
+        Apellidos: updatedUser.Apellidos || updatedUser.apellidos,
+        Telefono: updatedUser.Telefono || updatedUser.telefono || formData.Telefono,
+        role: userType
+      };
       
-      // Asegurarse de que el número de teléfono se mantenga
-      if (!userToSave.Telefono && formData.Telefono) {
-        userToSave.Telefono = formData.Telefono;
-        console.log("Teléfono mantenido:", userToSave.Telefono);
-      }
-      
-      // Asegurarse de que la contraseña se mantenga
-      if (formData.contraseña) {
-        userToSave.contraseña = formData.contraseña;
-      }
-      
-      // Conservar explícitamente el token original
+      // Mantener el token original
       if (originalToken) {
         localStorage.setItem('token', originalToken);
       }
       
-      // Guardar usuario actualizado
-      localStorage.setItem('user', JSON.stringify(userToSave));
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
       
       // Si la sección de contraseña está abierta, intentar actualizar la contraseña
       if (isPasswordSectionOpen) {
+        // Determinar la ruta de actualización de contraseña según el tipo de usuario
+        let passwordEndpoint = '';
+        
+        switch(userType) {
+          case 'proveedor':
+            passwordEndpoint = '/update/password/proveedor';
+            break;
+          case 'admin':
+            passwordEndpoint = '/update/password/admin';
+            break;
+          default: // cliente
+            passwordEndpoint = '/update/password';
+        }
+        
         // Log para datos de contraseña
         console.log("Datos de contraseña:", {
           currentPass: passwordData.currentPassword || formData.contraseña,
@@ -254,14 +299,14 @@ const EditProfile: React.FC = () => {
         const passwordUpdateData = {
           contraseña: passwordData.currentPassword || formData.contraseña,
           nuevaContraseña: passwordData.newPassword,
-          numeroTelefono: formData.Telefono || '', // Cambiar a numeroTelefono
-          tipoTelefono: 'movil' // Añadir tipo de teléfono
+          numeroTelefono: formData.Telefono || '',
+          tipoTelefono: 'movil'
         };
         
         console.log("Datos a enviar para actualizar contraseña:", passwordUpdateData);
         
         // Enviar solicitud para cambiar contraseña
-        const passwordResponse = await fetch(`${baseUrl}/update/password/${userData.id_cliente}`, {
+        const passwordResponse = await fetch(`${baseUrl}${passwordEndpoint}/${userId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

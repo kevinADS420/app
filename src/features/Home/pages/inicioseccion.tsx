@@ -150,41 +150,41 @@ function Login() {
       
       return;
     } catch (generalLoginError) {
-      console.log('Login general falló, intentando métodos específicos...', generalLoginError);
+      console.log('Login general falló, intentando como admin...', generalLoginError);
       
-      // Fallback: Try as customer first
+      // Primero intentar como admin
       try {
-        const customerResponse = await axios.post(`${API_BASE_URL}/login/customer`, loginData, axiosConfig);
+        const adminResponse = await axios.post(`${API_BASE_URL}/login/admin`, loginData, axiosConfig);
         
-        console.log('Login exitoso como cliente:', customerResponse.data);
+        console.log('Login exitoso como admin:', adminResponse.data);
         
-        localStorage.setItem('token', customerResponse.data.token);
-        localStorage.setItem('userType', 'customer');
+        localStorage.setItem('token', adminResponse.data.token);
+        localStorage.setItem('userType', 'admin');
         
-        axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${adminResponse.data.token}`;
         
-        if (customerResponse.data.userData) {
-          localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
+        if (adminResponse.data.userData) {
+          localStorage.setItem('user', JSON.stringify(adminResponse.data.userData));
         } else {
           try {
-            const userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
+            const userResponse = await axios.get(`${API_BASE_URL}/admin/email/${encodeURIComponent(formData.Email)}`, {
               headers: {
-                'Authorization': `Bearer ${customerResponse.data.token}`
+                'Authorization': `Bearer ${adminResponse.data.token}`
               }
             });
             
-            console.log('Datos de usuario cliente:', userResponse.data);
+            console.log('Datos de usuario admin:', userResponse.data);
             
             const userData = {
-              id_cliente: userResponse.data.id_cliente,
-              Nombres: userResponse.data.Nombres,
-              Apellidos: userResponse.data.Apellidos,
+              id_admin: userResponse.data.id_admin,
+              nombres: userResponse.data.nombres,
+              apellidos: userResponse.data.apellidos,
               Email: userResponse.data.Email
             };
             
             localStorage.setItem('user', JSON.stringify(userData));
           } catch (error) {
-            console.error('Error al obtener datos del cliente:', error);
+            console.error('Error al obtener datos del admin:', error);
           }
         }
         
@@ -196,10 +196,10 @@ function Login() {
         }, 2000);
         
         return;
-      } catch (customerError) {
-        console.log('Login como cliente falló, intentando como proveedor...', customerError);
+      } catch (adminError) {
+        console.log('Login como admin falló, intentando como proveedor...', adminError);
         
-        // If failed as customer, try as provider
+        // Si falló como admin, intentar como proveedor
         try {
           const proveedorResponse = await axios.post(`${API_BASE_URL}/login/proveedor`, loginData, axiosConfig);
           
@@ -214,7 +214,7 @@ function Login() {
             localStorage.setItem('user', JSON.stringify(proveedorResponse.data.userData));
           } else {
             try {
-              const userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
+              const userResponse = await axios.get(`${API_BASE_URL}/proveedor/profile`, {
                 headers: {
                   'Authorization': `Bearer ${proveedorResponse.data.token}`
                 }
@@ -222,14 +222,20 @@ function Login() {
               
               console.log('Datos de usuario proveedor:', userResponse.data);
               
-              const userData = {
-                id_proveedor: userResponse.data.id_proveedor,
-                nombres: userResponse.data.nombres,
-                apellidos: userResponse.data.apellidos,
-                Email: userResponse.data.Email
-              };
-              
-              localStorage.setItem('user', JSON.stringify(userData));
+              if (userResponse.data.status === 'success' && userResponse.data.data) {
+                const userData = {
+                  id_proveedor: userResponse.data.data.id_proveedor,
+                  nombres: userResponse.data.data.nombres,
+                  apellidos: userResponse.data.data.apellidos,
+                  Email: userResponse.data.data.Email,
+                  telefono: userResponse.data.data.telefono,
+                  direccion: userResponse.data.data.direccion
+                };
+                
+                localStorage.setItem('user', JSON.stringify(userData));
+              } else {
+                console.error('La respuesta del servidor no tiene el formato esperado:', userResponse.data);
+              }
             } catch (error) {
               console.error('Error al obtener datos del proveedor:', error);
             }
@@ -244,9 +250,57 @@ function Login() {
           
           return;
         } catch (proveedorError) {
-          console.error('Login como proveedor también falló:', proveedorError);
-          setError('Credenciales incorrectas o usuario no encontrado');
-          setLoading(false);
+          console.log('Login como proveedor falló, intentando como cliente...', proveedorError);
+          
+          // Si falló como proveedor, intentar como cliente
+          try {
+            const customerResponse = await axios.post(`${API_BASE_URL}/login/customer`, loginData, axiosConfig);
+            
+            console.log('Login exitoso como cliente:', customerResponse.data);
+            
+            localStorage.setItem('token', customerResponse.data.token);
+            localStorage.setItem('userType', 'customer');
+            
+            axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
+            
+            if (customerResponse.data.userData) {
+              localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
+            } else {
+              try {
+                const userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
+                  headers: {
+                    'Authorization': `Bearer ${customerResponse.data.token}`
+                  }
+                });
+                
+                console.log('Datos de usuario cliente:', userResponse.data);
+                
+                const userData = {
+                  id_cliente: userResponse.data.id_cliente,
+                  Nombres: userResponse.data.Nombres,
+                  Apellidos: userResponse.data.Apellidos,
+                  Email: userResponse.data.Email
+                };
+                
+                localStorage.setItem('user', JSON.stringify(userData));
+              } catch (error) {
+                console.error('Error al obtener datos del cliente:', error);
+              }
+            }
+            
+            window.dispatchEvent(userLoginEvent);
+            
+            setSuccess(true);
+            setTimeout(() => {
+              navigate('/');
+            }, 2000);
+            
+            return;
+          } catch (customerError) {
+            console.error('Login como cliente también falló:', customerError);
+            setError('Credenciales incorrectas o usuario no encontrado');
+            setLoading(false);
+          }
         }
       }
     } finally {
@@ -316,8 +370,8 @@ function Login() {
                 {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </button>
             </div>
-            <Link to="/Registro" className="buttonInicioSection">
-              Crear cuenta
+            <Link to="/registro" className="buttonInicioSection">
+              <button className="buttonInicioSection">Registrarse</button>
             </Link>
             <button type="button" className="recuperar-password" disabled={loading}>
               ¿Olvidaste tu contraseña?

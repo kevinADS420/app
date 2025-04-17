@@ -154,15 +154,8 @@ function RegistroUnificado() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      // Aquí iría la lógica de autenticación con Google
-      // Por ahora solo mostraremos un mensaje
-      setErrorMessage('La autenticación con Google está en desarrollo');
-    } catch (error) {
-      console.error('Error en autenticación con Google:', error);
-      setErrorMessage('Error al iniciar sesión con Google');
-    }
+  const handleGoogleLogin = () => {
+    window.location.href = `https://backendhuertomkt.onrender.com/auth/google?userType=${userType}`;
   };
 
   return (
@@ -171,7 +164,7 @@ function RegistroUnificado() {
         <div className="google-content">
           <h2>Bienvenido a HuertoMKT</h2>
           <p>Regístrate de forma rápida y segura con tu cuenta de Google</p>
-          <button className="google-button" onClick={handleGoogleSignIn}>
+          <button className="google-button" onClick={handleGoogleLogin}>
             <img src={Google} alt="Google" className="google-icon" />
             <span>Continuar con Google</span>
           </button>

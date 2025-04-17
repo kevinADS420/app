@@ -1,38 +1,44 @@
-import Header from './components/organisms/header'
-import Inicio from './features/Home/pages/HomePage'
-import Footer from './components/organisms/Footer'
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
-
+import Header from './components/organisms/header';
+import Footer from './components/organisms/Footer';
+import HomePage from './features/Home/pages/HomePage';
 import Productos from './features/Home/pages/Productos';
 import Servicios from './features/Home/pages/Servicios';
 import SobreNosotros from './features/Home/pages/SobreNosotros';
-import Inicioseccion from './features/Home/pages/inicioseccion';
-import Registro from './features/Home/pages/Registro';
+import InicioSection from './features/Home/pages/inicioseccion';
 import RegistroUnificado from './features/Home/pages/RegistroUnificado';
-import EditProfile from './components/pages/EditProfile/EditProfile';
+import ProtectedRoute from './features/Auth/components/ProtectedRoute';
 import RegistroProductos from './features/Home/pages/RegistroProduc';
+import EditProfile from './components/pages/EditProfile/EditProfile';
 
 function App() {
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/productos" element={<Productos />} />
-        <Route path="/servicios" element={<Servicios />} />
-        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-        <Route path="/inicio-section" element={<Inicioseccion />} />
-        <Route path="/registro" element={<RegistroUnificado />} />
-        <Route path="/registro-antiguo" element={<Registro />} />
-        <Route path="/configuracion" element={<EditProfile />} />
-        <Route path="/RegistroProductos" element= {<RegistroProductos/>}/>
-      </Routes>
-      <Footer />
-      <ToastContainer position="bottom-right" />
+      <div>
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/productos" element={<Productos />} />
+          <Route path="/servicios" element={<Servicios />} />
+          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+          <Route path="/inicio-section" element={<InicioSection />} />
+          <Route path="/registro" element={<RegistroUnificado />} />
+          <Route path="/RegistroProductos" element={
+            <ProtectedRoute>
+              <RegistroProductos/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/editar-perfil" element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }/>
+        </Routes>
+        <Footer />
+      </div>
     </Router>
-  )
+  );
 }
 
 export default App;

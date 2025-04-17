@@ -87,6 +87,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
           ¿Olvidaste tu contraseña?
         </button>
       </div>
+
+      <div className="form-footer">
+        <p>¿No tienes una cuenta?</p>
+        <Link to="/registro" className="register-link">Regístrate aquí</Link>
+      </div>
     </form>
   );
 };
