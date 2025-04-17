@@ -23,6 +23,8 @@ interface Producto {
   fechaRealización?: Date;
   seleccionado?: boolean;
   id_proveedor?: string;
+  enOferta: boolean;
+  porcentajeDescuento?: number;
 }
 
 // Opciones para el tipo de producto
@@ -37,7 +39,7 @@ const TIPOS_PRODUCTO = [
 // Base de datos de productos por categoría para la clasificación automática
 const PRODUCTOS_POR_CATEGORIA = {
   Frutas: [
-    'manzana', 'pera', 'plátano', 'banana', 'naranja', 'mandarina', 'limón', 'lima', 
+    'manzana', 'pera', 'plátano', 'banano', 'naranja', 'mandarina', 'limón', 'lima', 
     'fresa', 'frambuesa', 'arándano', 'mora', 'cereza', 'melón', 'sandía', 'piña', 
     'kiwi', 'mango', 'papaya', 'uva', 'ciruela', 'melocotón', 'durazno', 'nectarina',
     'aguacate', 'granada', 'higo', 'coco', 'níspero', 'membrillo', 'maracuyá'
@@ -169,6 +171,8 @@ const RegistroProductos: React.FC = () => {
     fechaIngreso: string;
     fechaSalida: string;
     fechaRealización: string;
+    enOferta: boolean;
+    porcentajeDescuento: string;
   }>({
     nombreP: '',
     tipo: '',
@@ -177,7 +181,9 @@ const RegistroProductos: React.FC = () => {
     cantidad: '0',
     fechaIngreso: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
     fechaSalida: new Date().toISOString().split('T')[0],
-    fechaRealización: new Date().toISOString().split('T')[0]
+    fechaRealización: new Date().toISOString().split('T')[0],
+    enOferta: false,
+    porcentajeDescuento: '0'
   });
   
   // Estado para errores de validación
@@ -265,7 +271,9 @@ const RegistroProductos: React.FC = () => {
           fechaIngreso: new Date(prod.fecha_ingreso || Date.now()),
           fechaSalida: new Date(prod.fecha_salida || Date.now()),
           fechaRealización: new Date(prod.fecha_realizacion || Date.now()),
-          id_proveedor: (prod.id_proveedor || (prod.id_inventario ? prod.id_inventario.id_proveedor : null))?.toString()
+          id_proveedor: (prod.id_proveedor || (prod.id_inventario ? prod.id_inventario.id_proveedor : null))?.toString(),
+          enOferta: prod.en_oferta || false,
+          porcentajeDescuento: prod.porcentaje_descuento || 0
         }));
 
       setProductos(productosFormateados);
@@ -602,7 +610,9 @@ const RegistroProductos: React.FC = () => {
           cantidad: cantidad,
           fechaIngreso: fechaIngreso,
           fechaSalida: fechaSalida,
-          fechaRealización: fechaRealización
+          fechaRealización: fechaRealización,
+          enOferta: formData.enOferta,
+          porcentajeDescuento: formData.porcentajeDescuento ? parseInt(formData.porcentajeDescuento) : undefined
         };
   
         // Enviar al backend
@@ -632,7 +642,9 @@ const RegistroProductos: React.FC = () => {
           cantidad: cantidad,
           fechaIngreso: fechaIngreso,
           fechaSalida: fechaSalida,
-          fechaRealización: fechaRealización
+          fechaRealización: fechaRealización,
+          enOferta: formData.enOferta,
+          porcentajeDescuento: formData.porcentajeDescuento ? parseInt(formData.porcentajeDescuento) : undefined
         };
         
         // Enviar al backend
@@ -655,7 +667,9 @@ const RegistroProductos: React.FC = () => {
         cantidad: '0',
         fechaIngreso: new Date().toISOString().split('T')[0],
         fechaSalida: new Date().toISOString().split('T')[0],
-        fechaRealización: new Date().toISOString().split('T')[0]
+        fechaRealización: new Date().toISOString().split('T')[0],
+        enOferta: false,
+        porcentajeDescuento: '0'
       });
   
       // Mostrar mensaje de éxito
@@ -738,7 +752,9 @@ const RegistroProductos: React.FC = () => {
           cantidad: '0',
           fechaIngreso: new Date().toISOString().split('T')[0],
           fechaSalida: new Date().toISOString().split('T')[0],
-          fechaRealización: new Date().toISOString().split('T')[0]
+          fechaRealización: new Date().toISOString().split('T')[0],
+          enOferta: false,
+          porcentajeDescuento: '0'
         });
         setEditandoId(null);
       }
@@ -793,7 +809,9 @@ const RegistroProductos: React.FC = () => {
         cantidad: producto.cantidad?.toString() || '0',
         fechaIngreso: fechaIngreso,
         fechaSalida: fechaSalida,
-        fechaRealización: fechaRealización
+        fechaRealización: fechaRealización,
+        enOferta: producto.enOferta,
+        porcentajeDescuento: producto.porcentajeDescuento?.toString() || '0'
       });
       
       setEditandoId(id);
@@ -819,22 +837,28 @@ const RegistroProductos: React.FC = () => {
 
   // Función para alternar la selección de un producto
   const toggleSeleccionProducto = (id: string) => {
-    setProductosSeleccionados(prev => {
-      if (prev.includes(id)) {
-        return prev.filter(prodId => prodId !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
+    setFormData(prev => ({
+      ...prev,
+      enOferta: !prev.enOferta,
+      porcentajeDescuento: prev.enOferta ? '0' : prev.porcentajeDescuento
+    }));
   };
 
   // Función para seleccionar o deseleccionar todos los productos
   const seleccionarTodos = (seleccionar: boolean) => {
     if (seleccionar) {
       const todosIds = productosFiltrados.map((p: Producto) => p.id);
-      setProductosSeleccionados(todosIds);
+      setFormData(prev => ({
+        ...prev,
+        enOferta: true,
+        porcentajeDescuento: prev.porcentajeDescuento
+      }));
     } else {
-      setProductosSeleccionados([]);
+      setFormData(prev => ({
+        ...prev,
+        enOferta: false,
+        porcentajeDescuento: '0'
+      }));
     }
   };
 
@@ -920,7 +944,7 @@ const RegistroProductos: React.FC = () => {
                   {obtenerEtiquetaTipo(productoAEliminar.tipo)}
                 </span>
                 <p className="rp-precio">{formatearPrecio(productoAEliminar.precio)}</p>
-                <p className="rp-cantidad">Cantidad: <strong>{productoAEliminar.cantidad || 0}</strong></p>
+                <p className="rp-cantidad">Cantidad: <strong>{productoAEliminar.cantidad || 0} kg</strong></p>
                 <p className="rp-advertencia">¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.</p>
               </div>
             </div>
@@ -1015,9 +1039,8 @@ const RegistroProductos: React.FC = () => {
                 </div>
                 
                 <div className="rp-form-group">
-                  <label htmlFor="precio">Precio</label>
+                  <label htmlFor="precio">Precio por Kg actual</label>
                   <div className="rp-input-icon">
-                    <span className="rp-icon">$</span>
                     <input
                       type="text"
                       id="precio"
@@ -1027,8 +1050,69 @@ const RegistroProductos: React.FC = () => {
                       className={`rp-input ${errores.precio ? 'rp-error' : ''}`}
                       placeholder="0.00"
                     />
+                    <span className="rp-unidad">/ kg</span>
                   </div>
                   {errores.precio && <p className="rp-error-message">{errores.precio}</p>}
+                </div>
+                <div className="rp-form-group oferta-group">
+                  <div className="rp-oferta-toggle">
+                    <label htmlFor="enOferta">¿Aplicar oferta?</label>
+                    <input
+                      type="checkbox"
+                      id="enOferta"
+                      name="enOferta"
+                      checked={formData.enOferta}
+                      onChange={(e) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          enOferta: e.target.checked,
+                          porcentajeDescuento: e.target.checked ? prev.porcentajeDescuento : '0'
+                        }));
+                      }}
+                    />
+                  </div>
+                  
+                  {formData.enOferta && (
+                    <div className="rp-oferta-content">
+                      <div className="rp-porcentaje-container">
+                        <label htmlFor="porcentajeDescuento">Porcentaje de descuento:</label>
+                        <div className="rp-input-porcentaje">
+                          <input
+                            type="number"
+                            id="porcentajeDescuento"
+                            name="porcentajeDescuento"
+                            value={formData.porcentajeDescuento}
+                            onChange={(e) => {
+                              const valor = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+                              setFormData(prev => ({
+                                ...prev,
+                                porcentajeDescuento: valor.toString()
+                              }));
+                            }}
+                            className="rp-input rp-porcentaje-input"
+                            min="0"
+                            max="100"
+                            placeholder="0"
+                          />
+                          <span className="rp-simbolo-porcentaje">%</span>
+                        </div>
+                      </div>
+                      
+                      {formData.precio && formData.porcentajeDescuento && (
+                        <div className="rp-preview-descuento">
+                          <div className="rp-precio-original">
+                            {formatearPrecio(parseFloat(formData.precio.replace(/\./g, '').replace(',', '.')))} /kg
+                          </div>
+                          <div className="rp-precio-descuento">
+                            {formatearPrecio(
+                              parseFloat(formData.precio.replace(/\./g, '').replace(',', '.')) * 
+                              (1 - parseInt(formData.porcentajeDescuento) / 100)
+                            )} /kg
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
                 
                 {/* Nuevos campos para inventario */}
@@ -1284,10 +1368,27 @@ const RegistroProductos: React.FC = () => {
                       <span className={`rp-tipo-badge ${producto.tipo}`}>
                         {obtenerEtiquetaTipo(producto.tipo)}
                       </span>
-                      <div className="rp-precio">{formatearPrecio(producto.precio)}</div>
-                      
+                      {producto.enOferta && producto.porcentajeDescuento ? (
+                        <>
+                          <div className="rp-badge-oferta">
+                            -{producto.porcentajeDescuento}%
+                          </div>
+                          <div className="rp-precio">
+                            <span className="rp-precio-original">
+                              {formatearPrecio(producto.precio)} /kg
+                            </span>
+                            <span className="rp-precio-descuento">
+                              {formatearPrecio(producto.precio * (1 - producto.porcentajeDescuento / 100))} /kg
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="rp-precio">
+                          {formatearPrecio(producto.precio)} /kg
+                        </div>
+                      )}
                       <div className="rp-inventario-info">
-                        <p>Cantidad: <strong>{producto.cantidad || 0}</strong></p>
+                        <p>Cantidad: <strong>{producto.cantidad || 0} kg</strong></p>
                         {producto.fechaIngreso && (
                           <p className="rp-fecha">
                             <small>Ingreso: {new Date(producto.fechaIngreso).toLocaleDateString('es-CO')}</small>
@@ -1334,5 +1435,5 @@ const RegistroProductos: React.FC = () => {
     </div>
   );
 };
-
+"kg"
 export default RegistroProductos;
