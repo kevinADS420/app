@@ -641,3 +641,104 @@ section.rp-card:last-child h2 {
   );
   transition: all 0.3s ease;
 }
+
+/* Estilos para el inventario */
+.rp-cantidad-inventario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.rp-cantidad-label {
+  font-weight: 500;
+  color: #666;
+}
+
+/* Estados del inventario */
+.rp-cantidad-inventario.normal {
+  background-color: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.rp-cantidad-inventario.normal strong {
+  color: #27ae60;
+}
+
+.rp-cantidad-inventario.bajo {
+  background-color: rgba(241, 196, 15, 0.1);
+  border: 1px solid rgba(241, 196, 15, 0.2);
+}
+
+.rp-cantidad-inventario.bajo strong {
+  color: #f39c12;
+}
+
+.rp-cantidad-inventario.critico {
+  background-color: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  animation: pulseAlerta 2s infinite;
+}
+
+.rp-cantidad-inventario.critico strong {
+  color: #e74c3c;
+}
+
+.rp-alerta-stock {
+  background-color: #e74c3c;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  animation: pulseAlerta 2s infinite;
+}
+
+/* Animación para alerta */
+@keyframes pulseAlerta {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Tooltip de información */
+.rp-cantidad-inventario {
+  position: relative;
+}
+
+.rp-cantidad-inventario:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* Estilos para el input de cantidad */
+.rp-form-group input[name="cantidad"] {
+  border-color: #2ecc71;
+}
+
+.rp-form-group input[name="cantidad"]:focus {
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+}
+
+/* Mensaje de advertencia de stock bajo */
+.rp-stock-warning {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
