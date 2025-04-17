@@ -1061,37 +1061,7 @@ const Productos: React.FC = () => {
             ]}
           />
           
-          <SeccionCategoria 
-            titulo="Ofertas" 
-            productos={obtenerProductosPorTipo('ofertas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Frutas" 
-            productos={obtenerProductosPorTipo('frutas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Verduras" 
-            productos={obtenerProductosPorTipo('verduras')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Tubérculos" 
-            productos={obtenerProductosPorTipo('tuberculos')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Hortalizas" 
-            productos={obtenerProductosPorTipo('hortalizas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          {/* Catálogo completo de productos */}
+          {/* Movido aquí - Catálogo completo de productos */}
           <section className="catalogo-completo">
             <h2>Catálogo Completo</h2>
             
@@ -1201,6 +1171,36 @@ const Productos: React.FC = () => {
               </div>
             )}
           </section>
+
+          <SeccionCategoria 
+            titulo="Ofertas" 
+            productos={obtenerProductosPorTipo('ofertas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Frutas" 
+            productos={obtenerProductosPorTipo('frutas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Verduras" 
+            productos={obtenerProductosPorTipo('verduras')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Tubérculos" 
+            productos={obtenerProductosPorTipo('tuberculos')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Hortalizas" 
+            productos={obtenerProductosPorTipo('hortalizas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
         </div>
       </main>
       

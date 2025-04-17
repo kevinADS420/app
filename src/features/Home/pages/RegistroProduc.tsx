@@ -1287,69 +1287,6 @@ const RegistroProductos: React.FC = () => {
                 </div>
               </form>
             </section>
-            
-            {/* Sección para exportar productos */}
-            <section className="rp-card exportar-productos">
-              <h2>Exportar Productos</h2>
-              
-              <div className="rp-opciones-exportacion">
-                <div className="rp-descripcion-exportar">
-                  <p>Selecciona productos de la lista para exportarlos a la plantilla de Productos.</p>
-                </div>
-                
-                <div className="rp-controles-exportacion">
-                  <div className="rp-toggle-seleccion">
-                    <label className="rp-switch">
-                      <input 
-                        type="checkbox" 
-                        checked={seleccionMultiple}
-                        onChange={() => {
-                          setSeleccionMultiple(!seleccionMultiple);
-                          // Si desactivamos, limpiamos selección
-                          if (seleccionMultiple) {
-                            setProductosSeleccionados([]);
-                          }
-                        }}
-                      />
-                      <span className="rp-slider round"></span>
-                    </label>
-                    <span className="rp-texto-modo">Modo selección {seleccionMultiple ? 'activado' : 'desactivado'}</span>
-                  </div>
-                  
-                  {seleccionMultiple && (
-                    <div className="rp-acciones-seleccion">
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-secundario rp-btn-sm"
-                        onClick={() => seleccionarTodos(true)}
-                      >
-                        Seleccionar todos
-                      </button>
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-secundario rp-btn-sm"
-                        onClick={() => seleccionarTodos(false)}
-                      >
-                        Deseleccionar todos
-                      </button>
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-primario"
-                        onClick={subirProductosSeleccionados}
-                      >
-                        Exportar seleccionados ({productosSeleccionados.length})
-                      </button>
-                    </div>
-                  )}
-                  
-                  {mostrarMensajeExito && (
-                    <div className="rp-alerta rp-alerta-exito">
-                      ¡Productos exportados correctamente! Ya están disponibles en la plantilla de Productos.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
           </div>
           
           {/* Lista de Productos */}
@@ -1500,5 +1437,5 @@ const RegistroProductos: React.FC = () => {
     </div>
   );
 };
-"kg"
+
 export default RegistroProductos;
