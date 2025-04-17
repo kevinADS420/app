@@ -40,21 +40,21 @@ const PRODUCTOS_POR_CATEGORIA = {
     'manzana', 'pera', 'plátano', 'banana', 'naranja', 'mandarina', 'limón', 'lima', 
     'fresa', 'frambuesa', 'arándano', 'mora', 'cereza', 'melón', 'sandía', 'piña', 
     'kiwi', 'mango', 'papaya', 'uva', 'ciruela', 'melocotón', 'durazno', 'nectarina',
-    'aguacate', 'granada', 'higo', 'coco', 'níspero', 'membrillo', 'maracuyá'
+    'aguacate', 'granadilla', 'higo', 'coco', 'níspero', 'membrillo', 'maracuyá','cacao'
   ],
   Verduras: [
-    'lechuga', 'espinaca', 'acelga', 'col', 'repollo', 'brócoli', 'coliflor', 
+    'espinaca', 'acelga', 'col', 'repollo', 'brócoli', 'coliflor', 
     'espárrago', 'alcachofa', 'pimiento', 'berenjena', 'calabacín', 'pepino', 
-    'judía', 'haba', 'apio', 'puerro', 'nabo', 'rábano', 'zanahoria'
+    'judía', 'haba', 'apio', 'puerro', 'nabo', 'rábano','platano'
   ],
   Tuberculos: [
     'patata', 'papa', 'boniato', 'batata', 'yuca', 'mandioca', 'ñame', 'jengibre', 
-    'cúrcuma', 'remolacha', 'malanga', 'taro', 'topinambur', 'arracacha'
+    'cúrcuma', 'remolacha', 'malanga', 'taro', 'topinambur', 'arracacha','zanahoria'
   ],
   Hortalizas: [
     'tomate', 'cebolla', 'ajo', 'calabaza', 'maíz', 'guisante', 'arveja', 'garbanzo', 
     'lenteja', 'frijol', 'poroto', 'alubia', 'chícharo', 'okra', 'quimbombó', 
-    'rúcula', 'canónigo', 'berro'
+    'rúcula', 'canónigo', 'berro','lechuga',
   ]
 };
 

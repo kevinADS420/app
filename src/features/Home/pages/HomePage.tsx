@@ -108,20 +108,20 @@ function Inicio() {
             <div className="product">
               <img src={Pimenton} alt="Producto 1" />
               <h3>Pimenton</h3>
-              <p>Descripción breve del producto.</p>
-              <span className="price">COP 1,200 K</span>
+              <p>Es una hortaliza rica en vitaminas y minerales. </p>
+              <span className="price">COP 1,200 x Kg</span>
             </div>
             <div className="product">
               <img src={Planato} alt="Producto 2" />
               <h3>Platanos</h3>
-              <p>Descripción breve del producto.</p>
-              <span className="price">COP 2,319 K</span>
+              <p> fruta tropical alargada y carnosa, con una cáscara. </p>
+              <span className="price">COP 2,319 x Kg</span>
             </div>
             <div className="product">
               <img src={Tomate} alt="Producto 3" />
               <h3>Tomate</h3>
-              <p>Descripción breve del producto.</p>
-              <span className="price">COP $6,300 k</span>
+              <p>Regula la tensión arterial, reduce los triglicéridos y las grasas saturadas.</p>
+              <span className="price">COP $6,300 x kg</span>
             </div>
           </div>
         </section>
