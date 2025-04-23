@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../../../style/inicio.css'; 
-import IconBot from '../../../assets/icons/iconbot.png'
-import IconEnvio from '../../../assets/icons/iconEnviar.png'
+import IconBot from '../../../assets/icons/image-removebg-preview.ico'
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
 
 interface Message {
     sender: 'user' | 'bot';
@@ -11,6 +12,7 @@ interface Message {
 const Chatbot: React.FC = () => {
     const [isActive, setIsActive] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
+    const [isTyping, setIsTyping] = useState(false);
     const messageInputRef = useRef<HTMLInputElement>(null);
     const messageAreaRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +29,7 @@ const Chatbot: React.FC = () => {
 
         if (messageText.trim() !== '') {
             displayMessage('user', messageText);
+            setIsTyping(true);
 
             try {
                 const response = await fetch('https://backendhuertomkt.onrender.com/api/chatbot/message', {
@@ -53,6 +56,8 @@ const Chatbot: React.FC = () => {
             } catch (error) {
                 console.error('Error completo:', error);
                 displayMessage('bot', "Lo siento, hubo un error al procesar tu pregunta. Por favor, intenta de nuevo.");
+            } finally {
+                setIsTyping(false);
             }
 
             messageInput.value = '';
@@ -70,12 +75,12 @@ const Chatbot: React.FC = () => {
     }, [messages, messageAreaRef]);  // Depende de 'messages' para scroll al agregar mensajes
 
 
-    const handleSendMessageClick = (event: React.MouseEvent<HTMLImageElement>) => {
+    const handleSendMessageClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         sendMessage();
     };
 
-    const handleCloseClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+    const handleCloseClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
         setIsActive(false);
     };
@@ -92,9 +97,12 @@ const Chatbot: React.FC = () => {
             <div className="help-text">¡Necesitas ayuda!</div>
             <img src={IconBot} alt="Icono de Mensaje" />
             <div className="text-bar" onClick={(event) => event.stopPropagation()}>
-                <div className="chat-header">
+                <div className="chat-header" style={{ color: 'black' }}>
                     Tu Chatbot Asistente de HuertoMKT
-                    <span className="close-button" onClick={handleCloseClick}>×</span>
+
+                    <button className="close-button" onClick={handleCloseClick}>
+                        <CloseIcon />
+                    </button>
                 </div>
                 <div className="message-area" ref={messageAreaRef}>
                     {messages.map((message, index) => (
@@ -102,6 +110,16 @@ const Chatbot: React.FC = () => {
                             {message.text}
                         </div>
                     ))}
+                    {isTyping && (
+                        <div className="typing-indicator">
+                            <span>Respondiendo</span>
+                            <div className="typing-dots">
+                                <span className="dot"></span>
+                                <span className="dot"></span>
+                                <span className="dot"></span>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="input-container">
                     <input
@@ -109,14 +127,15 @@ const Chatbot: React.FC = () => {
                         id="message-input"
                         placeholder="Escribe tu mensaje..."
                         ref={messageInputRef}
-                        onKeyDown={handleKeyDown} // Usamos onKeyDown directamente
+                        onKeyDown={handleKeyDown}
                     />
-                    <img
-                        src={IconEnvio}
-                        alt="Enviar"
-                        id="send-button-img"
+                    <button
+                        type="button"
+                        id="send-button"
                         onClick={handleSendMessageClick}
-                    />
+                    >
+                        <SendIcon />
+                    </button>
                 </div>
             </div>
         </div>

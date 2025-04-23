@@ -684,9 +684,13 @@ const RegistroProductos: React.FC = () => {
       });
   
       // Mostrar mensaje de éxito
-      alert('Producto guardado exitosamente en el servidor');
+      setMensajeNotificacion(`Producto "${formData.nombreP}" guardado exitosamente en el sistema`);
+      setMostrarNotificacion(true);
+      setTimeout(() => setMostrarNotificacion(false), 3000);
     } catch (error) {
-      alert('Error al guardar el producto en el servidor. Por favor, intente nuevamente.');
+      setMensajeNotificacion(`Error al guardar el producto: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+      setMostrarNotificacion(true);
+      setTimeout(() => setMostrarNotificacion(false), 5000);
     }
   };
   
