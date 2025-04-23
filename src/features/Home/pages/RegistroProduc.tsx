@@ -153,6 +153,15 @@ const Carrusel: React.FC<{imagenes: Imagen[], onEliminar: (id: string) => void}>
     </div>
   );
 };
+
+// Primero, definir la función getInventarioStatus fuera del componente
+const getInventarioStatus = (cantidad: number | undefined): 'critico' | 'bajo' | 'normal' => {
+  const cantidadReal = cantidad || 0;
+  if (cantidadReal <= 5) return 'critico';
+  if (cantidadReal <= 10) return 'bajo';
+  return 'normal';
+};
+
 const RegistroProductos: React.FC = () => {
   // Referencia para el input de archivos
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -916,6 +925,54 @@ const RegistroProductos: React.FC = () => {
     })}`;
   };
 
+  // Función para actualizar el inventario después de una compra
+  const actualizarInventario = async (productoId: string, cantidadComprada: number) => {
+    try {
+      const producto = productos.find(p => p.id === productoId);
+      if (!producto) return;
+
+      const nuevaCantidad = (producto.cantidad || 0) - cantidadComprada;
+      
+      // Actualizar en el backend
+      const response = await fetch(`https://backendhuertomkt.onrender.com/product/update-stock`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_producto: productoId,
+          cantidad: nuevaCantidad
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar el inventario');
+      }
+
+      // Actualizar estado local
+      setProductos(prev => 
+        prev.map(p => 
+          p.id === productoId 
+            ? { ...p, cantidad: nuevaCantidad }
+            : p
+        )
+      );
+
+      // Mostrar alerta si el stock es bajo
+      if (nuevaCantidad <= 5) {
+        setMensajeNotificacion(`¡Alerta! Stock crítico para ${producto.nombreP}: ${nuevaCantidad} kg`);
+        setMostrarNotificacion(true);
+        setTimeout(() => setMostrarNotificacion(false), 5000);
+      }
+
+    } catch (error) {
+      console.error('Error al actualizar inventario:', error);
+      setMensajeNotificacion('Error al actualizar el inventario');
+      setMostrarNotificacion(true);
+      setTimeout(() => setMostrarNotificacion(false), 5000);
+    }
+  };
+
   return (
     <div className="registro-productos-page">
       {/* Modal de confirmación */}
@@ -1232,69 +1289,6 @@ const RegistroProductos: React.FC = () => {
                 </div>
               </form>
             </section>
-            
-            {/* Sección para exportar productos */}
-            <section className="rp-card exportar-productos">
-              <h2>Exportar Productos</h2>
-              
-              <div className="rp-opciones-exportacion">
-                <div className="rp-descripcion-exportar">
-                  <p>Selecciona productos de la lista para exportarlos a la plantilla de Productos.</p>
-                </div>
-                
-                <div className="rp-controles-exportacion">
-                  <div className="rp-toggle-seleccion">
-                    <label className="rp-switch">
-                      <input 
-                        type="checkbox" 
-                        checked={seleccionMultiple}
-                        onChange={() => {
-                          setSeleccionMultiple(!seleccionMultiple);
-                          // Si desactivamos, limpiamos selección
-                          if (seleccionMultiple) {
-                            setProductosSeleccionados([]);
-                          }
-                        }}
-                      />
-                      <span className="rp-slider round"></span>
-                    </label>
-                    <span className="rp-texto-modo">Modo selección {seleccionMultiple ? 'activado' : 'desactivado'}</span>
-                  </div>
-                  
-                  {seleccionMultiple && (
-                    <div className="rp-acciones-seleccion">
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-secundario rp-btn-sm"
-                        onClick={() => seleccionarTodos(true)}
-                      >
-                        Seleccionar todos
-                      </button>
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-secundario rp-btn-sm"
-                        onClick={() => seleccionarTodos(false)}
-                      >
-                        Deseleccionar todos
-                      </button>
-                      <button 
-                        type="button" 
-                        className="rp-btn rp-btn-primario"
-                        onClick={subirProductosSeleccionados}
-                      >
-                        Exportar seleccionados ({productosSeleccionados.length})
-                      </button>
-                    </div>
-                  )}
-                  
-                  {mostrarMensajeExito && (
-                    <div className="rp-alerta rp-alerta-exito">
-                      ¡Productos exportados correctamente! Ya están disponibles en la plantilla de Productos.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
           </div>
           
           {/* Lista de Productos */}
@@ -1390,7 +1384,15 @@ const RegistroProductos: React.FC = () => {
                         </div>
                       )}
                       <div className="rp-inventario-info">
-                        <p>Cantidad: <strong>{producto.cantidad || 0} kg</strong></p>
+                        <p className={`rp-cantidad-inventario ${getInventarioStatus(producto.cantidad)}`}>
+                          <span className="rp-cantidad-label">Stock:</span>
+                          <strong>{producto.cantidad ?? 0} kg</strong>
+                          {(producto.cantidad ?? 0) <= 5 && (
+                            <span className="rp-alerta-stock">
+                              ¡Stock crítico!
+                            </span>
+                          )}
+                        </p>
                         {producto.fechaIngreso && (
                           <p className="rp-fecha">
                             <small>Ingreso: {new Date(producto.fechaIngreso).toLocaleDateString('es-CO')}</small>
@@ -1437,5 +1439,5 @@ const RegistroProductos: React.FC = () => {
     </div>
   );
 };
-"kg"
+
 export default RegistroProductos;

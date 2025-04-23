@@ -83,14 +83,21 @@
 
 .registro-productos-page .rp-main {
   padding: var(--rp-spacing-4) 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.registro-productos-page .rp-card {
+.registro-productos-page .rp-card,
+.registro-productos-page section#formulario-producto.rp-card {
   background-color: var(--rp-color-white);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   padding: var(--rp-spacing-6);
   margin-bottom: var(--rp-spacing-6);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .registro-productos-page .rp-form-group {
