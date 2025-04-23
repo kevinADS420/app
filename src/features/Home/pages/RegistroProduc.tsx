@@ -526,6 +526,7 @@ const RegistroProductos: React.FC = () => {
       productoData.append('nombreP', producto.nombreP);
       productoData.append('tipo', producto.tipo);
       productoData.append('Precio', producto.precio.toString());
+      productoData.append('cantidad', producto.cantidad?.toString() || '0');
       productoData.append('id_inventario', inventarioResult.data.id_inventario.toString());
       productoData.append('id_proveedor', idProveedor.toString());
 
@@ -534,6 +535,7 @@ const RegistroProductos: React.FC = () => {
         nombreP: producto.nombreP,
         tipo: producto.tipo,
         Precio: producto.precio.toString(),
+        cantidad: producto.cantidad?.toString() || '0',
         id_inventario: inventarioResult.data.id_inventario.toString(),
         id_proveedor: idProveedor.toString()
       });

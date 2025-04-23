@@ -138,6 +138,8 @@ function RegistroUnificado() {
       if (response.ok) {
         setSuccess(true);
         setErrorMessage('');
+        // Guardar el tipo de usuario en localStorage
+        localStorage.setItem('userType', userType);
         // Mostrar mensaje de éxito
         setTimeout(() => {
           navigate('/inicio-section'); // Redirigir a la página de inicio de sesión

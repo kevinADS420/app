@@ -24,6 +24,7 @@ interface Producto {
   imagenes: Imagen[];
   descuento?: number; // Para productos en oferta
   id_proveedor?: string; // Agregamos el ID del proveedor
+  cantidad: number;
 }
 
 interface ProductoCarrito extends Producto {
@@ -289,7 +290,12 @@ const TarjetaProducto: React.FC<{
     })}`;
   };
   
-  // Mostrar precio con descuento si aplica const CarritoCompras
+  // Verificar si el producto tiene imágenes válidas
+  const tieneImagenesValidas = producto.imagenes && 
+                              producto.imagenes.length > 0 && 
+                              producto.imagenes[0].url;
+  
+  // Mostrar precio con descuento si aplica
   const mostrarPrecio = () => {
     if (producto.descuento) {
       const precioDescuento = producto.precio * (1 - producto.descuento / 100);
@@ -305,16 +311,10 @@ const TarjetaProducto: React.FC<{
     return <div className="precio">{formatearPrecio(producto.precio)}</div>;
   };
 
-  // Verificar si el producto tiene imágenes válidas
-  const tieneImagenesValidas = producto.imagenes && 
-                              producto.imagenes.length > 0 && 
-                              producto.imagenes[0].url;
-  
   return (
     <div className="tarjeta-producto">
       <div className="producto-imagen">
         {tieneImagenesValidas ? (
-          // Si hay solo una imagen, mostramos directamente la imagen en lugar del carrusel  
           producto.imagenes.length === 1 ? (
             <img 
               src={producto.imagenes[0].url} 
@@ -347,9 +347,19 @@ const TarjetaProducto: React.FC<{
       
       <div className="producto-info">
         <h3>{producto.nombreP}</h3>
-        <span className={`tipo-badge ${producto.tipo.toLowerCase()}`}>
-          {producto.tipo}
-        </span>
+        {producto.cantidad <= 0 && (
+          <div className="estado-agotado">
+            Producto Agotado
+          </div>
+        )}
+        <div className="producto-detalles">
+          <span className={`tipo-badge ${producto.tipo.toLowerCase()}`}>
+            {producto.tipo}
+          </span>
+          <span className="cantidad-disponible">
+            Disponibles: {producto.cantidad} kg
+          </span>
+        </div>
         {mostrarPrecio()}
       </div>
       
@@ -357,8 +367,10 @@ const TarjetaProducto: React.FC<{
         <button 
           className="btn-agregar" 
           onClick={() => agregarAlCarrito(producto)}
+          disabled={producto.cantidad <= 0}
         >
-          <i className="icono-carrito"></i> Agregar
+          <i className="icono-carrito"></i>
+          {producto.cantidad <= 0 ? 'Agotado' : 'Agregar'}
         </button>
       </div>
     </div>
@@ -377,6 +389,7 @@ const CarritoCompras: React.FC<{
 }> = ({ productos, visible, onClose, actualizarCantidad, eliminarProducto, vaciarCarrito }) => {
   // Estado para controlar la visualización del componente de pagos
   const [mostrarPagos, setMostrarPagos] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   
   if (!visible) return null;
   
@@ -400,8 +413,84 @@ const CarritoCompras: React.FC<{
   };
   
   // Función para mostrar el componente de pagos
-  const mostrarComponentePagos = () => {
-    setMostrarPagos(true);
+  const mostrarComponentePagos = async () => {
+    try {
+      setIsProcessingPayment(true);
+      
+      // Obtener el ID del cliente del localStorage
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        toast.error('Debe iniciar sesión para realizar el pago', {
+          position: "bottom-right",
+          autoClose: 3000
+        });
+        return;
+      }
+      
+      // Obtener el token de autenticación
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Sesión expirada. Por favor, inicie sesión nuevamente', {
+          position: "bottom-right",
+          autoClose: 3000
+        });
+        return;
+      }
+      
+      // Enviar cada producto del carrito al backend
+      for (const producto of productos) {
+        try {
+          // Asegurarse de que el id_producto sea un número
+          const idProducto = parseInt(producto.id);
+          if (isNaN(idProducto)) {
+            throw new Error(`ID de producto inválido para ${producto.nombreP}`);
+          }
+
+          const response = await fetch(`https://backendhuertomkt.onrender.com/cart/${userId}/add`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              id_producto: idProducto,
+              cantidad: producto.cantidad
+            })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(
+              `Error al agregar producto ${producto.nombreP} al carrito del backend. ` +
+              `Status: ${response.status}. ` +
+              (errorData ? `Mensaje: ${JSON.stringify(errorData)}` : '')
+            );
+          }
+
+          const responseData = await response.json();
+          console.log(`Producto ${producto.nombreP} agregado exitosamente:`, responseData);
+        } catch (error) {
+          console.error(`Error procesando producto ${producto.nombreP}:`, error);
+          throw error; // Re-lanzar el error para manejarlo en el catch exterior
+        }
+      }
+      
+      // Si todo se envió correctamente, mostrar el componente de pagos
+      setMostrarPagos(true);
+      toast.success('Carrito sincronizado correctamente', {
+        position: "bottom-right",
+        autoClose: 2000
+      });
+      
+    } catch (error) {
+      console.error('Error al procesar el pago:', error);
+      toast.error('Error al procesar el pago: ' + (error instanceof Error ? error.message : 'Error desconocido'), {
+        position: "bottom-right",
+        autoClose: 5000
+      });
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
   
   // Función para ocultar el componente de pagos y volver al carrito
@@ -432,6 +521,7 @@ const CarritoCompras: React.FC<{
                 <Pago 
                   total={total} 
                   onCancel={volverAlCarrito}
+                  productos={productos}
                 />
                 
                 {/* Botón para volver al carrito */}
@@ -531,6 +621,7 @@ const CarritoCompras: React.FC<{
                     <button 
                       className="btn-pagar-sistema"
                       onClick={mostrarComponentePagos}
+                      disabled={isProcessingPayment}
                       style={{
                         backgroundColor: '#ff9800',
                         color: 'white',
@@ -538,21 +629,26 @@ const CarritoCompras: React.FC<{
                         border: 'none',
                         borderRadius: '5px',
                         fontWeight: 'bold',
-                        cursor: 'pointer',
+                        cursor: isProcessingPayment ? 'not-allowed' : 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        transition: 'background-color 0.3s'
+                        transition: 'background-color 0.3s',
+                        opacity: isProcessingPayment ? 0.7 : 1
                       }}
                       onMouseOver={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f57c00';
+                        if (!isProcessingPayment) {
+                          e.currentTarget.style.backgroundColor = '#f57c00';
+                        }
                       }}
                       onMouseOut={(e) => {
-                        e.currentTarget.style.backgroundColor = '#ff9800';
+                        if (!isProcessingPayment) {
+                          e.currentTarget.style.backgroundColor = '#ff9800';
+                        }
                       }}
                     >
                       <MdShoppingCart style={{ marginRight: '8px', fontSize: '18px' }} />
-                      Pagar ahora
+                      {isProcessingPayment ? 'Procesando...' : 'Pagar ahora'}
                     </button>
                   </div>
                 </div>
@@ -610,16 +706,15 @@ const Navbar: React.FC<{
 
 // Componente principal de Productos
 const Productos: React.FC = () => {
-  // Estados para productos y carrito
-  const [productos, setProductos] = useState<Producto[]>([]);
+  const navigate = useNavigate();
   const [productosCarrito, setProductosCarrito] = useState<ProductoCarrito[]>([]);
-  const [mostrarCarritoModal, setMostrarCarritoModal] = useState(false);
+  const [mostrarCarrito, setMostrarCarrito] = useState(false);
+  const [productos, setProductos] = useState<Producto[]>([]);
   
   // Estados para filtros
   const [filtroTipo, setFiltroTipo] = useState<string>('todos');
   const [terminoBusqueda, setTerminoBusqueda] = useState<string>('');
   const [userType, setUserType] = useState<string | null>(null);
-  const navigate = useNavigate();
   
   // Agregar estado de carga
   const [isLoading, setIsLoading] = useState(false);
@@ -705,7 +800,8 @@ const Productos: React.FC = () => {
           tipo: prod.tipo || 'Sin categoría',
           precio: precio,
           imagenes: imagenesProcesadas,
-          id_proveedor: prod.id_proveedor ? prod.id_proveedor.toString() : null
+          id_proveedor: prod.id_proveedor ? prod.id_proveedor.toString() : null,
+          cantidad: prod.cantidad || 0
         };
       });
 
@@ -770,39 +866,47 @@ const Productos: React.FC = () => {
   
   // Función para agregar un producto al carrito
   const agregarAlCarrito = (producto: Producto) => {
-    setProductosCarrito(prevCarrito => {
-      const productoExistente = prevCarrito.find(p => p.id === producto.id);
-      
-      if (productoExistente) {
-        toast.info(`Se agregó otra unidad de ${producto.nombreP} al carrito`, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        return prevCarrito.map(p => 
-          p.id === producto.id 
-            ? { ...p, cantidad: p.cantidad + 1 } 
-            : p
-        );
-      } else {
-        toast.success(`¡${producto.nombreP} agregado al carrito!`, {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        return [...prevCarrito, { ...producto, cantidad: 1 }];
-      }
-    });
+    // Verificar autenticación
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (!token) {
+      toast.error('Debe iniciar sesión para agregar productos al carrito', {
+        position: "bottom-right",
+        autoClose: 3000
+      });
+      navigate('/login');
+      return;
+    }
+
+    // Verificar si el producto ya existe en el carrito
+    const productoExistente = productosCarrito.find(item => item.id === producto.id);
+    
+    if (productoExistente) {
+      // Si existe, actualizar cantidad
+      const nuevoCarrito = productosCarrito.map(item =>
+        item.id === producto.id
+          ? { ...item, cantidad: item.cantidad + 1 }
+          : item
+      );
+      setProductosCarrito(nuevoCarrito);
+      localStorage.setItem('carritoProductos', JSON.stringify(nuevoCarrito));
+      toast.info('Se agregó otra unidad al carrito', {
+        position: "bottom-right",
+        autoClose: 2000
+      });
+    } else {
+      // Si no existe, agregar nuevo producto
+      const nuevoProductoCarrito: ProductoCarrito = {
+        ...producto,
+        cantidad: 1
+      };
+      const nuevoCarrito = [...productosCarrito, nuevoProductoCarrito];
+      setProductosCarrito(nuevoCarrito);
+      localStorage.setItem('carritoProductos', JSON.stringify(nuevoCarrito));
+      toast.success('Producto agregado al carrito', {
+        position: "bottom-right",
+        autoClose: 2000
+      });
+    }
   };
   
   // Función para actualizar cantidad de un producto en el carrito
@@ -882,7 +986,7 @@ const Productos: React.FC = () => {
   
   // Función para alternar la visibilidad del carrito
   const toggleCarrito = () => {
-    setMostrarCarritoModal(!mostrarCarritoModal);
+    setMostrarCarrito(!mostrarCarrito);
   };
 
   // Función mejorada para la navegación
@@ -1061,37 +1165,7 @@ const Productos: React.FC = () => {
             ]}
           />
           
-          <SeccionCategoria 
-            titulo="Ofertas" 
-            productos={obtenerProductosPorTipo('ofertas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Frutas" 
-            productos={obtenerProductosPorTipo('frutas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Verduras" 
-            productos={obtenerProductosPorTipo('verduras')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Tubérculos" 
-            productos={obtenerProductosPorTipo('tuberculos')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          <SeccionCategoria 
-            titulo="Hortalizas" 
-            productos={obtenerProductosPorTipo('hortalizas')}
-            agregarAlCarrito={agregarAlCarrito}
-          />
-          
-          {/* Catálogo completo de productos */}
+          {/* Movido aquí - Catálogo completo de productos */}
           <section className="catalogo-completo">
             <h2>Catálogo Completo</h2>
             
@@ -1201,13 +1275,43 @@ const Productos: React.FC = () => {
               </div>
             )}
           </section>
+
+          <SeccionCategoria 
+            titulo="Ofertas" 
+            productos={obtenerProductosPorTipo('ofertas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Frutas" 
+            productos={obtenerProductosPorTipo('frutas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Verduras" 
+            productos={obtenerProductosPorTipo('verduras')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Tubérculos" 
+            productos={obtenerProductosPorTipo('tuberculos')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
+          
+          <SeccionCategoria 
+            titulo="Hortalizas" 
+            productos={obtenerProductosPorTipo('hortalizas')}
+            agregarAlCarrito={agregarAlCarrito}
+          />
         </div>
       </main>
       
       <CarritoCompras 
         productos={productosCarrito}
-        visible={mostrarCarritoModal}
-        onClose={() => setMostrarCarritoModal(false)}
+        visible={mostrarCarrito}
+        onClose={() => setMostrarCarrito(false)}
         actualizarCantidad={actualizarCantidadCarrito}
         eliminarProducto={eliminarDelCarrito}
         vaciarCarrito={vaciarCarrito}

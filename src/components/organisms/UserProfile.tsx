@@ -23,7 +23,6 @@ function UserProfile() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log('👋 Ejecutando logout...');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('userType');
@@ -101,30 +100,25 @@ function UserProfile() {
           break;
           
         default:
-          console.error('Tipo de usuario no reconocido:', userType);
           handleLogout();
           return;
       }
 
       if (!response || !response.data) {
-        console.error('No se pudieron obtener los datos del usuario');
         handleLogout();
         return;
       }
 
     } catch (error) {
-      console.error('Error loading user data:', error);
       handleLogout();
     }
   };
 
   useEffect(() => {
-    console.log('🔄 Iniciando carga de datos de usuario...');
     loadUserData();
 
     // Escuchar eventos de login/logout
     const handleLogin = () => {
-      console.log('👋 Evento de login recibido');
       loadUserData();
     };
 
@@ -137,9 +131,13 @@ function UserProfile() {
     };
   }, []);
 
-  // Si no hay datos de usuario, no mostrar nada
+  // Si no hay datos de usuario, mostrar un mensaje de carga
   if (!userData) {
-    return null;
+    return (
+      <div className="user-profile-container">
+        <div className="loading-profile">Cargando perfil...</div>
+      </div>
+    );
   }
 
   // Mantenemos el menú original
@@ -169,9 +167,9 @@ function UserProfile() {
   // Para mantener compatibilidad con la estructura anterior
   const userDisplay = {
     id: userData.id_cliente || 0,
-    nombre: userData.Nombres,
-    apellido: userData.Apellidos,
-    email: userData.Email
+    nombre: userData.Nombres || '',
+    apellido: userData.Apellidos || '',
+    email: userData.Email || ''
   };
 
   return (
@@ -191,6 +189,7 @@ function UserProfile() {
           <div className="profile-dropdown">
             <div className="profile-header">
               <h3>{userDisplay.nombre} {userDisplay.apellido}</h3>
+              <p className="user-email">{userDisplay.email}</p>
               <p className="user-id">Tipo: {userData.role || 'Usuario'}</p>
             </div>
 

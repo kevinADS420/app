@@ -1,17 +1,18 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/atoms/Button/Button';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
 
   const handleGoogleLogin = () => {
-    // Redirigir al backend para iniciar el proceso de autenticación con Google
+    // Redirigir directamente a la autenticación de Google
     window.location.href = 'https://backendhuertomkt.onrender.com/auth/google/login';
   };
 
   const handleLoginClick = () => {
-    // Redirigir a la página de inicio de sesión existente
     navigate('/inicio-section');
   };
 
@@ -45,10 +46,17 @@ const Login = () => {
     gap: '1rem'
   };
 
+  const errorStyle: CSSProperties = {
+    color: '#dc3545',
+    marginBottom: '1rem',
+    fontSize: '0.9rem'
+  };
+
   return (
     <div style={containerStyle}>
       <div style={loginContainerStyle}>
         <h1 style={titleStyle}>Bienvenido a Huerto Market</h1>
+        {error && <div style={errorStyle}>{error}</div>}
         <div style={buttonContainerStyle}>
           <Button onClick={handleGoogleLogin} variant="primary">
             Iniciar sesión con Google

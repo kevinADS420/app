@@ -29,7 +29,7 @@ const Chatbot: React.FC = () => {
             displayMessage('user', messageText);
 
             try {
-                const response = await fetch('/api/chatbot', {
+                const response = await fetch('https://backendhuertomkt.onrender.com/api/chatbot/message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -37,12 +37,22 @@ const Chatbot: React.FC = () => {
                     body: JSON.stringify({ message: messageText })
                 });
 
+                console.log('Response status:', response.status);
                 const data = await response.json();
-                const botResponse = data.response;
-                displayMessage('bot', botResponse);
+                console.log('Response data:', data);
+
+                // Verificar diferentes formatos posibles de respuesta
+                const botResponse = data.response || data.message || data.answer || data;
+                if (typeof botResponse === 'string') {
+                    displayMessage('bot', botResponse);
+                } else if (typeof botResponse === 'object') {
+                    displayMessage('bot', JSON.stringify(botResponse));
+                } else {
+                    displayMessage('bot', 'Lo siento, no pude procesar la respuesta del servidor.');
+                }
             } catch (error) {
-                console.error('Error al obtener la respuesta del bot:', error);
-                displayMessage('bot', "Lo siento, hubo un error al procesar tu pregunta.");
+                console.error('Error completo:', error);
+                displayMessage('bot', "Lo siento, hubo un error al procesar tu pregunta. Por favor, intenta de nuevo.");
             }
 
             messageInput.value = '';

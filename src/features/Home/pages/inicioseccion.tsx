@@ -89,6 +89,13 @@ function Login() {
                         
       localStorage.setItem('userType', userType);
       
+      // Guardar el ID del usuario según el tipo
+      if (userType === 'customer' && loginResponse.data.userData?.id_cliente) {
+        localStorage.setItem('userId', loginResponse.data.userData.id_cliente.toString());
+      } else if (userType === 'proveedor' && loginResponse.data.userData?.id_proveedor) {
+        localStorage.setItem('userId', loginResponse.data.userData.id_proveedor.toString());
+      }
+      
       // Configure token for future requests
       axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.data.token}`;
       
@@ -100,9 +107,12 @@ function Login() {
         try {
           let userResponse;
           if (userType === 'proveedor') {
-            userResponse = await axios.get(`${API_BASE_URL}/proveedor/email/${encodeURIComponent(formData.Email)}`, {
+            userResponse = await axios.post(`${API_BASE_URL}/proveedor/email`, {
+              Email: formData.Email
+            }, {
               headers: {
-                'Authorization': `Bearer ${loginResponse.data.token}`
+                'Authorization': `Bearer ${loginResponse.data.token}`,
+                'Content-Type': 'application/json'
               }
             });
             
@@ -116,10 +126,14 @@ function Login() {
             };
             
             localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('userId', userData.id_proveedor.toString());
           } else if (userType === 'customer') {
-            userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
+            userResponse = await axios.post(`${API_BASE_URL}/customer/email`, {
+              Email: formData.Email
+            }, {
               headers: {
-                'Authorization': `Bearer ${loginResponse.data.token}`
+                'Authorization': `Bearer ${loginResponse.data.token}`,
+                'Content-Type': 'application/json'
               }
             });
             
@@ -133,6 +147,7 @@ function Login() {
             };
             
             localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('userId', userData.id_cliente.toString());
           }
         } catch (error) {
           console.error('Error al obtener datos del usuario:', error);
@@ -161,15 +176,22 @@ function Login() {
         localStorage.setItem('token', adminResponse.data.token);
         localStorage.setItem('userType', 'admin');
         
+        if (adminResponse.data.userData?.id_admin) {
+          localStorage.setItem('userId', adminResponse.data.userData.id_admin.toString());
+        }
+        
         axios.defaults.headers.common['Authorization'] = `Bearer ${adminResponse.data.token}`;
         
         if (adminResponse.data.userData) {
           localStorage.setItem('user', JSON.stringify(adminResponse.data.userData));
         } else {
           try {
-            const userResponse = await axios.get(`${API_BASE_URL}/admin/email/${encodeURIComponent(formData.Email)}`, {
+            const userResponse = await axios.post(`${API_BASE_URL}/admin/email`, {
+              Email: formData.Email
+            }, {
               headers: {
-                'Authorization': `Bearer ${adminResponse.data.token}`
+                'Authorization': `Bearer ${adminResponse.data.token}`,
+                'Content-Type': 'application/json'
               }
             });
             
@@ -183,6 +205,7 @@ function Login() {
             };
             
             localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('userId', userData.id_admin.toString());
           } catch (error) {
             console.error('Error al obtener datos del admin:', error);
           }
@@ -207,6 +230,10 @@ function Login() {
           
           localStorage.setItem('token', proveedorResponse.data.token);
           localStorage.setItem('userType', 'proveedor');
+          
+          if (proveedorResponse.data.userData?.id_proveedor) {
+            localStorage.setItem('userId', proveedorResponse.data.userData.id_proveedor.toString());
+          }
           
           axios.defaults.headers.common['Authorization'] = `Bearer ${proveedorResponse.data.token}`;
           
@@ -233,6 +260,7 @@ function Login() {
                 };
                 
                 localStorage.setItem('user', JSON.stringify(userData));
+                localStorage.setItem('userId', userData.id_proveedor.toString());
               } else {
                 console.error('La respuesta del servidor no tiene el formato esperado:', userResponse.data);
               }
@@ -261,15 +289,22 @@ function Login() {
             localStorage.setItem('token', customerResponse.data.token);
             localStorage.setItem('userType', 'customer');
             
+            if (customerResponse.data.userData?.id_cliente) {
+              localStorage.setItem('userId', customerResponse.data.userData.id_cliente.toString());
+            }
+            
             axios.defaults.headers.common['Authorization'] = `Bearer ${customerResponse.data.token}`;
             
             if (customerResponse.data.userData) {
               localStorage.setItem('user', JSON.stringify(customerResponse.data.userData));
             } else {
               try {
-                const userResponse = await axios.get(`${API_BASE_URL}/customer/email/${encodeURIComponent(formData.Email)}`, {
+                const userResponse = await axios.post(`${API_BASE_URL}/customer/email`, {
+                  Email: formData.Email
+                }, {
                   headers: {
-                    'Authorization': `Bearer ${customerResponse.data.token}`
+                    'Authorization': `Bearer ${customerResponse.data.token}`,
+                    'Content-Type': 'application/json'
                   }
                 });
                 
@@ -283,6 +318,7 @@ function Login() {
                 };
                 
                 localStorage.setItem('user', JSON.stringify(userData));
+                localStorage.setItem('userId', userData.id_cliente.toString());
               } catch (error) {
                 console.error('Error al obtener datos del cliente:', error);
               }
@@ -297,9 +333,8 @@ function Login() {
             
             return;
           } catch (customerError) {
-            console.error('Login como cliente también falló:', customerError);
-            setError('Credenciales incorrectas o usuario no encontrado');
-            setLoading(false);
+            console.error('Error en el login:', customerError);
+            setError('Credenciales inválidas. Por favor, intente nuevamente.');
           }
         }
       }

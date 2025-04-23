@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/organisms/header';
 import Footer from './components/organisms/Footer';
@@ -11,6 +10,10 @@ import RegistroUnificado from './features/Home/pages/RegistroUnificado';
 import ProtectedRoute from './features/Auth/components/ProtectedRoute';
 import RegistroProductos from './features/Home/pages/RegistroProduc';
 import EditProfile from './components/pages/EditProfile/EditProfile';
+import PagoExitoso from './features/Home/pages/PagoExitoso';
+import PagoFallido from './features/Home/pages/PagoFallido';
+import PagoPendiente from './features/Home/pages/PagoPendiente';
+import WebhookHandler from './features/Home/pages/webhook';
 
 function App() {
   return (
@@ -34,6 +37,10 @@ function App() {
               <EditProfile />
             </ProtectedRoute>
           }/>
+          <Route path="/pago-exitoso" element={<PagoExitoso />} />
+          <Route path="/pago-fallido" element={<PagoFallido />} />
+          <Route path="/pago-pendiente" element={<PagoPendiente />} />
+          <Route path="/webhook" element={<WebhookHandler />} />
         </Routes>
         <Footer />
       </div>
